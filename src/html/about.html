@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us | Robo Nexus</title>
+
+    <!-- Critical CSS - Prevents white flash -->
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; min-height: 100%; overflow-x: hidden; }
+      body { background: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .page-transition { position: fixed; inset: 0; background: #000; z-index: 9999; pointer-events: none; opacity: 0; display: none; }
+      .page-content { position: relative; z-index: 1; min-height: 100vh; }
+      #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    </style>
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/src/css/style.css" as="style" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
+
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" as="style" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png">
+  </head>
+
+  <body>
+    <!-- PARTICLE BACKGROUND -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- PAGE TRANSITION OVERLAY -->
+    <div class="page-transition"></div>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-content">
+      <!-- NAVBAR -->
+      <nav class="navbar">
+        <div class="navbar-content">
+          <div class="nav-logo">
+            <a href="/index.html">
+              <img src="/src/assets/images/Robo_Nexus_Logo.png" alt="Logo" class="logo-spin" />
+            </a>
+          </div>
+
+          <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <ul class="nav-links-ul">
+            <li><a class="nav-links active" href="/src/html/about.html">About Us</a></li>
+            <li class="separator">|</li>
+            <li><a class="nav-links" href="/src/html/team.html">Team</a></li>
+            <li class="separator">|</li>
+            <li><a class="nav-links" href="/src/html/projects.html">Projects</a></li>
+            <li class="separator">|</li>
+            <li><a class="nav-links" href="/src/html/events.html">Events</a></li>
+            <li class="separator">|</li>
+            <li><a class="nav-links" href="/src/html/contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- ABOUT HERO -->
+      <section class="page-hero">
+        <h1 class="page-title">About Us</h1>
+        <p class="hero-subtitle reveal">Know us better!</p>
+      </section>
+
+      <!-- ABOUT SECTION -->
+      <section class="about-section">
+        <div class="about-details reveal">
+          <h2 class="about-heading">Who We Are</h2>
+          <p class="about-text-sub">
+            Established in 2024, <strong>Robo Nexus</strong> is the official robotics club of 
+            Amity International School, Sector-46, Gurugram. We are a passionate community of 
+            students dedicated to exploring the fascinating world of robotics, automation, and 
+            emerging technologies.
+          </p>
+          <br>
+          <p class="about-text-sub">
+            Our mission is to inspire innovation, creativity, and hands-on learning. We believe 
+            in learning by doing — building robots, coding solutions, and pushing the boundaries 
+            of what's possible with technology.
+          </p>
+        </div>
+
+        <div class="about-logo reveal">
+          <img
+            src="/src/assets/images/Robo_Nexus_Logo.png"
+            class="home-logo-img"
+            alt="Robo Nexus Logo"
+          />
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <p>&copy; 2026 Robo Nexus. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- SCRIPTS -->
+    <script src="/src/js/particles.js"></script>
+    <script src="/src/js/script.js"></script>
+    <script src="/src/js/prefetch.js"></script>
+    <script src="/src/js/protection.js"></script>
+  </body>
+</html>
