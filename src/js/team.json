@@ -16,7 +16,9 @@
       "role": "President",
       "image": "assets/images/ARAY.jpeg",
       "leavingSoon": true,
-      "links": {}
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/aryaman-y-63751b3a8/"
+      }
     },
     {
       "name": "Akshar Yadav",
