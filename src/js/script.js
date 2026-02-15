@@ -225,20 +225,30 @@ if (teamContainer) {
       // Add cache buster to force image reload
       const cacheBuster = `?v=${Date.now()}`;
 
-      teamContainer.innerHTML = members.map((member, index) => `
-        <div class="team-card ${member.leavingSoon ? 'leaving-soon' : ''}">
-          ${member.leavingSoon ? '<span class="leaving-badge"><i class="fas fa-crown"></i> Leaving Club Soon</span>' : ''}
-          <img src="/src/${member.image}${cacheBuster}" alt="${member.name}" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png${cacheBuster}'">
-          <h2>${member.name}</h2>
-          <p>${member.role}</p>
-          <div class="social-links">
-            ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
-            ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
-            ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
-            ${member.links.discord ? `<a href="${member.links.discord}" target="_blank"><i class="fab fa-discord"></i></a>` : ""}
+      teamContainer.innerHTML = members.map((member, index) => {
+        // Normalize image path - handle both "assets/images/..." and "src/assets/images/..." formats
+        let imagePath = member.image;
+        if (!imagePath.startsWith('/') && !imagePath.startsWith('src/')) {
+          imagePath = `/src/${imagePath}`;
+        } else if (imagePath.startsWith('src/')) {
+          imagePath = `/${imagePath}`;
+        }
+        
+        return `
+          <div class="team-card ${member.leavingSoon ? 'leaving-soon' : ''}">
+            ${member.leavingSoon ? '<span class="leaving-badge"><i class="fas fa-crown"></i> Leaving Club Soon</span>' : ''}
+            <img src="${imagePath}${cacheBuster}" alt="${member.name}" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png${cacheBuster}'">
+            <h2>${member.name}</h2>
+            <p>${member.role}</p>
+            <div class="social-links">
+              ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
+              ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
+              ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
+              ${member.links.discord ? `<a href="${member.links.discord}" target="_blank"><i class="fab fa-discord"></i></a>` : ""}
+            </div>
           </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
     })
     .catch(err => {
       console.error('Team loading error:', err);
@@ -367,26 +377,36 @@ if (alumniContainer) {
         return;
       }
       
-      alumniContainer.innerHTML = alumni.map((member, index) => `
-        <div class="alumni-card ${member.upcoming ? 'upcoming-alumni' : ''}">
-          <div class="alumni-badge">
-            <i class="fas fa-medal"></i>
-          </div>
-          ${member.upcoming ? '<span class="upcoming-badge"><i class="fas fa-hourglass-half"></i> Coming Soon</span>' : ''}
-          <img src="/src/${member.image}" alt="${member.name}" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
-          <div class="alumni-info">
-            <h2>${member.name}</h2>
-            <p class="alumni-role">${member.role}</p>
-            <p class="alumni-batch"><i class="fas fa-graduation-cap"></i> Batch ${member.batch}</p>
-            ${member.contribution ? `<p class="alumni-contribution">"${member.contribution}"</p>` : ''}
-            <div class="social-links">
-              ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
-              ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
-              ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
+      alumniContainer.innerHTML = alumni.map((member, index) => {
+        // Normalize image path - handle both "assets/images/..." and "src/assets/images/..." formats
+        let imagePath = member.image;
+        if (!imagePath.startsWith('/') && !imagePath.startsWith('src/')) {
+          imagePath = `/src/${imagePath}`;
+        } else if (imagePath.startsWith('src/')) {
+          imagePath = `/${imagePath}`;
+        }
+        
+        return `
+          <div class="alumni-card ${member.upcoming ? 'upcoming-alumni' : ''}">
+            <div class="alumni-badge">
+              <i class="fas fa-medal"></i>
+            </div>
+            ${member.upcoming ? '<span class="upcoming-badge"><i class="fas fa-hourglass-half"></i> Coming Soon</span>' : ''}
+            <img src="${imagePath}" alt="${member.name}" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
+            <div class="alumni-info">
+              <h2>${member.name}</h2>
+              <p class="alumni-role">${member.role}</p>
+              <p class="alumni-batch"><i class="fas fa-graduation-cap"></i> Batch ${member.batch}</p>
+              ${member.contribution ? `<p class="alumni-contribution">"${member.contribution}"</p>` : ''}
+              <div class="social-links">
+                ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
+                ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
+                ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
+              </div>
             </div>
           </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
     })
     .catch(err => {
       console.error('Alumni loading error:', err);

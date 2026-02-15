@@ -2,7 +2,7 @@
   "_FORMAT_GUIDE": {
     "name": "Member's full name",
     "role": "President / Vice President / Core Member / Member",
-    "image": "Image path - just use: assets/images/filename.jpg (will be converted to /src/assets/images/filename.jpg)",
+    "image": "Image path - use any of these formats: 'assets/images/filename.jpg' OR 'src/assets/images/filename.jpg' OR '/src/assets/images/filename.jpg'",
     "leavingSoon": "true (only for members leaving soon) or remove this field",
     "links": {
       "github": "GitHub profile URL (optional)",
@@ -101,7 +101,7 @@
     {
       "name": "Reyansh Gugnani",
       "role": "Member",
-      "image": "src/assets/images/RG.jpg",
+      "image": "assets/images/RG.jpg",
       "links": {
         "linkedin": "https://www.linkedin.com/in/reyanshgugnani/"
       }
