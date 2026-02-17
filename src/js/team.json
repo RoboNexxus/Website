@@ -117,7 +117,9 @@
       "name": "Divyanshu Aggarwal",
       "role": "Member",
       "image": "assets/images/Robo_Nexus_Logo.png",
-      "links": {}
+      "links": {
+        "github":"https://github.com/divyanshu483"
+      }
     },
     {
       "name": "Vibhor Pandey",
