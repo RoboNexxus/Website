@@ -203,12 +203,27 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: textGlow 3s ease-in-out infinite;
+  /* Glow animation removed - replaced with flip animation */
 }
 
-@keyframes textGlow {
-  0%, 100% { filter: drop-shadow(0 0 20px rgba(71, 160, 184, 0.3)); }
-  50% { filter: drop-shadow(0 0 40px rgba(71, 160, 184, 0.6)); }
+/* Flip Text Animation - Based on VengenceUI FlipFadeText */
+@keyframes flipIn {
+  0% {
+    transform: rotateX(90deg) translateY(20px);
+    opacity: 0;
+    filter: blur(8px);
+  }
+  100% {
+    transform: rotateX(0deg) translateY(0);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+.flip-char {
+  display: inline-block;
+  transform-style: preserve-3d;
+  transform-origin: center center;
 }
 
 .home-text-sub {
@@ -2895,5 +2910,64 @@ input, textarea {
   .project-card:hover,
   .alumni-card:hover {
     transform: none;
+  }
+}
+
+
+/* ===============================
+   SPOTLIGHT NAVBAR EFFECTS
+================================ */
+
+/* Spotlight overlay that follows mouse */
+.navbar-spotlight-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+  background: radial-gradient(
+    120px circle at var(--spotlight-x, 50%) 100%,
+    rgba(71, 160, 184, 0.15) 0%,
+    transparent 50%
+  );
+}
+
+/* Ambience line under active nav item */
+.navbar-ambience-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    60px circle at var(--ambience-x, 50%) 0%,
+    rgba(71, 160, 184, 1) 0%,
+    transparent 100%
+  );
+}
+
+/* Ensure nav links are above overlays */
+.nav-links-ul {
+  position: relative;
+  z-index: 10;
+}
+
+/* Enhanced navbar styling */
+.navbar {
+  position: relative;
+  overflow: visible;
+}
+
+/* Mobile: disable spotlight effects */
+@media (max-width: 992px) {
+  .navbar-spotlight-overlay,
+  .navbar-ambience-line {
+    display: none;
   }
 }
