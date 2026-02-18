@@ -93,8 +93,10 @@ function applyFlipAnimation(characters, startDelay) {
     const delay = startDelay + (index * STAGGER_DELAY);
     // Using cubic-bezier to match VengenceUI's ease: [0.2, 0.65, 0.3, 0.9]
     char.style.animation = `flipIn ${LETTER_DURATION}s cubic-bezier(0.2, 0.65, 0.3, 0.9) ${delay}s forwards`;
-    // Set initial state
+    // Set initial state to hidden
+    char.style.transform = 'rotateX(90deg) translateY(20px)';
     char.style.opacity = '0';
+    char.style.filter = 'blur(8px)';
   });
 }
 
