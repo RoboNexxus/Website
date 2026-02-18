@@ -72,7 +72,8 @@ function initSpotlightNavbar() {
   let hoverX = null;
   let spotlightX = 0;
   let ambienceX = 0;
-  let currentAnimation = null;
+  let currentSpotlightAnimation = null;
+  let currentAmbienceAnimation = null;
   
   // Create spotlight overlay
   const spotlightOverlay = document.createElement('div');
@@ -86,16 +87,33 @@ function initSpotlightNavbar() {
   
   // Determine active link based on current page
   const currentPath = window.location.pathname;
+  const currentPage = currentPath.split('/').pop() || 'index.html';
+  
   navLinks.forEach((link, index) => {
+    link.classList.remove('active');
     const href = link.getAttribute('href');
-    if (href && currentPath.includes(href.replace('.html', ''))) {
-      activeIndex = index;
-      link.classList.add('active');
+    
+    if (href) {
+      const linkPage = href.split('/').pop();
+      // Check if this is the current page
+      if (linkPage === currentPage || 
+          (currentPage === '' && linkPage === 'index.html') ||
+          (currentPage === 'index.html' && href === '/index.html')) {
+        activeIndex = index;
+        link.classList.add('active');
+      }
     }
   });
   
-  // Initialize ambience position
-  updateAmbiencePosition(activeIndex);
+  // Initialize ambience position immediately (no animation on page load)
+  const activeLink = navLinks[activeIndex];
+  if (activeLink) {
+    const navRect = navbar.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+    ambienceX = linkRect.left - navRect.left + linkRect.width / 2;
+    ambienceLine.style.setProperty('--ambience-x', `${ambienceX}px`);
+    spotlightX = ambienceX;
+  }
   
   // Mouse move handler
   function handleMouseMove(e) {
@@ -122,11 +140,11 @@ function initSpotlightNavbar() {
       const linkRect = activeLink.getBoundingClientRect();
       const targetX = linkRect.left - navRect.left + linkRect.width / 2;
       
-      if (currentAnimation) {
-        currentAnimation.stop();
+      if (currentSpotlightAnimation) {
+        currentSpotlightAnimation.stop();
       }
       
-      currentAnimation = animateSpring(spotlightX, targetX, {
+      currentSpotlightAnimation = animateSpring(spotlightX, targetX, {
         stiffness: 200,
         damping: 20,
         onUpdate: (v) => {
@@ -138,7 +156,7 @@ function initSpotlightNavbar() {
   }
   
   // Update ambience position
-  function updateAmbiencePosition(index) {
+  function updateAmbiencePosition(index, immediate = false) {
     const activeLink = navLinks[index];
     if (!activeLink) return;
     
@@ -146,23 +164,32 @@ function initSpotlightNavbar() {
     const linkRect = activeLink.getBoundingClientRect();
     const targetX = linkRect.left - navRect.left + linkRect.width / 2;
     
-    if (currentAnimation) {
-      currentAnimation.stop();
-    }
-    
-    currentAnimation = animateSpring(ambienceX, targetX, {
-      stiffness: 200,
-      damping: 20,
-      onUpdate: (v) => {
-        ambienceX = v;
-        ambienceLine.style.setProperty('--ambience-x', `${v}px`);
+    if (immediate) {
+      // Set immediately without animation
+      ambienceX = targetX;
+      ambienceLine.style.setProperty('--ambience-x', `${targetX}px`);
+    } else {
+      // Animate with spring
+      if (currentAmbienceAnimation) {
+        currentAmbienceAnimation.stop();
       }
-    });
+      
+      currentAmbienceAnimation = animateSpring(ambienceX, targetX, {
+        stiffness: 200,
+        damping: 20,
+        onUpdate: (v) => {
+          ambienceX = v;
+          ambienceLine.style.setProperty('--ambience-x', `${v}px`);
+        }
+      });
+    }
   }
   
   // Click handlers for nav links
   navLinks.forEach((link, index) => {
     link.addEventListener('click', (e) => {
+      // Don't prevent default - allow navigation
+      
       // Remove active class from all links
       navLinks.forEach(l => l.classList.remove('active'));
       
@@ -170,8 +197,8 @@ function initSpotlightNavbar() {
       link.classList.add('active');
       activeIndex = index;
       
-      // Update ambience position
-      updateAmbiencePosition(index);
+      // Update ambience position with animation
+      updateAmbiencePosition(index, false);
     });
   });
   

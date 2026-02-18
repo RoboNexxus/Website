@@ -74,6 +74,11 @@ function wrapCharacters(element) {
     span.className = 'flip-char';
     span.style.display = 'inline-block';
     span.style.transformStyle = 'preserve-3d';
+    // Inherit gradient from parent
+    span.style.background = 'inherit';
+    span.style.webkitBackgroundClip = 'text';
+    span.style.backgroundClip = 'text';
+    span.style.webkitTextFillColor = 'transparent';
     
     element.appendChild(span);
     characters.push(span);
