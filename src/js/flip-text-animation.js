@@ -101,6 +101,16 @@ function applyFlipAnimation(characters, startDelay) {
     // Set initial state to hidden (animation will handle the blur)
     char.style.transform = 'rotateX(90deg) translateY(20px)';
     char.style.opacity = '0';
+    char.style.filter = 'blur(8px)';
+    
+    // Ensure final state is clean after animation completes
+    const totalDuration = (delay + LETTER_DURATION) * 1000;
+    setTimeout(() => {
+      char.style.animation = 'none';
+      char.style.transform = 'rotateX(0deg) translateY(0)';
+      char.style.opacity = '1';
+      char.style.filter = 'none';
+    }, totalDuration);
   });
 }
 

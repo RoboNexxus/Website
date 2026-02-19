@@ -45,25 +45,34 @@ function animateSpring(from, to, options) {
  * Initialize spotlight navbar effects
  */
 function initSpotlightNavbar() {
-  const navbar = document.querySelector('.navbar');
+  const spotlightNav = document.querySelector('.spotlight-nav');
   
-  if (!navbar) {
-    console.warn('Spotlight navbar: Navbar element not found');
+  if (!spotlightNav) {
+    console.warn('Spotlight navbar: .spotlight-nav element not found');
     return;
   }
   
   // Check if already initialized
-  if (navbar.classList.contains('spotlight-initialized')) {
+  if (spotlightNav.classList.contains('spotlight-initialized')) {
     return;
   }
   
-  navbar.classList.add('spotlight-initialized');
+  spotlightNav.classList.add('spotlight-initialized');
   
   // Get nav links
-  const navLinks = navbar.querySelectorAll('.nav-links');
+  const navLinks = spotlightNav.querySelectorAll('.nav-links');
   
   if (navLinks.length === 0) {
     console.warn('Spotlight navbar: No nav links found');
+    return;
+  }
+  
+  // Get overlays
+  const spotlightOverlay = spotlightNav.querySelector('.navbar-spotlight-overlay');
+  const ambienceLine = spotlightNav.querySelector('.navbar-ambience-line');
+  
+  if (!spotlightOverlay || !ambienceLine) {
+    console.warn('Spotlight navbar: Overlay elements not found');
     return;
   }
   
@@ -74,16 +83,6 @@ function initSpotlightNavbar() {
   let ambienceX = 0;
   let currentSpotlightAnimation = null;
   let currentAmbienceAnimation = null;
-  
-  // Create spotlight overlay
-  const spotlightOverlay = document.createElement('div');
-  spotlightOverlay.className = 'navbar-spotlight-overlay';
-  navbar.appendChild(spotlightOverlay);
-  
-  // Create ambience line
-  const ambienceLine = document.createElement('div');
-  ambienceLine.className = 'navbar-ambience-line';
-  navbar.appendChild(ambienceLine);
   
   // Determine active link based on current page
   const currentPath = window.location.pathname;
@@ -108,7 +107,7 @@ function initSpotlightNavbar() {
   // Initialize ambience position immediately (no animation on page load)
   const activeLink = navLinks[activeIndex];
   if (activeLink) {
-    const navRect = navbar.getBoundingClientRect();
+    const navRect = spotlightNav.getBoundingClientRect();
     const linkRect = activeLink.getBoundingClientRect();
     ambienceX = linkRect.left - navRect.left + linkRect.width / 2;
     ambienceLine.style.setProperty('--ambience-x', `${ambienceX}px`);
@@ -117,7 +116,7 @@ function initSpotlightNavbar() {
   
   // Mouse move handler
   function handleMouseMove(e) {
-    const rect = navbar.getBoundingClientRect();
+    const rect = spotlightNav.getBoundingClientRect();
     const x = e.clientX - rect.left;
     
     hoverX = x;
@@ -136,7 +135,7 @@ function initSpotlightNavbar() {
     // Spring spotlight back to active item
     const activeLink = navLinks[activeIndex];
     if (activeLink) {
-      const navRect = navbar.getBoundingClientRect();
+      const navRect = spotlightNav.getBoundingClientRect();
       const linkRect = activeLink.getBoundingClientRect();
       const targetX = linkRect.left - navRect.left + linkRect.width / 2;
       
@@ -160,7 +159,7 @@ function initSpotlightNavbar() {
     const activeLink = navLinks[index];
     if (!activeLink) return;
     
-    const navRect = navbar.getBoundingClientRect();
+    const navRect = spotlightNav.getBoundingClientRect();
     const linkRect = activeLink.getBoundingClientRect();
     const targetX = linkRect.left - navRect.left + linkRect.width / 2;
     
@@ -203,8 +202,8 @@ function initSpotlightNavbar() {
   });
   
   // Attach event listeners
-  navbar.addEventListener('mousemove', handleMouseMove);
-  navbar.addEventListener('mouseleave', handleMouseLeave);
+  spotlightNav.addEventListener('mousemove', handleMouseMove);
+  spotlightNav.addEventListener('mouseleave', handleMouseLeave);
   
   console.log('✨ Spotlight navbar initialized');
 }
