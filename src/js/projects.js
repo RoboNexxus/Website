@@ -2,7 +2,6 @@
 let tutorials = [];
 
 const tutorialsGrid = document.getElementById('projects-grid');
-const filterBtns = document.querySelectorAll('.filter-btn');
 const modal = document.getElementById('project-modal');
 const modalBody = document.getElementById('modal-body');
 const modalClose = document.querySelector('.modal-close');
@@ -21,14 +20,10 @@ fetch('/src/js/tutorials.json')
     }
   });
 
-function renderTutorials(filter = 'all') {
+function renderTutorials() {
   if (!tutorialsGrid) return;
-  
-  const filtered = filter === 'all' 
-    ? tutorials 
-    : tutorials.filter(t => t.category === filter);
 
-  tutorialsGrid.innerHTML = filtered.map((tutorial) => `
+  tutorialsGrid.innerHTML = tutorials.map((tutorial) => `
     <div class="project-card" data-id="${tutorial.id}">
       <div class="project-image">
         <img src="${tutorial.image}" alt="${tutorial.title}" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
@@ -53,15 +48,6 @@ function renderTutorials(filter = 'all') {
     btn.addEventListener('click', () => openModal(btn.dataset.id));
   });
 }
-
-// Filter functionality
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderTutorials(btn.dataset.filter);
-  });
-});
 
 // Modal
 function openModal(id) {
