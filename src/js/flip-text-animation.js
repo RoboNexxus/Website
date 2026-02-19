@@ -66,6 +66,9 @@ function wrapCharacters(element) {
   
   const characters = [];
   
+  // Check if element has gradient background
+  const hasGradient = element.classList.contains('home-text-main');
+  
   // Create wrapper for each character
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
@@ -74,11 +77,17 @@ function wrapCharacters(element) {
     span.className = 'flip-char';
     span.style.display = 'inline-block';
     span.style.transformStyle = 'preserve-3d';
-    // Inherit gradient from parent
-    span.style.background = 'inherit';
-    span.style.webkitBackgroundClip = 'text';
-    span.style.backgroundClip = 'text';
-    span.style.webkitTextFillColor = 'transparent';
+    
+    // Only apply gradient text fill for elements with gradient
+    if (hasGradient) {
+      span.style.background = 'inherit';
+      span.style.webkitBackgroundClip = 'text';
+      span.style.backgroundClip = 'text';
+      span.style.webkitTextFillColor = 'transparent';
+    } else {
+      // For solid color text, inherit color normally
+      span.style.color = 'inherit';
+    }
     
     element.appendChild(span);
     characters.push(span);
