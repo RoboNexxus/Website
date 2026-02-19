@@ -27,10 +27,10 @@
     </style>
 
     <!-- Preload Critical Resources -->
-    <link rel="preload" href="/src/css/style.css?v=3.0" as="style" />
+    <link rel="preload" href="/src/css/style.css?v=4.0" as="style" />
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
 
-    <link rel="stylesheet" href="/src/css/style.css?v=3.0" />
+    <link rel="stylesheet" href="/src/css/style.css?v=4.0" />
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,8 +61,25 @@
         <div class="navbar-content">
           <div class="nav-logo">
             <a href="/index.html">
-              <img src="/src/assets/images/Robo_Nexus_Logo.png" alt="Logo" class="logo-spin" />
+              <img src="/src/assets/images/Robo_Nexus_Logo.png" alt="Robo Nexus Logo" />
             </a>
+          </div>
+
+          <div class="spotlight-nav-container">
+            <div class="spotlight-nav">
+              <ul class="nav-links-ul">
+                <li><a class="nav-links" href="/index.html" data-index="0">Home</a></li>
+                <li><a class="nav-links" href="/src/html/about.html" data-index="1">About</a></li>
+                <li><a class="nav-links" href="/src/html/team.html" data-index="2">Team</a></li>
+                <li><a class="nav-links" href="/src/html/projects.html" data-index="3">Projects</a></li>
+                <li><a class="nav-links" href="/src/html/events.html" data-index="4">Events</a></li>
+                <li><a class="nav-links" href="/src/html/contact.html" data-index="5">Contact</a></li>
+              </ul>
+              <!-- Spotlight overlay (follows mouse) -->
+              <div class="navbar-spotlight-overlay"></div>
+              <!-- Ambience line (stays on active) -->
+              <div class="navbar-ambience-line"></div>
+            </div>
           </div>
 
           <div class="hamburger">
@@ -70,18 +87,6 @@
             <span></span>
             <span></span>
           </div>
-
-          <ul class="nav-links-ul">
-            <li><a class="nav-links" href="/src/html/about.html">About Us</a></li>
-            <li class="separator">|</li>
-            <li><a class="nav-links" href="/src/html/team.html">Team</a></li>
-            <li class="separator">|</li>
-            <li><a class="nav-links" href="/src/html/projects.html">Projects</a></li>
-            <li class="separator">|</li>
-            <li><a class="nav-links" href="/src/html/events.html">Events</a></li>
-            <li class="separator">|</li>
-            <li><a class="nav-links" href="/src/html/contact.html">Contact Us</a></li>
-          </ul>
         </div>
       </nav>
 
@@ -113,10 +118,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <!-- SCRIPTS -->
-    <script src="/src/js/spotlight-navbar.js?v=3.0"></script>
-    <script src="/src/js/particles.js?v=3.0"></script>
-    <script src="/src/js/script.js?v=3.0"></script>
-    <script src="/src/js/prefetch.js?v=3.0"></script>
-    <script src="/src/js/protection.js?v=3.0"></script>
+    <script src="/src/js/spotlight-navbar.js?v=4.0"></script>
+    <script src="/src/js/particles.js?v=4.0"></script>
+    <script src="/src/js/script.js?v=4.0"></script>
+    <script src="/src/js/prefetch.js?v=4.0"></script>
+    <script src="/src/js/protection.js?v=4.0"></script>
   </body>
 </html>
