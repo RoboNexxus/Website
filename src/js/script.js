@@ -30,10 +30,18 @@ if (pageTransition) {
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links-ul');
 
+console.log('Hamburger element:', hamburger);
+console.log('Nav links element:', navLinks);
+
 if (hamburger && navLinks) {
-  hamburger.addEventListener('click', () => {
+  hamburger.addEventListener('click', (e) => {
+    console.log('Hamburger clicked!');
+    e.preventDefault();
+    e.stopPropagation();
     hamburger.classList.toggle('active');
     navLinks.classList.toggle('active');
+    console.log('Hamburger active:', hamburger.classList.contains('active'));
+    console.log('Nav links active:', navLinks.classList.contains('active'));
   });
 
   // Close menu when clicking a link
@@ -43,6 +51,8 @@ if (hamburger && navLinks) {
       navLinks.classList.remove('active');
     });
   });
+} else {
+  console.error('Hamburger menu elements not found!');
 }
 
 /* ===============================

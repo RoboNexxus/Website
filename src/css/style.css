@@ -1823,6 +1823,11 @@ textarea::placeholder {
 @media (max-width: 992px) {
   .hamburger { display: flex; }
   
+  /* Fix spotlight nav for mobile */
+  .spotlight-nav-container {
+    display: none;
+  }
+  
   .nav-links-ul {
     position: fixed;
     top: 70px;
@@ -1838,10 +1843,12 @@ textarea::placeholder {
     z-index: 999;
     max-height: calc(100vh - 70px);
     overflow-y: auto;
+    display: flex;
   }
   
   .nav-links-ul.active {
     transform: translateY(0);
+    display: flex;
   }
   
   .nav-links-ul li {
