@@ -1525,7 +1525,7 @@ textarea::placeholder {
   transition: transform 0.1s ease;
 }
 
-/* Radial gradient glow that follows cursor */
+/* INTENSE radial gradient glow that follows cursor */
 .contact-send-button::before {
   content: '';
   position: absolute;
@@ -1533,20 +1533,41 @@ textarea::placeholder {
   border-radius: 12px;
   padding: 2px;
   background: radial-gradient(
-    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(255, 255, 255, 0.4),
-    rgba(255, 255, 255, 0.15) 40%,
-    transparent 80%
+    400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.6) 20%,
+    rgba(255, 255, 255, 0.3) 40%,
+    transparent 70%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
   pointer-events: none;
 }
 
 .contact-send-button:hover::before {
+  opacity: 1;
+}
+
+/* Additional inner glow for more intensity */
+.contact-send-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: radial-gradient(
+    500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.08),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.contact-send-button:hover::after {
   opacity: 1;
 }
 
@@ -1560,7 +1581,7 @@ textarea::placeholder {
   justify-content: center;
 }
 
-/* Subtle inner glow on hover */
+/* Subtle background change on hover */
 .contact-send-button:hover {
   background: rgba(10, 10, 10, 0.95);
 }
