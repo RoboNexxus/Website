@@ -105,10 +105,10 @@
           <h2 class="contact-text">Send a Message</h2>
 
           <form class="contact-form">
-            <input type="text" id="name" placeholder="Your Name" required />
-            <input type="email" id="email" placeholder="Email Address" required />
-            <input type="text" id="subject" placeholder="Subject" required />
-            <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+            <input type="text" id="name" name="name" placeholder="Your Name" required />
+            <input type="email" id="email" name="email" placeholder="Email Address" required />
+            <input type="text" id="subject" name="subject" placeholder="Subject" required />
+            <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
 
             <button type="button" onclick="sendMail()" class="contact-send-button">
               <i class="fas fa-paper-plane"></i> Send Message
@@ -198,10 +198,6 @@
     <script src="/src/js/prefetch.js?v=4.0"></script>
     <script src="/src/js/protection.js?v=4.0"></script>
 
-    <!-- EMAILJS -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>
-      emailjs.init("LhPol6L9HRAPF2BC8");
-    </script>
+
   </body>
 </html>
