@@ -1835,6 +1835,9 @@ textarea::placeholder {
     transform: translateY(-150%);
     transition: transform 0.4s ease;
     border-bottom: 1px solid rgba(71, 160, 184, 0.3);
+    z-index: 999;
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
   }
   
   .nav-links-ul.active {
