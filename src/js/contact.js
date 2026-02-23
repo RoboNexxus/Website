@@ -7,7 +7,7 @@ async function sendMail() {
 
     // Validate fields
     if (!name || !email || !subject || !message) {
-        alert("Please fill in all fields!");
+        toast.error("Missing Information", "Please fill in all fields before submitting.");
         return;
     }
 
@@ -71,19 +71,28 @@ async function sendMail() {
         document.getElementById("subject").value = "";
         document.getElementById("message").value = "";
         
-        // Success message
+        // Success message with toast
         submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+        toast.success(
+            "Message Sent Successfully!",
+            "Thank you for reaching out. We'll get back to you soon.",
+            5000
+        );
+        
         setTimeout(() => {
             submitBtn.innerHTML = originalBtnText;
             submitBtn.disabled = false;
         }, 3000);
-        
-        alert("✅ Message sent successfully! We'll get back to you soon.");
 
     } catch (error) {
         console.error("Error:", error);
         submitBtn.innerHTML = originalBtnText;
         submitBtn.disabled = false;
-        alert("❌ There was an error sending your message. Please try again or email us directly at robonexus.ais46@gmail.com");
+        
+        toast.error(
+            "Failed to Send Message",
+            "There was an error sending your message. Please try again or email us directly at robonexus.ais46@gmail.com",
+            6000
+        );
     }
 }
