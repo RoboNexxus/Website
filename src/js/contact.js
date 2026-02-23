@@ -13,8 +13,8 @@ async function sendMail() {
 
     // Show loading state
     const submitBtn = document.querySelector(".contact-send-button");
-    const originalBtnText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    const originalBtnHTML = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<span class="button-text"><i class="fas fa-spinner fa-spin"></i> Sending...</span>';
     submitBtn.disabled = true;
 
     try {
@@ -72,7 +72,7 @@ async function sendMail() {
         document.getElementById("message").value = "";
         
         // Success message with toast
-        submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+        submitBtn.innerHTML = '<span class="button-text"><i class="fas fa-check"></i> Sent!</span>';
         toast.success(
             "Message Sent Successfully!",
             "Thank you for reaching out. We'll get back to you soon.",
@@ -80,13 +80,13 @@ async function sendMail() {
         );
         
         setTimeout(() => {
-            submitBtn.innerHTML = originalBtnText;
+            submitBtn.innerHTML = originalBtnHTML;
             submitBtn.disabled = false;
         }, 3000);
 
     } catch (error) {
         console.error("Error:", error);
-        submitBtn.innerHTML = originalBtnText;
+        submitBtn.innerHTML = originalBtnHTML;
         submitBtn.disabled = false;
         
         toast.error(

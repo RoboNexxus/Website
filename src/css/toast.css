@@ -12,30 +12,31 @@
 }
 
 .toast {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     padding: 16px 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: flex-start;
     gap: 12px;
     min-width: 350px;
     max-width: 500px;
     pointer-events: auto;
-    animation: slideDown 0.3s ease-out;
+    animation: slideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(10px);
 }
 
 .toast.toast-exit {
-    animation: slideUp 0.3s ease-out forwards;
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 .toast-success {
-    border-left: 4px solid #10b981;
+    border-left: 3px solid #10b981;
 }
 
 .toast-error {
-    border-left: 4px solid #ef4444;
+    border-left: 3px solid #ef4444;
 }
 
 .toast-icon {
@@ -65,13 +66,13 @@
 .toast-title {
     font-weight: 600;
     font-size: 14px;
-    color: #111827;
+    color: #f9fafb;
     margin: 0 0 4px 0;
 }
 
 .toast-description {
     font-size: 13px;
-    color: #6b7280;
+    color: #9ca3af;
     margin: 0;
     line-height: 1.5;
 }
@@ -80,7 +81,7 @@
     flex-shrink: 0;
     background: none;
     border: none;
-    color: #9ca3af;
+    color: #6b7280;
     cursor: pointer;
     padding: 0;
     width: 20px;
@@ -88,41 +89,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.2s;
+    transition: color 0.2s ease;
+    border-radius: 4px;
 }
 
 .toast-close:hover {
-    color: #4b5563;
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    .toast {
-        background: #1f2937;
-        border-color: #374151;
-    }
-
-    .toast-title {
-        color: #f9fafb;
-    }
-
-    .toast-description {
-        color: #d1d5db;
-    }
-
-    .toast-close {
-        color: #6b7280;
-    }
-
-    .toast-close:hover {
-        color: #9ca3af;
-    }
+    color: #d1d5db;
+    background: rgba(255, 255, 255, 0.05);
 }
 
 /* Animations */
 @keyframes slideDown {
     from {
-        transform: translateY(-100%);
+        transform: translateY(-120%);
         opacity: 0;
     }
     to {
@@ -137,7 +116,7 @@
         opacity: 1;
     }
     to {
-        transform: translateY(-100%);
+        transform: translateY(-120%);
         opacity: 0;
     }
 }
