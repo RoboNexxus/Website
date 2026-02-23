@@ -30,7 +30,7 @@
     <link rel="preload" href="/src/css/style.css?v=4.0" as="style" />
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
 
-    <link rel="stylesheet" href="/src/css/style.css?v=6.0" />
+    <link rel="stylesheet" href="/src/css/style.css?v=7.0" />
     <link rel="stylesheet" href="/src/css/toast.css?v=2.0" />
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -112,6 +112,8 @@
             <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
 
             <button type="button" onclick="sendMail()" class="contact-send-button">
+              <div class="cursor-glow"></div>
+              <div class="outer-glow"></div>
               <span class="button-text">
                 <i class="fas fa-paper-plane"></i> Send Message
               </span>

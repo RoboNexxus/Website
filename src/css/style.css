@@ -1504,15 +1504,17 @@ textarea::placeholder {
   font-weight: 500;
   font-size: 1rem;
   background: #000;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   cursor: pointer;
   color: #fff;
   position: relative;
   overflow: hidden;
-  transition: background 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   --mouse-x: 50%;
   --mouse-y: 50%;
+  --glow-x: 0%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .contact-send-button:disabled {
@@ -1525,45 +1527,81 @@ textarea::placeholder {
   transition: transform 0.1s ease;
 }
 
-/* Animated sweeping glow from left to right */
+.contact-send-button:hover {
+  background: rgba(10, 10, 10, 0.95);
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+/* MAIN SWEEPING GLOW - SUPER INTENSE */
 .contact-send-button::before {
   content: '';
   position: absolute;
-  inset: -2px;
+  inset: -3px;
   border-radius: 12px;
-  padding: 2px;
+  padding: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 20%,
+    rgba(255, 255, 255, 0.15) 35%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(255, 255, 255, 0.15) 65%,
+    transparent 80%,
+    transparent 100%
+  );
+  background-size: 300% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borderSweepSlow 6s ease-in-out infinite;
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+.contact-send-button:hover::before {
+  animation: borderSweepSlow 4s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+
+/* INNER GLOW THAT FOLLOWS THE SWEEP */
+.contact-send-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
   background: linear-gradient(
     90deg,
     transparent 0%,
     transparent 30%,
-    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0.03) 40%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 60%,
     transparent 70%,
     transparent 100%
   );
-  background-size: 200% 100%;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: borderSweep 3s linear infinite;
+  background-size: 300% 100%;
+  animation: innerGlowSweep 6s ease-in-out infinite;
   pointer-events: none;
+  opacity: 0.8;
 }
 
-.contact-send-button:hover::before {
-  animation: borderSweep 2s linear infinite;
+.contact-send-button:hover::after {
+  animation: innerGlowSweep 4s ease-in-out infinite;
+  opacity: 1;
 }
 
-/* Cursor-following glow (on hover only) */
-.contact-send-button::after {
-  content: '';
+/* CURSOR FOLLOWING GLOW - INTENSE */
+.contact-send-button .cursor-glow {
   position: absolute;
   inset: -2px;
   border-radius: 12px;
   padding: 2px;
   background: radial-gradient(
-    400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(255, 255, 255, 0.6),
-    rgba(255, 255, 255, 0.3) 30%,
-    transparent 60%
+    500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.4) 25%,
+    rgba(255, 255, 255, 0.2) 40%,
+    transparent 65%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -1571,35 +1609,125 @@ textarea::placeholder {
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
+  z-index: 3;
 }
 
-.contact-send-button:hover::after {
+.contact-send-button:hover .cursor-glow {
   opacity: 1;
 }
 
-/* Text */
+/* TEXT WITH GLOW EFFECT */
 .contact-send-button .button-text {
   position: relative;
-  z-index: 2;
+  z-index: 4;
   display: flex;
   align-items: center;
   gap: 8px;
   justify-content: center;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+  transition: all 0.3s ease;
 }
 
-/* Subtle background change on hover */
+.contact-send-button:hover .button-text {
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5));
+  transform: scale(1.02);
+}
+
+/* TEXT SHINE EFFECT THAT FOLLOWS THE SWEEP */
+.contact-send-button .button-text::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 70%,
+    transparent 100%
+  );
+  background-size: 300% 100%;
+  animation: textShineFlow 6s ease-in-out infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  pointer-events: none;
+}
+
+.contact-send-button:hover .button-text::before {
+  animation: textShineFlow 4s ease-in-out infinite;
+}
+
+/* OUTER GLOW HALO */
+.contact-send-button .outer-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 20px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(15px);
+}
+
+.contact-send-button:hover .outer-glow {
+  opacity: 1;
+}
+
+/* BENDING EFFECT - SUBTLE TRANSFORM */
 .contact-send-button:hover {
-  background: rgba(10, 10, 10, 0.95);
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  transition: transform 0.1s ease;
 }
 
-/* Sweeping animation */
-@keyframes borderSweep {
+/* ANIMATIONS */
+@keyframes borderSweepSlow {
   0% {
-    background-position: 200% 0;
+    background-position: 300% 0;
   }
   100% {
-    background-position: -200% 0;
+    background-position: -300% 0;
   }
+}
+
+@keyframes innerGlowSweep {
+  0% {
+    background-position: 300% 0;
+  }
+  100% {
+    background-position: -300% 0;
+  }
+}
+
+@keyframes textShineFlow {
+  0% {
+    background-position: 300% 0;
+  }
+  100% {
+    background-position: -300% 0;
+  }
+}
+
+/* PULSING GLOW ON IDLE */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+  }
+}
+
+.contact-send-button {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.contact-send-button:hover {
+  animation: none;
 }
 
 
