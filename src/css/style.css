@@ -1823,9 +1823,17 @@ textarea::placeholder {
 @media (max-width: 992px) {
   .hamburger { display: flex; }
   
-  /* Fix spotlight nav for mobile */
+  /* Break nav out of spotlight container on mobile */
   .spotlight-nav-container {
-    display: none;
+    position: static;
+  }
+  
+  .spotlight-nav {
+    overflow: visible;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    height: auto;
   }
   
   .nav-links-ul {
@@ -1837,6 +1845,7 @@ textarea::placeholder {
     flex-direction: column;
     padding: 30px;
     gap: 0;
+    height: auto;
     transform: translateY(-150%);
     transition: transform 0.4s ease;
     border-bottom: 1px solid rgba(71, 160, 184, 0.3);
@@ -1844,6 +1853,7 @@ textarea::placeholder {
     max-height: calc(100vh - 70px);
     overflow-y: auto;
     display: flex;
+    border-radius: 0;
   }
   
   .nav-links-ul.active {
