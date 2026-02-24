@@ -1,0 +1,15 @@
+# Robots.txt for Robo Nexus Website
+# https://robonexusaisg46.netlify.app
+
+User-agent: *
+Allow: /
+
+# Disallow admin or private directories (if any)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Sitemap location
+Sitemap: https://robonexusaisg46.netlify.app/sitemap.xml
+
+# Crawl-delay (optional, helps prevent server overload)
+Crawl-delay: 1

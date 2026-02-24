@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-53TPG7NL');</script>
+    <!-- End Google Tag Manager -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKPK7KF3CQ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KKPK7KF3CQ');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Page Not Found | Robo Nexus</title>
+
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Page not found - Robo Nexus Robotics Club">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="404 - Page Not Found | Robo Nexus">
+    <meta property="og:description" content="Page not found - Robo Nexus Robotics Club">
+    <meta property="og:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.png">
+    <meta property="og:url" content="https://robonexusaisg46.netlify.app/404.html">
+    <meta property="og:type" content="website">
+
+    <!-- Critical CSS - Prevents white flash -->
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; min-height: 100%; overflow-x: hidden; }
+      body { background: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #ffffff; }
+      #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    </style>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/src/css/style.css?v=8.0" />
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png">
+    <link rel="manifest" href="/src/assets/images/site.webmanifest">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+      .error-container {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .error-logo {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 30px;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease forwards;
+      }
+
+      .error-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 0 30px rgba(71, 160, 184, 0.4));
+        animation: logoFloat 4s ease-in-out infinite;
+        cursor: pointer;
+        transition: filter 0.3s ease;
+      }
+
+      .error-logo img:hover {
+        filter: drop-shadow(0 0 40px rgba(71, 160, 184, 0.8));
+      }
+
+      @keyframes logoFloat {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-15px) rotate(2deg); }
+        75% { transform: translateY(-15px) rotate(-2deg); }
+      }
+
+      .error-code {
+        font-size: 120px;
+        font-weight: 900;
+        color: #47a0b8;
+        line-height: 1;
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease 0.2s forwards;
+        text-shadow: 0 0 30px rgba(71, 160, 184, 0.5);
+      }
+
+      .error-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 15px;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease 0.4s forwards;
+      }
+
+      .error-message {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 500px;
+        margin: 0 auto 40px;
+        line-height: 1.6;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease 0.6s forwards;
+      }
+
+      .error-actions {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease 0.8s forwards;
+      }
+
+      .error-button {
+        padding: 15px 35px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .error-button-primary {
+        background: #47a0b8;
+        color: #ffffff;
+        border: 2px solid #47a0b8;
+      }
+
+      .error-button-primary:hover {
+        background: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(71, 160, 184, 0.4);
+      }
+
+      .error-button-secondary {
+        background: transparent;
+        color: #47a0b8;
+        border: 2px solid #47a0b8;
+      }
+
+      .error-button-secondary:hover {
+        background: rgba(71, 160, 184, 0.1);
+        transform: translateY(-2px);
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .error-code {
+          font-size: 80px;
+        }
+
+        .error-title {
+          font-size: 24px;
+        }
+
+        .error-message {
+          font-size: 16px;
+        }
+
+        .error-actions {
+          flex-direction: column;
+          width: 100%;
+          max-width: 300px;
+        }
+
+        .error-button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- PARTICLE BACKGROUND -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ERROR CONTAINER -->
+    <div class="error-container">
+      <div class="error-logo">
+        <img src="/src/assets/images/Robo_Nexus_Logo.png" alt="Robo Nexus Logo" />
+      </div>
+
+      <div class="error-code">404</div>
+      
+      <h1 class="error-title">Page Not Found</h1>
+      
+      <p class="error-message">
+        Oops! The page you're looking for seems to have wandered off into the digital void. 
+        Our robots are searching for it, but in the meantime, let's get you back on track.
+      </p>
+
+      <div class="error-actions">
+        <a href="/index.html" class="error-button error-button-primary">
+          <i class="fas fa-home"></i>
+          <span>Back to Home</span>
+        </a>
+        <a href="/src/html/contact.html" class="error-button error-button-secondary">
+          <i class="fas fa-envelope"></i>
+          <span>Contact Us</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <!-- Particles -->
+    <script src="/src/js/particles.js?v=4.0"></script>
+
+    <!-- Magnetic Button Effect -->
+    <script>
+      // Magnetic button effect for error buttons
+      document.querySelectorAll('.error-button').forEach(btn => {
+        btn.addEventListener('mousemove', function(e) {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          
+          gsap.to(btn, {
+            x: x * 0.3,
+            y: y * 0.3,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        });
+
+        btn.addEventListener('mouseleave', function() {
+          gsap.to(btn, {
+            x: 0,
+            y: 0,
+            duration: 0.5,
+            ease: "elastic.out(1, 0.3)"
+          });
+        });
+      });
+
+      // Custom cursor glow effect
+      const cursor = document.createElement('div');
+      cursor.className = 'custom-cursor';
+      cursor.style.cssText = `
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(71, 160, 184, 0.8) 0%, rgba(71, 160, 184, 0) 70%);
+        pointer-events: none;
+        z-index: 10000;
+        mix-blend-mode: screen;
+        transition: transform 0.15s ease;
+      `;
+      document.body.appendChild(cursor);
+
+      document.addEventListener('mousemove', (e) => {
+        gsap.to(cursor, {
+          x: e.clientX - 10,
+          y: e.clientY - 10,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+
+      // Scale cursor on button hover
+      document.querySelectorAll('.error-button, .error-logo img').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          gsap.to(cursor, { scale: 2, duration: 0.3 });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(cursor, { scale: 1, duration: 0.3 });
+        });
+      });
+    </script>
+  </body>
+</html>
