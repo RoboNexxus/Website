@@ -56,61 +56,6 @@ body {
 }
 
 /* ===============================
-   LOADING SCREEN
-================================ */
-.loading-screen {
-  position: fixed;
-  inset: 0;
-  background: #000000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-  opacity: 0;
-}
-
-.liquid-text-canvas {
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-}
-
-.loading-screen-skip {
-  position: fixed;
-  bottom: 40px;
-  right: 40px;
-  background: rgba(71, 160, 184, 0.2);
-  border: 2px solid rgba(71, 160, 184, 0.5);
-  color: #47a0b8;
-  padding: 12px 24px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: 10001;
-}
-
-.loading-screen-skip.visible {
-  opacity: 1;
-}
-
-.loading-screen-skip:hover {
-  background: rgba(71, 160, 184, 0.4);
-  border-color: #47a0b8;
-  transform: scale(1.05);
-}
-
-.loading-screen-skip:focus {
-  outline: 2px solid #47a0b8;
-  outline-offset: 2px;
-}
-
-/* ===============================
    NAVBAR - Spotlight Style
 ================================ */
 .navbar {
