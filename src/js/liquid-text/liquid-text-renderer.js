@@ -335,20 +335,13 @@ class LiquidTextRenderer {
   setupUniforms() {
     // Get uniform locations
     this.uniforms = {
-      uHoverPosition: this.gl.getUniformLocation(this.program, 'uHoverPosition'),
-      uDistortionRadius: this.gl.getUniformLocation(this.program, 'uDistortionRadius'),
-      uDistortionStrength: this.gl.getUniformLocation(this.program, 'uDistortionStrength'),
       uTime: this.gl.getUniformLocation(this.program, 'uTime'),
-      uResolution: this.gl.getUniformLocation(this.program, 'uResolution'),
       uTexture: this.gl.getUniformLocation(this.program, 'uTexture'),
       uGradientStart: this.gl.getUniformLocation(this.program, 'uGradientStart'),
       uGradientEnd: this.gl.getUniformLocation(this.program, 'uGradientEnd')
     };
     
     // Set static uniforms
-    this.gl.uniform1f(this.uniforms.uDistortionRadius, this.options.distortionRadius);
-    this.gl.uniform1f(this.uniforms.uDistortionStrength, this.options.distortionStrength);
-    this.gl.uniform2f(this.uniforms.uResolution, this.canvas.width, this.canvas.height);
     this.gl.uniform1i(this.uniforms.uTexture, 0);
     
     // Set gradient colors
@@ -398,15 +391,9 @@ class LiquidTextRenderer {
     // Clear canvas
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     
-    // Update time uniform
+    // Update time uniform for automatic animation
     const currentTime = (performance.now() - this.startTime) / 1000;
     this.gl.uniform1f(this.uniforms.uTime, currentTime);
-    
-    // Update hover position uniform
-    // Convert from normalized (0-1) to NDC (-1 to 1)
-    const ndcX = this.hoverPosition.x * 2.0 - 1.0;
-    const ndcY = -(this.hoverPosition.y * 2.0 - 1.0); // Flip Y for screen coordinates
-    this.gl.uniform2f(this.uniforms.uHoverPosition, ndcX, ndcY);
     
     // Bind texture
     this.gl.activeTexture(this.gl.TEXTURE0);
