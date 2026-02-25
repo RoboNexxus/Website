@@ -88,6 +88,8 @@ function initSpotlightNavbar() {
   const currentPath = window.location.pathname;
   const currentPage = currentPath.split('/').pop() || 'index.html';
   
+  console.log('Spotlight Navbar - Current page:', currentPage);
+  
   navLinks.forEach((link, index) => {
     link.classList.remove('active');
     const href = link.getAttribute('href');
@@ -102,6 +104,7 @@ function initSpotlightNavbar() {
           (currentPage === 'alumni.html' && linkPage === 'team.html')) {
         activeIndex = index;
         link.classList.add('active');
+        console.log('Spotlight Navbar - Active link set to:', linkPage, 'at index:', index);
       }
     }
   });
