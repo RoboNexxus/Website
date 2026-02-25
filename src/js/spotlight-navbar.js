@@ -97,7 +97,9 @@ function initSpotlightNavbar() {
       // Check if this is the current page
       if (linkPage === currentPage || 
           (currentPage === '' && linkPage === 'index.html') ||
-          (currentPage === 'index.html' && href === '/index.html')) {
+          (currentPage === 'index.html' && href === '/index.html') ||
+          // Alumni page should highlight Team link
+          (currentPage === 'alumni.html' && linkPage === 'team.html')) {
         activeIndex = index;
         link.classList.add('active');
       }

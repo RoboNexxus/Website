@@ -1,28 +1,38 @@
-gsap.registerPlugin(ScrollTrigger);
+// Wait for GSAP to be available
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 /* ===============================
    PAGE TRANSITION
 ================================ */
-const pageTransition = document.querySelector(".page-transition");
+function initPageTransition() {
+  const pageTransition = document.querySelector(".page-transition");
 
-if (pageTransition) {
-  // Immediately hide transition overlay
-  gsap.set(pageTransition, { opacity: 0 });
+  if (pageTransition) {
+    // Immediately hide transition overlay
+    if (typeof gsap !== 'undefined') {
+      gsap.set(pageTransition, { opacity: 0 });
+    }
 
-  // Disable page transition animations to prevent browser glitches
-  document.querySelectorAll("a[href]").forEach(link => {
-    const href = link.getAttribute("href");
+    // Disable page transition animations to prevent browser glitches
+    document.querySelectorAll("a[href]").forEach(link => {
+      const href = link.getAttribute("href");
 
-    if (
-      href.startsWith("http") ||
-      href.startsWith("#") ||
-      href.startsWith("mailto")
-    ) return;
+      if (
+        href.startsWith("http") ||
+        href.startsWith("#") ||
+        href.startsWith("mailto")
+      ) return;
 
-    // Remove the transition animation - just navigate directly
-    // This prevents the browser glitch/hang issue
-  });
+      // Remove the transition animation - just navigate directly
+      // This prevents the browser glitch/hang issue
+    });
+  }
 }
+
+// Initialize page transition
+initPageTransition();
 
 /* ===============================
    HAMBURGER MENU
@@ -213,7 +223,12 @@ function loadTeamMembers() {
 
   if (teamContainer) {
     console.log('Loading team members...');
-    fetch("/src/js/team.json")
+    // Use relative path that works from any page
+    const jsonPath = window.location.pathname.includes('/src/html/') 
+      ? '../js/team.json' 
+      : 'src/js/team.json';
+    
+    fetch(jsonPath)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load team data');
         return res.json();
@@ -270,9 +285,13 @@ function loadTeamMembers() {
   }
 }
 
-// Call immediately and also on DOMContentLoaded
-loadTeamMembers();
-document.addEventListener('DOMContentLoaded', loadTeamMembers);
+// Call immediately and also on DOMContentLoaded as backup
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadTeamMembers);
+} else {
+  // DOM already loaded, call with a small delay to ensure container exists
+  setTimeout(loadTeamMembers, 100);
+}
 
 /* ===============================
    STATS COUNTER
@@ -385,7 +404,12 @@ function loadAlumni() {
 
   if (alumniContainer) {
     console.log('Loading alumni...');
-    fetch("/src/js/alumni.json")
+    // Use relative path that works from any page
+    const jsonPath = window.location.pathname.includes('/src/html/') 
+      ? '../js/alumni.json' 
+      : 'src/js/alumni.json';
+    
+    fetch(jsonPath)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load alumni data');
         return res.json();
@@ -439,9 +463,13 @@ function loadAlumni() {
   }
 }
 
-// Call immediately and also on DOMContentLoaded
-loadAlumni();
-document.addEventListener('DOMContentLoaded', loadAlumni);
+// Call immediately and also on DOMContentLoaded as backup
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadAlumni);
+} else {
+  // DOM already loaded, call with a small delay to ensure container exists
+  setTimeout(loadAlumni, 100);
+}
 
 console.log('🤖 Robo Nexus - Website Loaded Successfully!');
 
