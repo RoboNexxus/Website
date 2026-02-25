@@ -41,11 +41,7 @@ function initProjects() {
 }
 
 // Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initProjects);
-} else {
-  initProjects();
-}
+document.addEventListener('DOMContentLoaded', initProjects);
 
 function renderTutorials() {
   if (!tutorialsGrid) return;

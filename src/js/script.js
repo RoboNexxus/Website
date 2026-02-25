@@ -266,11 +266,7 @@ function loadTeamMembers() {
 }
 
 // Call the function when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadTeamMembers);
-} else {
-  loadTeamMembers();
-}
+document.addEventListener('DOMContentLoaded', loadTeamMembers);
 
 /* ===============================
    STATS COUNTER
@@ -433,11 +429,7 @@ function loadAlumni() {
 }
 
 // Call the function when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadAlumni);
-} else {
-  loadAlumni();
-}
+document.addEventListener('DOMContentLoaded', loadAlumni);
 
 console.log('🤖 Robo Nexus - Website Loaded Successfully!');
 

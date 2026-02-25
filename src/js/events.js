@@ -22,11 +22,7 @@ function initEvents() {
 }
 
 // Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initEvents);
-} else {
-  initEvents();
-}
+document.addEventListener('DOMContentLoaded', initEvents);
 
 // Calendar Data
 function generateCalendarDays(year, month) {
