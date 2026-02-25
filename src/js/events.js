@@ -131,7 +131,7 @@ function renderPastEvents() {
   pastContainer.innerHTML = pastEvents.map(event => `
     <div class="past-event-card reveal">
       <div class="past-event-image">
-        <img src="${event.images[0]}" alt="${event.title}">
+        <img src="${event.images[0]}" alt="${event.title}" width="400" height="300" loading="lazy">
       </div>
       <div class="past-event-info">
         <span class="past-event-date">${new Date(event.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>

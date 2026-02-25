@@ -26,7 +26,7 @@ function renderTutorials() {
   tutorialsGrid.innerHTML = tutorials.map((tutorial) => `
     <div class="project-card" data-id="${tutorial.id}">
       <div class="project-image">
-        <img src="${tutorial.image}" alt="${tutorial.title}" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
+        <img src="${tutorial.image}" alt="${tutorial.title}" width="400" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
         <div class="project-overlay">
           <span class="project-category">${tutorial.category.toUpperCase()}</span>
           <span class="project-status ${tutorial.status === 'Completed' ? 'completed' : 'progress'}">${tutorial.status}</span>
@@ -56,7 +56,7 @@ function openModal(id) {
 
   modalBody.innerHTML = `
     <div class="modal-image">
-      <img src="${tutorial.image}" alt="${tutorial.title}" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
+      <img src="${tutorial.image}" alt="${tutorial.title}" width="600" height="400" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
     </div>
     <div class="modal-info">
       <span class="modal-category">${tutorial.category.toUpperCase()}</span>

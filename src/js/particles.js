@@ -12,6 +12,22 @@ if (canvas) {
   let mouse = { x: null, y: null, radius: 150 };
   let isResizing = false;
 
+  // Mobile detection and optimization
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+                   || window.innerWidth < 768;
+  
+  // Adaptive configuration based on device
+  const config = {
+    maxParticles: isMobile ? 20 : 80,
+    particleSize: isMobile ? 1.5 : 2,
+    particleSpeed: isMobile ? 0.2 : 0.3,
+    enableConnections: !isMobile, // Disable connection lines on mobile
+    connectionDistance: isMobile ? 0 : 100,
+    mouseRadius: isMobile ? 100 : 150
+  };
+  
+  mouse.radius = config.mouseRadius;
+
   // Optimized canvas sizing
   const setCanvasSize = () => {
     const dpr = window.devicePixelRatio || 1;
@@ -105,22 +121,25 @@ if (canvas) {
 
   function init() {
     particles = [];
-    // Reduced particle count significantly
+    // Use adaptive particle count based on device
     const area = window.innerWidth * window.innerHeight;
-    const numParticles = Math.min(Math.floor(area / 20000), 80); // Max 80 particles
+    const numParticles = Math.min(Math.floor(area / 20000), config.maxParticles);
     
     for (let i = 0; i < numParticles; i++) {
-      let size = Math.random() * 2 + 1; // Smaller particles
+      let size = Math.random() * config.particleSize + 1;
       let x = Math.random() * window.innerWidth;
       let y = Math.random() * window.innerHeight;
-      let speedX = (Math.random() - 0.5) * 0.3; // Slower movement
-      let speedY = (Math.random() - 0.5) * 0.3;
+      let speedX = (Math.random() - 0.5) * config.particleSpeed;
+      let speedY = (Math.random() - 0.5) * config.particleSpeed;
       particles.push(new Particle(x, y, size, speedX, speedY));
     }
   }
 
   function connect() {
-    const maxDistance = 100; // Reduced connection distance
+    // Skip connections on mobile for better performance
+    if (!config.enableConnections) return;
+    
+    const maxDistance = config.connectionDistance;
     const maxDistanceSq = maxDistance * maxDistance;
     
     // Only check nearby particles (optimization)
@@ -169,6 +188,23 @@ if (canvas) {
   window.addEventListener('beforeunload', () => {
     if (animationId) {
       cancelAnimationFrame(animationId);
+    }
+  });
+
+  // Page Visibility API - Pause particles when tab is hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      // Pause animation when tab is hidden
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+    } else {
+      // Resume animation when tab becomes visible
+      if (!animationId) {
+        lastTime = 0; // Reset timing
+        animate(0);
+      }
     }
   });
 
