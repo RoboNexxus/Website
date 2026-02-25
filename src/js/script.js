@@ -208,62 +208,68 @@ if (document.querySelector(".about-section")) {
 /* ===============================
    TEAM CARDS
 ================================ */
-const teamContainer = document.getElementById("team-container");
+function loadTeamMembers() {
+  const teamContainer = document.getElementById("team-container");
 
-if (teamContainer) {
-  fetch("/src/js/team.json")
-    .then(res => {
-      if (!res.ok) throw new Error('Failed to load team data');
-      return res.json();
-    })
-    .then(data => {
-      // Define role hierarchy for sorting
-      const roleOrder = {
-        "President": 1,
-        "Vice President": 2,
-        "Core Member": 3,
-        "Member": 4
-      };
+  if (teamContainer) {
+    fetch("/src/js/team.json")
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load team data');
+        return res.json();
+      })
+      .then(data => {
+        // Define role hierarchy for sorting
+        const roleOrder = {
+          "President": 1,
+          "Vice President": 2,
+          "Core Member": 3,
+          "Member": 4
+        };
 
-      // Sort members by role first, then alphabetically by name
-      const members = data.members.sort((a, b) => {
-        const roleComparison = (roleOrder[a.role] || 999) - (roleOrder[b.role] || 999);
-        if (roleComparison !== 0) return roleComparison;
-        return a.name.localeCompare(b.name);
-      });
+        // Sort members by role first, then alphabetically by name
+        const members = data.members.sort((a, b) => {
+          const roleComparison = (roleOrder[a.role] || 999) - (roleOrder[b.role] || 999);
+          if (roleComparison !== 0) return roleComparison;
+          return a.name.localeCompare(b.name);
+        });
 
-      // Add cache buster to force image reload
-      const cacheBuster = `?v=${Date.now()}`;
-
-      teamContainer.innerHTML = members.map((member, index) => {
-        // Normalize image path - handle both "assets/images/..." and "src/assets/images/..." formats
-        let imagePath = member.image;
-        if (!imagePath.startsWith('/') && !imagePath.startsWith('src/')) {
-          imagePath = `/src/${imagePath}`;
-        } else if (imagePath.startsWith('src/')) {
-          imagePath = `/${imagePath}`;
-        }
-        
-        return `
-          <div class="team-card ${member.leavingSoon ? 'leaving-soon' : ''}">
-            ${member.leavingSoon ? '<span class="leaving-badge"><i class="fas fa-crown"></i> Leaving Club Soon</span>' : ''}
-            <img src="${imagePath}${cacheBuster}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png${cacheBuster}'">
-            <h2>${member.name}</h2>
-            <p>${member.role}</p>
-            <div class="social-links">
-              ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
-              ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
-              ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
-              ${member.links.discord ? `<a href="${member.links.discord}" target="_blank"><i class="fab fa-discord"></i></a>` : ""}
+        teamContainer.innerHTML = members.map((member, index) => {
+          // Normalize image path - handle both "assets/images/..." and "src/assets/images/..." formats
+          let imagePath = member.image;
+          if (!imagePath.startsWith('/') && !imagePath.startsWith('src/')) {
+            imagePath = `/src/${imagePath}`;
+          } else if (imagePath.startsWith('src/')) {
+            imagePath = `/${imagePath}`;
+          }
+          
+          return `
+            <div class="team-card ${member.leavingSoon ? 'leaving-soon' : ''}">
+              ${member.leavingSoon ? '<span class="leaving-badge"><i class="fas fa-crown"></i> Leaving Club Soon</span>' : ''}
+              <img src="${imagePath}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
+              <h2>${member.name}</h2>
+              <p>${member.role}</p>
+              <div class="social-links">
+                ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
+                ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
+                ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
+                ${member.links.discord ? `<a href="${member.links.discord}" target="_blank"><i class="fab fa-discord"></i></a>` : ""}
+              </div>
             </div>
-          </div>
-        `;
-      }).join("");
-    })
-    .catch(err => {
-      console.error('Team loading error:', err);
-      teamContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Team data loading...</p>';
-    });
+          `;
+        }).join("");
+      })
+      .catch(err => {
+        console.error('Team loading error:', err);
+        teamContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Team data loading...</p>';
+      });
+  }
+}
+
+// Call the function when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadTeamMembers);
+} else {
+  loadTeamMembers();
 }
 
 /* ===============================
@@ -372,56 +378,65 @@ document.addEventListener('mousemove', (e) => {
 /* ===============================
    ALUMNI SECTION
 ================================ */
-const alumniContainer = document.getElementById("alumni-container");
+function loadAlumni() {
+  const alumniContainer = document.getElementById("alumni-container");
 
-if (alumniContainer) {
-  fetch("/src/js/alumni.json")
-    .then(res => {
-      if (!res.ok) throw new Error('Failed to load alumni data');
-      return res.json();
-    })
-    .then(data => {
-      const alumni = data.alumni;
-      if (alumni.length === 0) {
-        alumniContainer.innerHTML = '<p class="no-alumni">No alumni yet - our journey continues!</p>';
-        return;
-      }
-      
-      alumniContainer.innerHTML = alumni.map((member, index) => {
-        // Normalize image path - handle both "assets/images/..." and "src/assets/images/..." formats
-        let imagePath = member.image;
-        if (!imagePath.startsWith('/') && !imagePath.startsWith('src/')) {
-          imagePath = `/src/${imagePath}`;
-        } else if (imagePath.startsWith('src/')) {
-          imagePath = `/${imagePath}`;
+  if (alumniContainer) {
+    fetch("/src/js/alumni.json")
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load alumni data');
+        return res.json();
+      })
+      .then(data => {
+        const alumni = data.alumni;
+        if (alumni.length === 0) {
+          alumniContainer.innerHTML = '<p class="no-alumni">No alumni yet - our journey continues!</p>';
+          return;
         }
         
-        return `
-          <div class="alumni-card ${member.upcoming ? 'upcoming-alumni' : ''}">
-            <div class="alumni-badge">
-              <i class="fas fa-medal"></i>
-            </div>
-            ${member.upcoming ? '<span class="upcoming-badge"><i class="fas fa-hourglass-half"></i> Coming Soon</span>' : ''}
-            <img src="${imagePath}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
-            <div class="alumni-info">
-              <h2>${member.name}</h2>
-              <p class="alumni-role">${member.role}</p>
-              <p class="alumni-batch"><i class="fas fa-graduation-cap"></i> Batch ${member.batch}</p>
-              ${member.contribution ? `<p class="alumni-contribution">"${member.contribution}"</p>` : ''}
-              <div class="social-links">
-                ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
-                ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
-                ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
+        alumniContainer.innerHTML = alumni.map((member, index) => {
+          // Normalize image path - handle both "assets/images/..." and "src/assets/images/..." formats
+          let imagePath = member.image;
+          if (!imagePath.startsWith('/') && !imagePath.startsWith('src/')) {
+            imagePath = `/src/${imagePath}`;
+          } else if (imagePath.startsWith('src/')) {
+            imagePath = `/${imagePath}`;
+          }
+          
+          return `
+            <div class="alumni-card ${member.upcoming ? 'upcoming-alumni' : ''}">
+              <div class="alumni-badge">
+                <i class="fas fa-medal"></i>
+              </div>
+              ${member.upcoming ? '<span class="upcoming-badge"><i class="fas fa-hourglass-half"></i> Coming Soon</span>' : ''}
+              <img src="${imagePath}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
+              <div class="alumni-info">
+                <h2>${member.name}</h2>
+                <p class="alumni-role">${member.role}</p>
+                <p class="alumni-batch"><i class="fas fa-graduation-cap"></i> Batch ${member.batch}</p>
+                ${member.contribution ? `<p class="alumni-contribution">"${member.contribution}"</p>` : ''}
+                <div class="social-links">
+                  ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
+                  ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
+                  ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
+                </div>
               </div>
             </div>
-          </div>
-        `;
-      }).join("");
-    })
-    .catch(err => {
-      console.error('Alumni loading error:', err);
-      alumniContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Alumni data loading...</p>';
-    });
+          `;
+        }).join("");
+      })
+      .catch(err => {
+        console.error('Alumni loading error:', err);
+        alumniContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Alumni data loading...</p>';
+      });
+  }
+}
+
+// Call the function when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadAlumni);
+} else {
+  loadAlumni();
 }
 
 console.log('🤖 Robo Nexus - Website Loaded Successfully!');

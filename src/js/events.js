@@ -1,20 +1,32 @@
 // Events Data - Fetched from JSON
 let upcomingEvents = [];
 let pastEvents = [];
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 
-// Fetch events from JSON
-fetch('/src/js/events.json')
-  .then(res => res.json())
-  .then(data => {
-    upcomingEvents = data.upcomingEvents;
-    pastEvents = data.pastEvents;
-    renderCalendar();
-    renderUpcomingEvents();
-    renderPastEvents();
-  })
-  .catch(err => {
-    console.error('Error loading events:', err);
-  });
+function initEvents() {
+  // Fetch events from JSON
+  fetch('/src/js/events.json')
+    .then(res => res.json())
+    .then(data => {
+      upcomingEvents = data.upcomingEvents;
+      pastEvents = data.pastEvents;
+      renderCalendar();
+      renderUpcomingEvents();
+      renderPastEvents();
+      setupEventListeners();
+    })
+    .catch(err => {
+      console.error('Error loading events:', err);
+    });
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initEvents);
+} else {
+  initEvents();
+}
 
 // Calendar Data
 function generateCalendarDays(year, month) {
@@ -42,9 +54,6 @@ function generateCalendarDays(year, month) {
 }
 
 // Render Calendar
-let currentMonth = new Date().getMonth();
-let currentYear = new Date().getFullYear();
-
 function renderCalendar() {
   const calendarGrid = document.getElementById('calendar-grid');
   const monthYear = document.getElementById('month-year');
@@ -66,26 +75,48 @@ function renderCalendar() {
   `).join('');
 }
 
-// Calendar Navigation
-document.getElementById('prev-month')?.addEventListener('click', () => {
-  currentMonth--;
-  if (currentMonth < 0) {
-    currentMonth = 11;
-    currentYear--;
-  }
-  renderCalendar();
-});
+// Setup Event Listeners
+function setupEventListeners() {
+  // Calendar Navigation
+  document.getElementById('prev-month')?.addEventListener('click', () => {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    }
+    renderCalendar();
+  });
 
-document.getElementById('next-month')?.addEventListener('click', () => {
-  currentMonth++;
-  if (currentMonth > 11) {
-    currentMonth = 0;
-    currentYear++;
-  }
-  renderCalendar();
-});
+  document.getElementById('next-month')?.addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    renderCalendar();
+  });
 
-// Render Upcoming Events
+  // Registration Modal
+  const regModal = document.getElementById('registration-modal');
+  const regForm = document.getElementById('registration-form');
+
+  document.querySelector('.reg-modal-close')?.addEventListener('click', () => {
+    regModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  });
+
+  regForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(regForm);
+    console.log('Registration:', Object.fromEntries(formData));
+    
+    alert('Registration successful! You will receive a confirmation email shortly.');
+    regModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    regForm.reset();
+  });
+}
 function renderUpcomingEvents() {
   const upcomingContainer = document.getElementById('upcoming-events');
   if (!upcomingContainer) return;
@@ -146,11 +177,9 @@ function renderPastEvents() {
 }
 
 // Registration Modal
-const regModal = document.getElementById('registration-modal');
-const regForm = document.getElementById('registration-form');
-
 function openRegistrationModal(eventId) {
   const event = upcomingEvents.find(e => e.id == eventId);
+  const regModal = document.getElementById('registration-modal');
   if (!event || !regModal) return;
 
   document.getElementById('reg-event-title').textContent = event.title;
@@ -158,20 +187,3 @@ function openRegistrationModal(eventId) {
   regModal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
-
-document.querySelector('.reg-modal-close')?.addEventListener('click', () => {
-  regModal.classList.remove('active');
-  document.body.style.overflow = 'auto';
-});
-
-regForm?.addEventListener('submit', (e) => {
-  e.preventDefault();
-  
-  const formData = new FormData(regForm);
-  console.log('Registration:', Object.fromEntries(formData));
-  
-  alert('Registration successful! You will receive a confirmation email shortly.');
-  regModal.classList.remove('active');
-  document.body.style.overflow = 'auto';
-  regForm.reset();
-});

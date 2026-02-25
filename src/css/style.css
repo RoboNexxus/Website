@@ -287,11 +287,15 @@ body {
   border: 2px solid rgba(71, 160, 184, 0.5);
   border-radius: 50%;
   transition: all 0.3s ease;
+  text-align: center;
+  line-height: 50px;
 }
 
 .socials a i {
   font-size: 1.5rem;
   transition: all 0.3s ease;
+  display: block;
+  line-height: 1;
 }
 
 .socials a:hover {

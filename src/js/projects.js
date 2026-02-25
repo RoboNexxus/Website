@@ -1,24 +1,51 @@
 // Tutorials Data - Fetched from JSON
 let tutorials = [];
+let tutorialsGrid, modal, modalBody, modalClose;
 
-const tutorialsGrid = document.getElementById('projects-grid');
-const modal = document.getElementById('project-modal');
-const modalBody = document.getElementById('modal-body');
-const modalClose = document.querySelector('.modal-close');
+function initProjects() {
+  tutorialsGrid = document.getElementById('projects-grid');
+  modal = document.getElementById('project-modal');
+  modalBody = document.getElementById('modal-body');
+  modalClose = document.querySelector('.modal-close');
 
-// Fetch tutorials from JSON
-fetch('/src/js/tutorials.json')
-  .then(res => res.json())
-  .then(data => {
-    tutorials = data.tutorials;
-    renderTutorials();
-  })
-  .catch(err => {
-    console.error('Error loading tutorials:', err);
-    if (tutorialsGrid) {
-      tutorialsGrid.innerHTML = '<p style="text-align:center; color: #47a0b8;">Tutorials loading...</p>';
-    }
-  });
+  // Fetch tutorials from JSON
+  fetch('/src/js/tutorials.json')
+    .then(res => res.json())
+    .then(data => {
+      tutorials = data.tutorials;
+      renderTutorials();
+    })
+    .catch(err => {
+      console.error('Error loading tutorials:', err);
+      if (tutorialsGrid) {
+        tutorialsGrid.innerHTML = '<p style="text-align:center; color: #47a0b8;">Tutorials loading...</p>';
+      }
+    });
+
+  // Setup modal close listeners
+  if (modalClose) {
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+  }
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initProjects);
+} else {
+  initProjects();
+}
 
 function renderTutorials() {
   if (!tutorialsGrid) return;
@@ -80,18 +107,4 @@ function openModal(id) {
   document.body.style.overflow = 'hidden';
 }
 
-if (modalClose) {
-  modalClose.addEventListener('click', () => {
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-  });
-}
 
-if (modal) {
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.classList.remove('active');
-      document.body.style.overflow = 'auto';
-    }
-  });
-}
