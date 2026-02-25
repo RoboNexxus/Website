@@ -212,12 +212,14 @@ function loadTeamMembers() {
   const teamContainer = document.getElementById("team-container");
 
   if (teamContainer) {
+    console.log('Loading team members...');
     fetch("/src/js/team.json")
       .then(res => {
         if (!res.ok) throw new Error('Failed to load team data');
         return res.json();
       })
       .then(data => {
+        console.log('Team data loaded:', data);
         // Define role hierarchy for sorting
         const roleOrder = {
           "President": 1,
@@ -257,15 +259,19 @@ function loadTeamMembers() {
             </div>
           `;
         }).join("");
+        console.log('Team members rendered');
       })
       .catch(err => {
         console.error('Team loading error:', err);
         teamContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Team data loading...</p>';
       });
+  } else {
+    console.log('Team container not found');
   }
 }
 
-// Call the function when DOM is ready
+// Call immediately and also on DOMContentLoaded
+loadTeamMembers();
 document.addEventListener('DOMContentLoaded', loadTeamMembers);
 
 /* ===============================
@@ -378,12 +384,14 @@ function loadAlumni() {
   const alumniContainer = document.getElementById("alumni-container");
 
   if (alumniContainer) {
+    console.log('Loading alumni...');
     fetch("/src/js/alumni.json")
       .then(res => {
         if (!res.ok) throw new Error('Failed to load alumni data');
         return res.json();
       })
       .then(data => {
+        console.log('Alumni data loaded:', data);
         const alumni = data.alumni;
         if (alumni.length === 0) {
           alumniContainer.innerHTML = '<p class="no-alumni">No alumni yet - our journey continues!</p>';
@@ -420,15 +428,19 @@ function loadAlumni() {
             </div>
           `;
         }).join("");
+        console.log('Alumni rendered');
       })
       .catch(err => {
         console.error('Alumni loading error:', err);
         alumniContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Alumni data loading...</p>';
       });
+  } else {
+    console.log('Alumni container not found');
   }
 }
 
-// Call the function when DOM is ready
+// Call immediately and also on DOMContentLoaded
+loadAlumni();
 document.addEventListener('DOMContentLoaded', loadAlumni);
 
 console.log('🤖 Robo Nexus - Website Loaded Successfully!');
