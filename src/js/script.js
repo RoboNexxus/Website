@@ -188,32 +188,7 @@ revealElements.forEach(el => {
 /* ===============================
    ABOUT SECTION
 ================================ */
-if (document.querySelector(".about-section")) {
-  gsap.set(".about-details", { opacity: 1, x: 0 });
-  gsap.set(".about-logo", { opacity: 1, x: 0 });
-  
-  gsap.from(".about-details", {
-    scrollTrigger: {
-      trigger: ".about-section",
-      start: "top 80%"
-    },
-    x: -80,
-    opacity: 0,
-    duration: 1,
-    ease: "power3.out"
-  });
-
-  gsap.from(".about-logo", {
-    scrollTrigger: {
-      trigger: ".about-section",
-      start: "top 80%"
-    },
-    x: 80,
-    opacity: 0,
-    duration: 1,
-    ease: "power3.out"
-  });
-}
+// Removed duplicate animation - using .reveal class instead
 
 /* ===============================
    TEAM CARDS

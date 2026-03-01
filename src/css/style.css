@@ -445,11 +445,11 @@ body {
 .about-text-sub {
   font-size: 1.2rem;
   line-height: 1.8;
-  color: rgba(255, 255, 255, 0.9) !important;
+  color: #ffffff !important;
 }
 
 .about-text-sub strong {
-  color: rgba(255, 255, 255, 0.95) !important;
+  color: #ffffff !important;
 }
 
 /* ===============================
