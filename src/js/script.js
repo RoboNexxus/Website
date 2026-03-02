@@ -255,13 +255,14 @@ function loadTeamMembers() {
         }).join("");
         // Animate each card individually as it scrolls into view
         const cards = teamContainer.querySelectorAll('.team-card');
-        cards.forEach((card) => {
+        cards.forEach((card, i) => {
           gsap.set(card, { opacity: 0, y: 60, scale: 0.95 });
           gsap.to(card, {
             opacity: 1,
             y: 0,
             scale: 1,
             duration: 0.8,
+            delay: i * 0.12,
             ease: "power3.out",
             scrollTrigger: {
               trigger: card,
@@ -445,13 +446,14 @@ function loadAlumni() {
         }).join("");
         // Animate each card individually as it scrolls into view
         const cards = alumniContainer.querySelectorAll('.alumni-card');
-        cards.forEach((card) => {
+        cards.forEach((card, i) => {
           gsap.set(card, { opacity: 0, y: 60, scale: 0.95 });
           gsap.to(card, {
             opacity: 1,
             y: 0,
             scale: 1,
             duration: 0.8,
+            delay: i * 0.12,
             ease: "power3.out",
             scrollTrigger: {
               trigger: card,
