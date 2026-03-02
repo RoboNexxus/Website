@@ -41,13 +41,31 @@
 
   // Parse total lines from the README badge: Total_Lines-XXXXX
   function parseLinesFromReadme(content) {
-    const match = content.match(/Total_Lines[_-](\d+)/i);
+    const match = content.match(/Total_Lines[_-]([\d,]+)/i);
+    return match ? parseInt(match[1].replace(/,/g, ''), 10) : null;
+  }
+
+  // Parse repo count from README: "Across all X repositories"
+  function parseRepoCountFromReadme(content) {
+    const match = content.match(/Across all (\d+) repositories/i);
     return match ? parseInt(match[1], 10) : null;
+  }
+
+  // Parse language breakdown from README comment: <!-- LANG_DATA:Python:12345,JavaScript:6789 -->
+  function parseLangsFromReadme(content) {
+    const match = content.match(/<!-- LANG_DATA:(.+?) -->/);
+    if (!match) return null;
+    const langs = {};
+    match[1].split(',').forEach(pair => {
+      const [lang, lines] = pair.split(':');
+      if (lang && lines) langs[lang] = parseInt(lines, 10);
+    });
+    return Object.keys(langs).length > 0 ? langs : null;
   }
 
   async function fetchGitHubStats() {
     try {
-      // Fetch repos + README in parallel
+      // Fetch repos (public) + README (has all data including private) in parallel
       const [reposRes, readmeRes] = await Promise.all([
         fetch(`${API}/orgs/${ORG}/repos?per_page=100`),
         fetch(README_URL, { headers: { Accept: 'application/vnd.github.v3.raw' } }),
@@ -58,32 +76,43 @@
       const realRepos = repos.filter(r => r.name !== '.github');
       const totalStars = realRepos.reduce((sum, r) => sum + r.stargazers_count, 0);
 
-      // Get line count from README (includes private repos)
+      // Parse README for accurate stats (includes private repos)
       let totalLines = null;
+      let repoCount = null;
+      let readmeLangs = null;
       if (readmeRes.ok) {
         const readmeText = await readmeRes.text();
         totalLines = parseLinesFromReadme(readmeText);
+        repoCount = parseRepoCountFromReadme(readmeText);
+        readmeLangs = parseLangsFromReadme(readmeText);
       }
 
-      // Fetch languages for each public repo in parallel
-      const langPromises = realRepos.map(r =>
-        fetch(`${API}/repos/${ORG}/${r.name}/languages`).then(res => res.json())
-      );
-      const langResults = await Promise.all(langPromises);
+      // Use README language data if available, otherwise fall back to API
+      let sortedLangs;
+      let totalBytes;
 
-      const allLangs = {};
-      langResults.forEach(langObj => {
-        Object.entries(langObj).forEach(([lang, bytes]) => {
-          allLangs[lang] = (allLangs[lang] || 0) + bytes;
+      if (readmeLangs) {
+        totalBytes = Object.values(readmeLangs).reduce((a, b) => a + b, 0);
+        sortedLangs = Object.entries(readmeLangs).sort((a, b) => b[1] - a[1]);
+      } else {
+        // Fallback: fetch languages from public repos only
+        const langPromises = realRepos.map(r =>
+          fetch(`${API}/repos/${ORG}/${r.name}/languages`).then(res => res.json())
+        );
+        const langResults = await Promise.all(langPromises);
+        const allLangs = {};
+        langResults.forEach(langObj => {
+          Object.entries(langObj).forEach(([lang, bytes]) => {
+            allLangs[lang] = (allLangs[lang] || 0) + bytes;
+          });
         });
-      });
+        totalBytes = Object.values(allLangs).reduce((a, b) => a + b, 0);
+        sortedLangs = Object.entries(allLangs).sort((a, b) => b[1] - a[1]);
+      }
 
-      const totalBytes = Object.values(allLangs).reduce((a, b) => a + b, 0);
-      const langCount = Object.keys(allLangs).length;
-      const sortedLangs = Object.entries(allLangs).sort((a, b) => b[1] - a[1]);
+      const langCount = sortedLangs.length;
 
-      // Use 5 repos (README says "all 5 repositories" including private)
-      updateStat('stat-repos', 5);
+      updateStat('stat-repos', repoCount || realRepos.length);
       updateStat('stat-lines', totalLines || Math.round(totalBytes / 40));
       updateStat('stat-stars', totalStars);
       updateStat('stat-langs', langCount);
