@@ -409,6 +409,7 @@
       onComplete: () => {
         animRunning = false;
         intro.remove();
+        window.dispatchEvent(new CustomEvent('introComplete'));
       }
     });
 

@@ -100,45 +100,54 @@ gsap.from(".nav-logo img", {
    HOME PAGE HERO
 ================================ */
 if (document.querySelector(".hero-section")) {
-  // Make sure elements are visible first
-  gsap.set(".home-text-main, .home-text-sub, .socials a, .home-logo-img", { opacity: 1 });
-  
-  // Main text animation
-  gsap.from(".home-text-main", {
-    y: 100,
-    opacity: 0,
-    duration: 1,
-    delay: 0.3,
-    ease: "power4.out"
-  });
+  function playHeroAnimations() {
+    // Make sure elements are visible first
+    gsap.set(".home-text-main, .home-text-sub, .socials a, .home-logo-img", { opacity: 1 });
+    
+    // Main text animation
+    gsap.from(".home-text-main", {
+      y: 100,
+      opacity: 0,
+      duration: 1,
+      delay: 0.3,
+      ease: "power4.out"
+    });
 
-  // Sub text animation
-  gsap.from(".home-text-sub", {
-    y: 80,
-    opacity: 0,
-    duration: 1,
-    delay: 0.5,
-    ease: "power4.out"
-  });
+    // Sub text animation
+    gsap.from(".home-text-sub", {
+      y: 80,
+      opacity: 0,
+      duration: 1,
+      delay: 0.5,
+      ease: "power4.out"
+    });
 
-  // Social icons stagger
-  gsap.from(".socials a", {
-    y: 30,
-    opacity: 0,
-    duration: 0.5,
-    delay: 0.7,
-    stagger: 0.1,
-    ease: "power3.out"
-  });
+    // Social icons stagger
+    gsap.from(".socials a", {
+      y: 30,
+      opacity: 0,
+      duration: 0.5,
+      delay: 0.7,
+      stagger: 0.1,
+      ease: "power3.out"
+    });
 
-  // Logo animation
-  gsap.from(".home-logo-img", {
-    scale: 0.8,
-    opacity: 0,
-    duration: 1,
-    delay: 0.5,
-    ease: "power3.out"
-  });
+    // Logo animation
+    gsap.from(".home-logo-img", {
+      scale: 0.8,
+      opacity: 0,
+      duration: 1,
+      delay: 0.5,
+      ease: "power3.out"
+    });
+  }
+
+  // Delay hero animations until landing intro finishes
+  if (document.getElementById('landing-intro')) {
+    window.addEventListener('introComplete', playHeroAnimations, { once: true });
+  } else {
+    playHeroAnimations();
+  }
 }
 
 /* ===============================
@@ -244,6 +253,21 @@ function loadTeamMembers() {
             </div>
           `;
         }).join("");
+        // Animate cards in with stagger
+        const cards = teamContainer.querySelectorAll('.team-card');
+        gsap.set(cards, { opacity: 0, y: 40 });
+        gsap.to(cards, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: teamContainer,
+            start: "top 85%",
+            toggleActions: "play none none none"
+          }
+        });
         console.log('Team members rendered');
       })
       .catch(err => {
@@ -417,6 +441,21 @@ function loadAlumni() {
             </div>
           `;
         }).join("");
+        // Animate cards in with stagger
+        const cards = alumniContainer.querySelectorAll('.alumni-card');
+        gsap.set(cards, { opacity: 0, y: 40 });
+        gsap.to(cards, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: alumniContainer,
+            start: "top 85%",
+            toggleActions: "play none none none"
+          }
+        });
         console.log('Alumni rendered');
       })
       .catch(err => {

@@ -129,7 +129,13 @@ function removeGlowAnimation(element) {
   element.style.animation = 'none';
 }
 
-// Initialize on DOM load
-document.addEventListener('DOMContentLoaded', initFlipAnimation);
+// Initialize after landing intro finishes, or immediately if no intro
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('landing-intro')) {
+    window.addEventListener('introComplete', initFlipAnimation, { once: true });
+  } else {
+    initFlipAnimation();
+  }
+});
 
 console.log('🎬 Flip text animation module loaded');
