@@ -20,7 +20,9 @@
       "image": "assets/images/ARAY.webp",
       "contribution": "Founded Robo Nexus and led the team to multiple achievements",
       "upcoming": true,
-      "links": {}
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/-aryamanyadav"
+      }
     },
     {
       "name": "Akshar Yadav",

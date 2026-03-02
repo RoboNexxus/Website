@@ -2287,8 +2287,8 @@ textarea::placeholder {
 }
 
 .alumni-card img {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 50%;
   border: 3px solid rgba(255, 215, 0, 0.5);
@@ -3169,8 +3169,8 @@ input, textarea {
   }
   
   .alumni-card img {
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
   }
   
   .alumni-btn,
