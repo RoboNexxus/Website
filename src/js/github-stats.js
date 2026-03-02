@@ -1,11 +1,14 @@
 /* ===============================
    GITHUB STATS - Live from GitHub API
-   Fetches org data from RoboNexxus
+   Fetches org data + README line count from RoboNexxus
+   Line count comes from .github/Profile/Readme.md badge
+   (updated by GitHub Actions on every commit, includes private repos)
 ================================ */
 
 (function () {
   const ORG = 'RoboNexxus';
   const API = 'https://api.github.com';
+  const README_URL = `${API}/repos/${ORG}/.github/contents/Profile/Readme.md`;
 
   const LANG_COLORS = {
     Python: '#3572A5',
@@ -16,9 +19,10 @@
     Shell: '#89e051',
     Nix: '#7e7eff',
     Procfile: '#3B2F63',
+    'C++': '#f34b7d',
+    C: '#555555',
   };
 
-  // Animated counter
   function animateCount(el, target, duration) {
     if (typeof gsap === 'undefined') {
       el.textContent = target.toLocaleString();
@@ -35,26 +39,38 @@
     });
   }
 
+  // Parse total lines from the README badge: Total_Lines-XXXXX
+  function parseLinesFromReadme(content) {
+    const match = content.match(/Total_Lines[_-](\d+)/i);
+    return match ? parseInt(match[1], 10) : null;
+  }
+
   async function fetchGitHubStats() {
     try {
-      // Fetch repos
-      const reposRes = await fetch(`${API}/orgs/${ORG}/repos?per_page=100`);
+      // Fetch repos + README in parallel
+      const [reposRes, readmeRes] = await Promise.all([
+        fetch(`${API}/orgs/${ORG}/repos?per_page=100`),
+        fetch(README_URL, { headers: { Accept: 'application/vnd.github.v3.raw' } }),
+      ]);
+
       if (!reposRes.ok) throw new Error('Failed to fetch repos');
       const repos = await reposRes.json();
-
-      // Filter out .github meta repo
       const realRepos = repos.filter(r => r.name !== '.github');
-
-      const repoCount = realRepos.length;
       const totalStars = realRepos.reduce((sum, r) => sum + r.stargazers_count, 0);
 
-      // Fetch languages for each repo in parallel
+      // Get line count from README (includes private repos)
+      let totalLines = null;
+      if (readmeRes.ok) {
+        const readmeText = await readmeRes.text();
+        totalLines = parseLinesFromReadme(readmeText);
+      }
+
+      // Fetch languages for each public repo in parallel
       const langPromises = realRepos.map(r =>
         fetch(`${API}/repos/${ORG}/${r.name}/languages`).then(res => res.json())
       );
       const langResults = await Promise.all(langPromises);
 
-      // Aggregate languages
       const allLangs = {};
       langResults.forEach(langObj => {
         Object.entries(langObj).forEach(([lang, bytes]) => {
@@ -63,26 +79,21 @@
       });
 
       const totalBytes = Object.values(allLangs).reduce((a, b) => a + b, 0);
-      const estimatedLines = Math.round(totalBytes / 40);
       const langCount = Object.keys(allLangs).length;
-
-      // Sort languages by bytes descending
       const sortedLangs = Object.entries(allLangs).sort((a, b) => b[1] - a[1]);
 
-      // Update stat cards with animated counters
-      updateStat('stat-repos', repoCount);
-      updateStat('stat-lines', estimatedLines);
+      // Use 5 repos (README says "all 5 repositories" including private)
+      updateStat('stat-repos', 5);
+      updateStat('stat-lines', totalLines || Math.round(totalBytes / 40));
       updateStat('stat-stars', totalStars);
       updateStat('stat-langs', langCount);
 
-      // Render language bar
       renderLangBar(sortedLangs, totalBytes);
     } catch (err) {
       console.error('GitHub stats error:', err);
-      // Fallback to hardcoded values
-      updateStat('stat-repos', 4);
-      updateStat('stat-lines', 37000);
-      updateStat('stat-stars', 5);
+      updateStat('stat-repos', 5);
+      updateStat('stat-lines', 46453);
+      updateStat('stat-stars', 6);
       updateStat('stat-langs', 6);
     }
   }
@@ -94,7 +105,6 @@
     if (!numEl) return;
     numEl.setAttribute('data-target', value);
 
-    // Use ScrollTrigger to animate when visible
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
       ScrollTrigger.create({
         trigger: card,
@@ -112,7 +122,6 @@
     const legend = document.getElementById('lang-legend');
     if (!bar || !legend) return;
 
-    // Group small languages into "Other"
     const threshold = 0.01;
     const mainLangs = [];
     let otherBytes = 0;
@@ -126,7 +135,6 @@
     });
     if (otherBytes > 0) mainLangs.push(['Other', otherBytes]);
 
-    // Render bar segments (start at 0 width, animate in)
     bar.innerHTML = mainLangs
       .map(([lang, bytes]) => {
         const color = LANG_COLORS[lang] || '#666';
@@ -134,7 +142,6 @@
       })
       .join('');
 
-    // Render legend
     legend.innerHTML = mainLangs
       .map(([lang, bytes]) => {
         const color = LANG_COLORS[lang] || '#666';
@@ -143,7 +150,6 @@
       })
       .join('');
 
-    // Animate bar segments when scrolled into view
     const segments = bar.querySelectorAll('.lang-bar-segment');
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
       ScrollTrigger.create({
@@ -168,7 +174,6 @@
     }
   }
 
-  // Initialize
   if (document.getElementById('github-stats-grid')) {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', fetchGitHubStats);

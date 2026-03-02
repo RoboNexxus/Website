@@ -44,10 +44,10 @@
 
     <!-- Preload Critical Resources -->
     <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
-    <link rel="preload" href="/src/css/style.css?v=15.0" as="style" />
+    <link rel="preload" href="/src/css/style.css?v=16.0" as="style" />
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
 
-    <link rel="stylesheet" href="/src/css/style.css?v=15.0" />
+    <link rel="stylesheet" href="/src/css/style.css?v=16.0" />
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
@@ -141,6 +141,41 @@
         </div>
       </section>
 
+      <!-- GITHUB STATS SECTION -->
+      <section class="github-stats-section reveal">
+        <h2 class="section-title">Our Code <span class="accent">in Numbers</span></h2>
+        <p class="section-subtitle">Live from <a href="https://github.com/RoboNexxus" target="_blank"><i class="fab fa-github"></i> GitHub</a></p>
+        
+        <div class="stats-grid" id="github-stats-grid">
+          <div class="github-stat-card" id="stat-repos">
+            <div class="stat-icon"><i class="fas fa-code-branch"></i></div>
+            <div class="stat-number" data-target="0">0</div>
+            <div class="stat-label">Repositories</div>
+          </div>
+          <div class="github-stat-card" id="stat-lines">
+            <div class="stat-icon"><i class="fas fa-code"></i></div>
+            <div class="stat-number" data-target="0">0</div>
+            <div class="stat-label">Lines of Code</div>
+          </div>
+          <div class="github-stat-card" id="stat-stars">
+            <div class="stat-icon"><i class="fas fa-star"></i></div>
+            <div class="stat-number" data-target="0">0</div>
+            <div class="stat-label">Stars Earned</div>
+          </div>
+          <div class="github-stat-card" id="stat-langs">
+            <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+            <div class="stat-number" data-target="0">0</div>
+            <div class="stat-label">Languages Used</div>
+          </div>
+        </div>
+
+        <div class="lang-bar-container reveal" id="lang-bar-container">
+          <h3 class="lang-bar-title">Language Breakdown</h3>
+          <div class="lang-bar" id="lang-bar"></div>
+          <div class="lang-legend" id="lang-legend"></div>
+        </div>
+      </section>
+
       <!-- FOOTER -->
       <footer class="footer">
         <p>&copy; 2026 Robo Nexus. All rights reserved.</p>
@@ -149,12 +184,14 @@
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 
     <!-- SCRIPTS -->
-    <script src="/src/js/spotlight-navbar.js?v=15.0" defer></script>
-    <script src="/src/js/particles.js?v=15.0" defer></script>
-    <script src="/src/js/script.js?v=15.0" defer></script>
-    <script src="/src/js/prefetch.js?v=15.0" defer></script>
-    <script src="/src/js/protection.js?v=15.0" defer></script>
+    <script src="/src/js/spotlight-navbar.js?v=16.0" defer></script>
+    <script src="/src/js/particles.js?v=16.0" defer></script>
+    <script src="/src/js/script.js?v=16.0" defer></script>
+    <script src="/src/js/github-stats.js?v=16.0" defer></script>
+    <script src="/src/js/prefetch.js?v=16.0" defer></script>
+    <script src="/src/js/protection.js?v=16.0" defer></script>
   </body>
 </html>
