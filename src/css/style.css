@@ -70,7 +70,8 @@ body {
   transform: translateY(100px) rotateX(90deg);
   text-shadow: 0 0 0 transparent;
   position: relative;
-  will-change: transform, opacity, text-shadow, color;
+  will-change: transform, opacity, text-shadow, color, filter;
+  transition: filter 0.05s;
 }
 
 .intro-letter::after {
@@ -3422,5 +3423,180 @@ input, textarea {
   .navbar-spotlight-overlay,
   .navbar-ambience-line {
     display: none;
+  }
+}
+
+/* ===============================
+   GITHUB STATS SECTION
+================================ */
+.github-stats-section {
+  position: relative;
+  padding: 80px 40px;
+  text-align: center;
+  z-index: 1;
+}
+
+.github-stats-section .section-title {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.github-stats-section .section-title .accent {
+  color: #47a0b8;
+}
+
+.github-stats-section .section-subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 50px;
+}
+
+.github-stats-section .section-subtitle a {
+  color: #47a0b8;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.github-stats-section .section-subtitle a:hover {
+  color: #5ec4e0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto 60px;
+}
+
+.github-stat-card {
+  background: rgba(71, 160, 184, 0.05);
+  border: 1px solid rgba(71, 160, 184, 0.15);
+  border-radius: 16px;
+  padding: 30px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.github-stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(71, 160, 184, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.github-stat-card:hover {
+  border-color: rgba(71, 160, 184, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(71, 160, 184, 0.15);
+}
+
+.github-stat-card:hover::before {
+  opacity: 1;
+}
+
+.stat-icon {
+  font-size: 28px;
+  color: #47a0b8;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 8px rgba(71, 160, 184, 0.4));
+}
+
+.stat-number {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+}
+
+/* Language breakdown bar */
+.lang-bar-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.lang-bar-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lang-bar {
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 16px;
+}
+
+.lang-bar-segment {
+  height: 100%;
+  transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+.lang-bar-segment:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.lang-bar-segment:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.lang-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.lang-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.lang-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.lang-legend-pct {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .github-stats-section {
+    padding: 60px 20px;
+  }
+
+  .github-stat-card {
+    padding: 24px 16px;
   }
 }
