@@ -253,20 +253,22 @@ function loadTeamMembers() {
             </div>
           `;
         }).join("");
-        // Animate cards in with stagger
+        // Animate each card individually as it scrolls into view
         const cards = teamContainer.querySelectorAll('.team-card');
-        gsap.set(cards, { opacity: 0, y: 40 });
-        gsap.to(cards, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: teamContainer,
-            start: "top 85%",
-            toggleActions: "play none none none"
-          }
+        cards.forEach((card) => {
+          gsap.set(card, { opacity: 0, y: 60, scale: 0.95 });
+          gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none none"
+            }
+          });
         });
         console.log('Team members rendered');
       })
@@ -441,20 +443,22 @@ function loadAlumni() {
             </div>
           `;
         }).join("");
-        // Animate cards in with stagger
+        // Animate each card individually as it scrolls into view
         const cards = alumniContainer.querySelectorAll('.alumni-card');
-        gsap.set(cards, { opacity: 0, y: 40 });
-        gsap.to(cards, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: alumniContainer,
-            start: "top 85%",
-            toggleActions: "play none none none"
-          }
+        cards.forEach((card) => {
+          gsap.set(card, { opacity: 0, y: 60, scale: 0.95 });
+          gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none none"
+            }
+          });
         });
         console.log('Alumni rendered');
       })
