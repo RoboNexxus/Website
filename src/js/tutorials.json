@@ -14,7 +14,7 @@
       "id": 1,
       "title": "Line Follower Robot",
       "category": "robots",
-      "image": "/src/assets/images/Robo_Nexus_Logo.png",
+      "image": "/src/assets/images/Robo_Nexus_Logo.webp",
       "description": "An autonomous robot that follows a black line using IR sensors and PID control.",
       "tech": ["Arduino", "IR Sensors", "Motor Driver"],
       "status": "Completed",

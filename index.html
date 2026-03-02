@@ -23,7 +23,7 @@
     <!-- Open Graph -->
     <meta property="og:title" content="Robo Nexus - Robotics Club">
     <meta property="og:description" content="Inspiring innovation through robotics and technology">
-    <meta property="og:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.png">
+    <meta property="og:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
     <meta property="og:url" content="https://robonexusaisg46.netlify.app/">
     <meta property="og:type" content="website">
     
@@ -31,7 +31,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Robo Nexus - Robotics Club">
     <meta name="twitter:description" content="Inspiring innovation through robotics and technology">
-    <meta name="twitter:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.png">
+    <meta name="twitter:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
 
     <!-- Critical CSS - Prevents white flash -->
     <style>
@@ -44,12 +44,12 @@
     </style>
 
     <!-- Preload Critical Resources -->
-    <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.png" />
-    <link rel="preload" href="/src/css/style.css?v=11.0" as="style" />
+    <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
+    <link rel="preload" href="/src/css/style.css?v=12.0" as="style" />
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
     
     <!-- Main CSS -->
-    <link rel="stylesheet" href="/src/css/style.css?v=11.0" />
+    <link rel="stylesheet" href="/src/css/style.css?v=12.0" />
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
@@ -73,6 +73,39 @@
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+    <!-- LANDING INTRO -->
+    <div id="landing-intro">
+      <canvas id="intro-canvas"></canvas>
+      <div class="intro-content">
+        <div class="intro-word intro-word-top" id="intro-robo">
+          <span class="intro-letter" data-index="0">R</span>
+          <span class="intro-letter" data-index="1">O</span>
+          <span class="intro-letter" data-index="2">B</span>
+          <span class="intro-letter" data-index="3">O</span>
+        </div>
+        <div class="intro-word intro-word-bottom" id="intro-nexus">
+          <span class="intro-letter" data-index="4">N</span>
+          <span class="intro-letter" data-index="5">E</span>
+          <span class="intro-letter" data-index="6">X</span>
+          <span class="intro-letter" data-index="7">U</span>
+          <span class="intro-letter" data-index="8">S</span>
+        </div>
+        <div class="intro-tagline" id="intro-tagline">
+          <span class="tagline-word">Inspiring</span>
+          <span class="tagline-word">Innovation</span>
+          <span class="tagline-word">Through</span>
+          <span class="tagline-word">Robotics</span>
+        </div>
+        <div class="intro-line-left" id="intro-line-left"></div>
+        <div class="intro-line-right" id="intro-line-right"></div>
+      </div>
+      <div class="intro-corner intro-corner-tl"></div>
+      <div class="intro-corner intro-corner-tr"></div>
+      <div class="intro-corner intro-corner-bl"></div>
+      <div class="intro-corner intro-corner-br"></div>
+      <div class="intro-scanline"></div>
+    </div>
+
     <!-- PARTICLE BACKGROUND -->
     <canvas id="particle-canvas"></canvas>
 
@@ -80,25 +113,25 @@
     <div class="page-transition"></div>
 
     <!-- PAGE CONTENT -->
-    <div class="page-content" style="opacity: 1;">
+    <div class="page-content" style="opacity: 0;" id="main-content">
       <!-- NAVBAR -->
       <nav class="navbar">
         <div class="navbar-content">
           <div class="nav-logo">
-            <a href="/index.html">
-              <img src="/src/assets/images/Robo_Nexus_Logo.png" alt="Robo Nexus Logo" />
+            <a href="/">
+              <img src="/src/assets/images/Robo_Nexus_Logo.webp" alt="Robo Nexus Logo" />
             </a>
           </div>
 
           <div class="spotlight-nav-container">
             <div class="spotlight-nav">
               <ul class="nav-links-ul">
-                <li><a class="nav-links active" href="/index.html" data-index="0">Home</a></li>
-                <li><a class="nav-links" href="/src/html/about.html" data-index="1">About</a></li>
-                <li><a class="nav-links" href="/src/html/team.html" data-index="2">Team</a></li>
-                <li><a class="nav-links" href="/src/html/projects.html" data-index="3">Projects</a></li>
-                <li><a class="nav-links" href="/src/html/events.html" data-index="4">Events</a></li>
-                <li><a class="nav-links" href="/src/html/contact.html" data-index="5">Contact</a></li>
+                <li><a class="nav-links active" href="/" data-index="0">Home</a></li>
+                <li><a class="nav-links" href="/about" data-index="1">About</a></li>
+                <li><a class="nav-links" href="/team" data-index="2">Team</a></li>
+                <li><a class="nav-links" href="/projects" data-index="3">Projects</a></li>
+                <li><a class="nav-links" href="/events" data-index="4">Events</a></li>
+                <li><a class="nav-links" href="/contact" data-index="5">Contact</a></li>
               </ul>
               <!-- Spotlight overlay (follows mouse) -->
               <div class="navbar-spotlight-overlay"></div>
@@ -143,7 +176,7 @@
 
           <div class="home-logo">
             <img
-              src="/src/assets/images/Robo_Nexus_Logo.png"
+              src="/src/assets/images/Robo_Nexus_Logo.webp"
               alt="Robo Nexus Robot"
               class="home-logo-img"
             />
@@ -158,16 +191,19 @@
     </div>
 
     <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 
-    <script src="/src/js/toast.js?v=11.0" defer></script>
-    <script src="/src/js/magnetic-button.js?v=11.0" defer></script>
-    <script src="/src/js/spotlight-navbar.js?v=11.0" defer></script>
-    <script src="/src/js/particles.js?v=11.0" defer></script>
-    <script src="/src/js/script.js?v=11.0" defer></script>
-    <script src="/src/js/flip-text-animation.js?v=11.0" defer></script>
-    <script src="/src/js/prefetch.js?v=11.0" defer></script>
-    <script src="/src/js/protection.js?v=11.0" defer></script>
+    <!-- Landing Intro (non-deferred so it runs immediately with GSAP) -->
+    <script src="/src/js/landing-intro.js?v=12.0"></script>
+
+    <script src="/src/js/toast.js?v=12.0" defer></script>
+    <script src="/src/js/magnetic-button.js?v=12.0" defer></script>
+    <script src="/src/js/spotlight-navbar.js?v=12.0" defer></script>
+    <script src="/src/js/particles.js?v=12.0" defer></script>
+    <script src="/src/js/script.js?v=12.0" defer></script>
+    <script src="/src/js/flip-text-animation.js?v=12.0" defer></script>
+    <script src="/src/js/prefetch.js?v=12.0" defer></script>
+    <script src="/src/js/protection.js?v=12.0" defer></script>
   </body>
 </html>

@@ -17,8 +17,3 @@
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=3600, must-revalidate"
-
-[[headers]]
-  for = "/src/html/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=3600, must-revalidate"

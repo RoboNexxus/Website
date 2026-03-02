@@ -198,12 +198,7 @@ function loadTeamMembers() {
 
   if (teamContainer) {
     console.log('Loading team members...');
-    // Use relative path that works from any page
-    const jsonPath = window.location.pathname.includes('/src/html/') 
-      ? '../js/team.json' 
-      : 'src/js/team.json';
-    
-    fetch(jsonPath)
+    fetch('/src/js/team.json')
       .then(res => {
         if (!res.ok) throw new Error('Failed to load team data');
         return res.json();
@@ -237,7 +232,7 @@ function loadTeamMembers() {
           return `
             <div class="team-card ${member.leavingSoon ? 'leaving-soon' : ''}">
               ${member.leavingSoon ? '<span class="leaving-badge"><i class="fas fa-crown"></i> Leaving Club Soon</span>' : ''}
-              <img src="${imagePath}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
+              <img src="${imagePath}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.webp'">
               <h2>${member.name}</h2>
               <p>${member.role}</p>
               <div class="social-links">
@@ -379,12 +374,7 @@ function loadAlumni() {
 
   if (alumniContainer) {
     console.log('Loading alumni...');
-    // Use relative path that works from any page
-    const jsonPath = window.location.pathname.includes('/src/html/') 
-      ? '../js/alumni.json' 
-      : 'src/js/alumni.json';
-    
-    fetch(jsonPath)
+    fetch('/src/js/alumni.json')
       .then(res => {
         if (!res.ok) throw new Error('Failed to load alumni data');
         return res.json();
@@ -412,7 +402,7 @@ function loadAlumni() {
                 <i class="fas fa-medal"></i>
               </div>
               ${member.upcoming ? '<span class="upcoming-badge"><i class="fas fa-hourglass-half"></i> Coming Soon</span>' : ''}
-              <img src="${imagePath}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.png'">
+              <img src="${imagePath}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.webp'">
               <div class="alumni-info">
                 <h2>${member.name}</h2>
                 <p class="alumni-role">${member.role}</p>
