@@ -18,59 +18,25 @@ async function sendMail() {
     submitBtn.disabled = true;
 
     try {
-        // 1. Send to Web3Forms (sends email to robonexus.ais46@gmail.com)
-        const web3formsData = new FormData();
-        web3formsData.append("access_key", "50c6d094-5720-4448-a5b4-ec23f718a12f");
-        web3formsData.append("name", name);
-        web3formsData.append("email", email);
-        web3formsData.append("subject", subject);
-        web3formsData.append("message", message);
-
-        const emailResponse = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            body: web3formsData
-        });
-
-        const emailResult = await emailResponse.json();
-
-        if (!emailResult.success) {
-            throw new Error("Failed to send email");
-        }
-
-        // 2. Send to Discord (for instant notification)
-        const webhookUrl = "https://discord.com/api/webhooks/1475461950719660212/wUzEzMNmNeRuWuJ5PrQQn0ql1hA52Z1aaY1VkMXJImRz2wZLcvPUiJXAnE3LSr_QJbXD";
-        
-        const webhookBody = {
-            embeds: [{
-                title: "📧 New Contact Form Submission",
-                color: 0x00ff00, // Green color
-                description: `**From:** ${name} (${email})`,
-                fields: [
-                    { name: "📝 Subject", value: subject, inline: false },
-                    { name: "💬 Message", value: message.length > 1024 ? message.substring(0, 1021) + "..." : message, inline: false }
-                ],
-                footer: {
-                    text: "Robo Nexus Contact Form • Email sent to robonexus.ais46@gmail.com"
-                },
-                timestamp: new Date().toISOString()
-            }]
-        };
-
-        // Send to Discord (don't fail if this doesn't work)
-        await fetch(webhookUrl, {
+        // Send data to our secure serverless function
+        const response = await fetch("/.netlify/functions/contact", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(webhookBody),
-        }).catch(err => console.log("Discord notification failed:", err));
+            body: JSON.stringify({ name, email, subject, message }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to submit form");
+        }
 
         // Clear form
         document.getElementById("name").value = "";
         document.getElementById("email").value = "";
         document.getElementById("subject").value = "";
         document.getElementById("message").value = "";
-        
+
         // Success message with toast
         submitBtn.innerHTML = '<span class="button-text"><i class="fas fa-check"></i> Sent!</span>';
         toast.success(
@@ -78,7 +44,7 @@ async function sendMail() {
             "Thank you for reaching out. We'll get back to you soon.",
             5000
         );
-        
+
         setTimeout(() => {
             submitBtn.innerHTML = originalBtnHTML;
             submitBtn.disabled = false;
@@ -88,7 +54,7 @@ async function sendMail() {
         console.error("Error:", error);
         submitBtn.innerHTML = originalBtnHTML;
         submitBtn.disabled = false;
-        
+
         toast.error(
             "Failed to Send Message",
             "There was an error sending your message. Please try again or email us directly at robonexus.ais46@gmail.com",
