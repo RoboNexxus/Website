@@ -28,6 +28,8 @@ exports.handler = async function (event, context) {
         const WEB3FORMS_KEY = process.env.WEB3FORMS_KEY;
         const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 
+        console.log("WEB3FORMS_KEY present:", !!process.env.WEB3FORMS_KEY, "length:", process.env.WEB3FORMS_KEY?.length);
+
         if (!WEB3FORMS_KEY || !DISCORD_WEBHOOK_URL) {
             console.error("Missing environment variables");
             return {
