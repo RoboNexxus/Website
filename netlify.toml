@@ -1,3 +1,9 @@
+[build.environment]
+  NODE_VERSION = "18"
+
+[functions]
+  node_bundler = "esbuild"
+
 [[headers]]
   for = "/src/assets/images/*"
   [headers.values]
