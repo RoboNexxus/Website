@@ -1,124 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-53TPG7NL');</script>
-    <!-- End Google Tag Manager -->
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKPK7KF3CQ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-KKPK7KF3CQ');
-    </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Events | Robo Nexus</title>
 
-    <!-- Meta Tags for SEO -->
-    <meta name="description" content="Explore upcoming and past events by Robo Nexus - Workshops, competitions, and robotics showcases.">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Events | Robo Nexus">
-    <meta property="og:description" content="Explore upcoming and past events by Robo Nexus - Workshops, competitions, and robotics showcases.">
-    <meta property="og:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
-    <meta property="og:url" content="https://robonexusaisg46.netlify.app/events.html">
-    <meta property="og:type" content="website">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Events | Robo Nexus">
-    <meta name="twitter:description" content="Explore upcoming and past events by Robo Nexus - Workshops, competitions, and robotics showcases.">
-    <meta name="twitter:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) { w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f); })(window, document, 'script', 'dataLayer', 'GTM-53TPG7NL');</script>
+  <!-- End Google Tag Manager -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKPK7KF3CQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-KKPK7KF3CQ');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events | Robo Nexus</title>
 
-    <!-- Critical CSS - Prevents white flash -->
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { width: 100%; min-height: 100%; overflow-x: hidden; }
-      body { background: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-      .page-transition { position: fixed; inset: 0; background: #000; z-index: 9999; pointer-events: none; opacity: 0; display: none; }
-      .page-content { position: relative; z-index: 1; min-height: 100vh; }
-      #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-    </style>
+  <meta name="description"
+    content="Explore upcoming and past events by Robo Nexus - Workshops, competitions, and robotics showcases.">
+  <meta property="og:title" content="Events | Robo Nexus">
+  <meta property="og:description"
+    content="Explore upcoming and past events by Robo Nexus - Workshops, competitions, and robotics showcases.">
+  <meta property="og:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
+  <meta property="og:url" content="https://robonexusaisg46.netlify.app/events.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Events | Robo Nexus">
+  <meta name="twitter:description"
+    content="Explore upcoming and past events by Robo Nexus - Workshops, competitions, and robotics showcases.">
+  <meta name="twitter:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
 
-    <!-- Preload Critical Resources -->
-    <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
-    <link rel="preload" href="/src/css/style.css?v=18.0" as="style" />
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <link rel="stylesheet" href="/src/css/style.css?v=18.0" />
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" as="style" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png">
-  </head>
+    body {
+      background: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
 
-  <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <!-- PARTICLE BACKGROUND -->
-    <canvas id="particle-canvas"></canvas>
+    .page-transition {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      display: none;
+    }
 
-    <!-- PAGE TRANSITION OVERLAY -->
-    <div class="page-transition"></div>
+    .page-content {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+    }
 
-    <!-- PAGE CONTENT -->
-    <div class="page-content">
-      <!-- NAVBAR -->
-      <nav class="navbar">
-        <div class="navbar-content">
-          <div class="nav-logo">
-            <a href="/">
-              <img src="/src/assets/images/Robo_Nexus_Logo.webp" alt="Robo Nexus Logo" />
-            </a>
-          </div>
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
 
-          <div class="spotlight-nav-container">
-            <div class="spotlight-nav">
-              <ul class="nav-links-ul">
-                <li><a class="nav-links" href="/" data-index="0">Home</a></li>
-                <li><a class="nav-links" href="/about" data-index="1">About</a></li>
-                <li><a class="nav-links" href="/team" data-index="2">Team</a></li>
-                <li><a class="nav-links" href="/projects" data-index="3">Projects</a></li>
-                <li><a class="nav-links active" href="/events" data-index="4">Events</a></li>
-                <li><a class="nav-links" href="/contact" data-index="5">Contact</a></li>
-              </ul>
-              <!-- Spotlight overlay (follows mouse) -->
-              <div class="navbar-spotlight-overlay"></div>
-              <!-- Ambience line (stays on active) -->
-              <div class="navbar-ambience-line"></div>
-            </div>
-          </div>
+  <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
+  <link rel="preload" href="/src/css/style.css?v=18.0" as="style" />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
+  <link rel="stylesheet" href="/src/css/style.css?v=18.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print"
+    onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  </noscript>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png">
 
-          <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
+  <style>
+    /* ── Events Page Layout Restructure ── */
+
+    /* Main layout: calendar LEFT + upcoming events RIGHT */
+    .events-main-layout {
+      display: flex;
+      gap: 50px;
+      padding: 40px 60px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+      align-items: flex-start;
+    }
+
+    /* Calendar column — fixed width */
+    .events-calendar-col {
+      flex-shrink: 0;
+      width: 380px;
+    }
+
+    .events-calendar-col .calendar-container {
+      max-width: 100%;
+      margin: 0;
+      position: sticky;
+      top: 90px;
+    }
+
+    /* Upcoming events column — fills remaining space */
+    .events-upcoming-col {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .events-upcoming-col h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+
+    /* ── Horizontal event list card ── */
+    .event-list-card {
+      background: rgba(15, 15, 15, 0.9);
+      border: 1px solid rgba(71, 160, 184, 0.2);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .event-list-card:hover {
+      border-color: rgba(71, 160, 184, 0.5);
+      box-shadow: 0 8px 30px rgba(71, 160, 184, 0.1);
+    }
+
+    .event-list-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .event-list-badge {
+      background: rgba(71, 160, 184, 0.12);
+      border: 1px solid rgba(71, 160, 184, 0.35);
+      color: #47a0b8;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+    }
+
+    .event-list-register-btn {
+      background: #47a0b8;
+      border: none;
+      color: #000;
+      padding: 10px 26px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+
+    .event-list-register-btn:hover {
+      background: #02cadc;
+      transform: scale(1.04);
+    }
+
+    .event-list-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .event-list-desc {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .event-list-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .event-list-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.82rem;
+    }
+
+    .event-list-meta-item i {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .event-list-coming-soon {
+      color: rgba(255, 255, 255, 0.35);
+      font-style: italic;
+      font-size: 0.85rem;
+      margin-top: 12px;
+    }
+
+    /* ── Past Events — 3-column grid ── */
+    .past-events-section {
+      padding: 20px 60px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .past-events-section h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+
+    .past-events-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .past-event-grid-card {
+      background: rgba(15, 15, 15, 0.9);
+      border: 1px solid rgba(71, 160, 184, 0.15);
+      border-radius: 16px;
+      padding: 24px;
+      transition: border-color 0.3s ease;
+    }
+
+    .past-event-grid-card:hover {
+      border-color: rgba(71, 160, 184, 0.4);
+    }
+
+    .past-event-grid-date {
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+    }
+
+    .past-event-grid-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .past-event-grid-desc {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.87rem;
+      line-height: 1.55;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1100px) {
+      .events-main-layout {
+        padding: 40px 30px 60px;
+        gap: 30px;
+      }
+
+      .events-calendar-col {
+        width: 320px;
+      }
+
+      .past-events-section {
+        padding: 20px 30px 60px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .events-main-layout {
+        flex-direction: column;
+        padding: 30px 20px 40px;
+      }
+
+      .events-calendar-col {
+        width: 100%;
+      }
+
+      .events-calendar-col .calendar-container {
+        position: static;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .past-events-section {
+        padding: 20px 20px 60px;
+      }
+
+      .past-events-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .past-events-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .event-list-top {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .event-list-register-btn {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+
+  <canvas id="particle-canvas"></canvas>
+  <div class="page-transition"></div>
+
+  <div class="page-content">
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="nav-logo">
+          <a href="/"><img src="/src/assets/images/Robo_Nexus_Logo.webp" alt="Robo Nexus Logo" /></a>
+        </div>
+        <div class="spotlight-nav-container">
+          <div class="spotlight-nav">
+            <ul class="nav-links-ul">
+              <li><a class="nav-links" href="/" data-index="0">Home</a></li>
+              <li><a class="nav-links" href="/about" data-index="1">About</a></li>
+              <li><a class="nav-links" href="/team" data-index="2">Team</a></li>
+              <li><a class="nav-links" href="/projects" data-index="3">Projects</a></li>
+              <li><a class="nav-links active" href="/events" data-index="4">Events</a></li>
+              <li><a class="nav-links" href="/contact" data-index="5">Contact</a></li>
+            </ul>
+            <div class="navbar-spotlight-overlay"></div>
+            <div class="navbar-ambience-line"></div>
           </div>
         </div>
-      </nav>
+        <div class="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </nav>
 
-      <!-- EVENTS HERO -->
-      <section class="page-hero">
-        <h1 class="page-title">Events</h1>
-        <p class="hero-subtitle reveal">Workshops, competitions, and learning opportunities</p>
-        <div class="scroll-indicator">
-          <i class="fas fa-chevron-down"></i>
-        </div>
-      </section>
+    <!-- HERO -->
+    <section class="page-hero">
+      <h1 class="page-title">Events</h1>
+      <p class="hero-subtitle reveal">Workshops, competitions, and learning opportunities</p>
+      <div class="scroll-indicator"><i class="fas fa-chevron-down"></i></div>
+    </section>
 
-      <!-- CALENDAR -->
-      <section class="calendar-section reveal">
+    <!-- MAIN LAYOUT: Calendar LEFT + Upcoming Events RIGHT -->
+    <div class="events-main-layout reveal">
+
+      <!-- Calendar column -->
+      <div class="events-calendar-col">
         <div class="calendar-container">
           <div class="calendar-header">
             <button class="calendar-nav" id="prev-month"><i class="fas fa-chevron-left"></i></button>
@@ -126,85 +384,79 @@
             <button class="calendar-nav" id="next-month"><i class="fas fa-chevron-right"></i></button>
           </div>
           <div class="calendar-days">
-            <span>Sun</span>
-            <span>Mon</span>
-            <span>Tue</span>
-            <span>Wed</span>
-            <span>Thu</span>
-            <span>Fri</span>
-            <span>Sat</span>
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+            <span>Thu</span><span>Fri</span><span>Sat</span>
           </div>
           <div class="calendar-grid" id="calendar-grid"></div>
         </div>
-      </section>
-
-      <!-- UPCOMING EVENTS -->
-      <section class="events-section">
-        <h2 class="section-title reveal">Upcoming Events</h2>
-        <div class="events-grid" id="upcoming-events">
-          <!-- Events loaded via JS -->
-        </div>
-      </section>
-
-      <!-- PAST EVENTS -->
-      <section class="past-events-section events-section">
-        <h2 class="section-title reveal">Past Events</h2>
-        <div id="past-events">
-          <!-- Past events loaded via JS -->
-        </div>
-      </section>
-
-      <!-- FOOTER -->
-      <footer class="footer">
-        <p>&copy; 2026 Robo Nexus. All rights reserved.</p>
-      </footer>
-    </div>
-
-    <!-- REGISTRATION MODAL -->
-    <div class="registration-modal" id="registration-modal">
-      <div class="reg-modal-content">
-        <span class="reg-modal-close">&times;</span>
-        <h2>Event Registration</h2>
-        <h3 id="reg-event-title"></h3>
-        <form id="registration-form">
-          <input type="hidden" id="reg-event-id">
-          <div class="reg-form-group">
-            <label for="reg-name">Full Name</label>
-            <input type="text" id="reg-name" name="name" required placeholder="Enter your full name">
-          </div>
-          <div class="reg-form-group">
-            <label for="reg-email">Email Address</label>
-            <input type="email" id="reg-email" name="email" required placeholder="Enter your email">
-          </div>
-          <div class="reg-form-group">
-            <label for="reg-phone">Phone Number</label>
-            <input type="tel" id="reg-phone" name="phone" required placeholder="Enter your phone number">
-          </div>
-          <div class="reg-form-group">
-            <label for="reg-class">Class/Grade</label>
-            <select id="reg-class" name="class" required>
-              <option value="">Select your class</option>
-              <option value="9">Class 9</option>
-              <option value="10">Class 10</option>
-              <option value="11">Class 11</option>
-              <option value="12">Class 12</option>
-            </select>
-          </div>
-          <button type="submit" class="reg-submit-btn">Register Now</button>
-        </form>
       </div>
+
+      <!-- Upcoming events column -->
+      <div class="events-upcoming-col">
+        <h2>Upcoming Events</h2>
+        <div id="upcoming-events">
+          <!-- Injected by events.js -->
+        </div>
+      </div>
+
     </div>
 
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <!-- PAST EVENTS — 3-column grid -->
+    <section class="past-events-section">
+      <h2>Past Events</h2>
+      <div class="past-events-grid" id="past-events">
+        <!-- Injected by events.js -->
+      </div>
+    </section>
 
-    <!-- SCRIPTS -->
-    <script src="/src/js/spotlight-navbar.js?v=18.0" defer></script>
-    <script src="/src/js/particles.js?v=18.0" defer></script>
-    <script src="/src/js/script.js?v=18.0" defer></script>
-    <script src="/src/js/events.js?v=18.0" defer></script>
-    <script src="/src/js/prefetch.js?v=18.0" defer></script>
-    <script src="/src/js/protection.js?v=18.0" defer></script>
-  </body>
+    <footer class="footer">
+      <p>&copy; 2026 Robo Nexus. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- Registration Modal (unchanged) -->
+  <div class="registration-modal" id="registration-modal">
+    <div class="reg-modal-content">
+      <span class="reg-modal-close">&times;</span>
+      <h2>Event Registration</h2>
+      <h3 id="reg-event-title"></h3>
+      <form id="registration-form">
+        <input type="hidden" id="reg-event-id">
+        <div class="reg-form-group">
+          <label for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" name="name" required placeholder="Enter your full name">
+        </div>
+        <div class="reg-form-group">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" name="email" required placeholder="Enter your email">
+        </div>
+        <div class="reg-form-group">
+          <label for="reg-phone">Phone Number</label>
+          <input type="tel" id="reg-phone" name="phone" required placeholder="Enter your phone number">
+        </div>
+        <div class="reg-form-group">
+          <label for="reg-class">Class/Grade</label>
+          <select id="reg-class" name="class" required>
+            <option value="">Select your class</option>
+            <option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+          </select>
+        </div>
+        <button type="submit" class="reg-submit-btn">Register Now</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="/src/js/spotlight-navbar.js?v=18.0" defer></script>
+  <script src="/src/js/particles.js?v=18.0" defer></script>
+  <script src="/src/js/script.js?v=18.0" defer></script>
+  <script src="/src/js/events.js?v=18.0" defer></script>
+  <script src="/src/js/prefetch.js?v=18.0" defer></script>
+  <script src="/src/js/protection.js?v=18.0" defer></script>
+</body>
+
 </html>

@@ -1,227 +1,439 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-53TPG7NL');</script>
-    <!-- End Google Tag Manager -->
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKPK7KF3CQ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-KKPK7KF3CQ');
-    </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact Us | Robo Nexus</title>
 
-    <!-- Meta Tags for SEO -->
-    <meta name="description" content="Get in touch with Robo Nexus - Contact us for inquiries, collaborations, or to join our robotics club.">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Contact Us | Robo Nexus">
-    <meta property="og:description" content="Get in touch with Robo Nexus - Contact us for inquiries, collaborations, or to join our robotics club.">
-    <meta property="og:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
-    <meta property="og:url" content="https://robonexusaisg46.netlify.app/contact.html">
-    <meta property="og:type" content="website">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Contact Us | Robo Nexus">
-    <meta name="twitter:description" content="Get in touch with Robo Nexus - Contact us for inquiries, collaborations, or to join our robotics club.">
-    <meta name="twitter:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) { w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f); })(window, document, 'script', 'dataLayer', 'GTM-53TPG7NL');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKPK7KF3CQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-KKPK7KF3CQ');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us | Robo Nexus</title>
 
-    <!-- Critical CSS - Prevents white flash -->
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { width: 100%; min-height: 100%; overflow-x: hidden; }
-      body { background: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-      .page-transition { position: fixed; inset: 0; background: #000; z-index: 9999; pointer-events: none; opacity: 0; display: none; }
-      .page-content { position: relative; z-index: 1; min-height: 100vh; }
-      #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-    </style>
+  <!-- Meta Tags for SEO -->
+  <meta name="description"
+    content="Get in touch with Robo Nexus - Contact us for inquiries, collaborations, or to join our robotics club.">
 
-    <!-- Preload Critical Resources -->
-    <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
-    <link rel="preload" href="/src/css/style.css?v=18.0" as="style" />
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Contact Us | Robo Nexus">
+  <meta property="og:description"
+    content="Get in touch with Robo Nexus - Contact us for inquiries, collaborations, or to join our robotics club.">
+  <meta property="og:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
+  <meta property="og:url" content="https://robonexusaisg46.netlify.app/contact.html">
+  <meta property="og:type" content="website">
 
-    <link rel="stylesheet" href="/src/css/style.css?v=18.0" />
-    <link rel="stylesheet" href="/src/css/toast.css?v=18.0" />
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" as="style" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact Us | Robo Nexus">
+  <meta name="twitter:description"
+    content="Get in touch with Robo Nexus - Contact us for inquiries, collaborations, or to join our robotics club.">
+  <meta name="twitter:image" content="https://robonexusaisg46.netlify.app/src/assets/images/Robo_Nexus_Logo.webp">
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png">
-  </head>
+  <!-- Critical CSS -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <!-- PARTICLE BACKGROUND -->
-    <canvas id="particle-canvas"></canvas>
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
 
-    <!-- PAGE TRANSITION OVERLAY -->
-    <div class="page-transition"></div>
+    body {
+      background: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
 
-    <!-- PAGE CONTENT -->
-    <div class="page-content">
-      <!-- NAVBAR -->
-      <nav class="navbar">
-        <div class="navbar-content">
-          <div class="nav-logo">
-            <a href="/">
-              <img src="/src/assets/images/Robo_Nexus_Logo.webp" alt="Robo Nexus Logo" />
-            </a>
-          </div>
+    .page-transition {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      display: none;
+    }
 
-          <div class="spotlight-nav-container">
-            <div class="spotlight-nav">
-              <ul class="nav-links-ul">
-                <li><a class="nav-links" href="/" data-index="0">Home</a></li>
-                <li><a class="nav-links" href="/about" data-index="1">About</a></li>
-                <li><a class="nav-links" href="/team" data-index="2">Team</a></li>
-                <li><a class="nav-links" href="/projects" data-index="3">Projects</a></li>
-                <li><a class="nav-links" href="/events" data-index="4">Events</a></li>
-                <li><a class="nav-links active" href="/contact" data-index="5">Contact</a></li>
-              </ul>
-              <!-- Spotlight overlay (follows mouse) -->
-              <div class="navbar-spotlight-overlay"></div>
-              <!-- Ambience line (stays on active) -->
-              <div class="navbar-ambience-line"></div>
-            </div>
-          </div>
+    .page-content {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+    }
 
-          <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+
+  <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
+  <link rel="preload" href="/src/css/style.css?v=18.0" as="style" />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
+
+  <link rel="stylesheet" href="/src/css/style.css?v=18.0" />
+  <link rel="stylesheet" href="/src/css/toast.css?v=18.0" />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print"
+    onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  </noscript>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png">
+
+  <style>
+    /* ── Contact Page Layout Restructure ── */
+
+    .contact-section {
+      display: flex;
+      gap: 30px;
+      padding: 40px 60px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: flex-start;
+      flex-wrap: nowrap;
+    }
+
+    /* LEFT: Form */
+    .contact-form-div {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Name + Email on same row */
+    .contact-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    /* Full-width send button */
+    .contact-send-button {
+      width: 100%;
+    }
+
+    /* RIGHT: Single unified card */
+    .contact-right-card {
+      width: 360px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(20, 20, 20, 0.9), rgba(30, 30, 30, 0.9));
+      border: 1px solid rgba(71, 160, 184, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-block-title {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.45);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .contact-block-divider {
+      height: 1px;
+      background: rgba(71, 160, 184, 0.15);
+      margin: 22px 0;
+    }
+
+    .contact-info-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(71, 160, 184, 0.05);
+      border: 1px solid rgba(71, 160, 184, 0.12);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+
+    .contact-info-row i {
+      color: #47a0b8;
+      font-size: 1rem;
+      width: 18px;
+      flex-shrink: 0;
+    }
+
+    .contact-follow-socials {
+      display: flex;
+      gap: 12px;
+      padding: 0;
+      margin-top: 4px;
+    }
+
+    .contact-follow-socials a {
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(71, 160, 184, 0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .contact-follow-socials a i {
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    .contact-follow-socials a:hover {
+      background: #47a0b8;
+      border-color: #47a0b8;
+    }
+
+    .contact-follow-socials a:hover i {
+      color: #000;
+    }
+
+    /* Teacher inline */
+    .teacher-inline-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .teacher-avatar-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #47a0b8, #02cadc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #000;
+      flex-shrink: 0;
+    }
+
+    .teacher-inline-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+
+    .teacher-inline-role {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    /* Location block */
+    .contact-location-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+    }
+
+    .contact-location-name-row i {
+      color: #47a0b8;
+    }
+
+    .contact-location-addr-text {
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.82rem;
+      margin-bottom: 14px;
+      padding-left: 22px;
+    }
+
+    .contact-map-embed {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .contact-section {
+        flex-direction: column;
+        padding: 30px 20px 60px;
+      }
+
+      .contact-right-card {
+        width: 100%;
+      }
+
+      .contact-form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contact-form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+
+  <canvas id="particle-canvas"></canvas>
+  <div class="page-transition"></div>
+
+  <div class="page-content">
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="nav-logo">
+          <a href="/"><img src="/src/assets/images/Robo_Nexus_Logo.webp" alt="Robo Nexus Logo" /></a>
+        </div>
+        <div class="spotlight-nav-container">
+          <div class="spotlight-nav">
+            <ul class="nav-links-ul">
+              <li><a class="nav-links" href="/" data-index="0">Home</a></li>
+              <li><a class="nav-links" href="/about" data-index="1">About</a></li>
+              <li><a class="nav-links" href="/team" data-index="2">Team</a></li>
+              <li><a class="nav-links" href="/projects" data-index="3">Projects</a></li>
+              <li><a class="nav-links" href="/events" data-index="4">Events</a></li>
+              <li><a class="nav-links active" href="/contact" data-index="5">Contact</a></li>
+            </ul>
+            <div class="navbar-spotlight-overlay"></div>
+            <div class="navbar-ambience-line"></div>
           </div>
         </div>
-      </nav>
+        <div class="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </nav>
 
-      <!-- CONTACT HERO -->
-      <section class="page-hero">
-        <h1 class="page-title">Contact Us</h1>
-        <p class="hero-subtitle reveal">Get in touch with us</p>
-        <div class="scroll-indicator">
-          <i class="fas fa-chevron-down"></i>
-        </div>
-      </section>
+    <!-- HERO -->
+    <section class="page-hero">
+      <h1 class="page-title">Contact Us</h1>
+      <p class="hero-subtitle reveal">Get in touch with us</p>
+      <div class="scroll-indicator"><i class="fas fa-chevron-down"></i></div>
+    </section>
 
-      <!-- CONTACT SECTION -->
-      <section class="contact-section">
-        <div class="contact-form-div reveal">
-          <h2 class="contact-text">Send a Message</h2>
+    <!-- CONTACT SECTION — two column -->
+    <section class="contact-section">
 
-          <form class="contact-form">
+      <!-- LEFT: Form -->
+      <div class="contact-form-div reveal">
+        <h2 class="contact-text">Send a Message</h2>
+        <form class="contact-form">
+
+          <!-- Name + Email on same row -->
+          <div class="contact-form-row">
             <input type="text" id="name" name="name" placeholder="Your Name" required />
             <input type="email" id="email" name="email" placeholder="Email Address" required />
-            <input type="text" id="subject" name="subject" placeholder="Subject" required />
-            <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+          </div>
 
-            <button type="button" onclick="sendMail()" class="contact-send-button">
-              <div class="cursor-glow"></div>
-              <div class="outer-glow"></div>
-              <span class="button-text">
-                <i class="fas fa-paper-plane"></i> Send Message
-              </span>
-            </button>
-          </form>
+          <input type="text" id="subject" name="subject" placeholder="Subject" required />
+          <textarea id="message" name="message" rows="6" placeholder="Your Message" required></textarea>
+
+          <button type="button" onclick="sendMail()" class="contact-send-button">
+            <div class="cursor-glow"></div>
+            <div class="outer-glow"></div>
+            <span class="button-text">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </span>
+          </button>
+        </form>
+      </div>
+
+      <!-- RIGHT: Unified info card -->
+      <div class="contact-right-card reveal">
+
+        <!-- Contact Information -->
+        <p class="contact-block-title">Contact Information</p>
+        <div class="contact-info-row">
+          <i class="fas fa-phone"></i>
+          <span>+91 XXXXXX6613</span>
+        </div>
+        <div class="contact-info-row">
+          <i class="fas fa-envelope"></i>
+          <span>robonexus.ais46@gmail.com</span>
         </div>
 
-        <div class="contact-info reveal">
-          <h3>Contact Information</h3>
-          <p><i class="fas fa-phone"></i> +91 XXXXXX6613</p>
-          <p><i class="fas fa-envelope"></i> robonexus.ais46@gmail.com</p>
-          
-          <div style="margin-top: 30px;">
-            <h3>Follow Us</h3>
-            <div class="socials" style="margin-top: 15px; gap: 15px; padding: 0;">
-              <a href="" target="_blank">
-                <i class="fa-brands fa-instagram"></i>
-              </a>
-              <a href="https://github.com/robonexusaisg46" target="_blank">
-                <i class="fa-brands fa-github"></i>
-              </a>
-              <a href="" target="_blank">
-                <i class="fa-brands fa-linkedin"></i>
-              </a>
-            </div>
-          </div>
+        <div class="contact-block-divider"></div>
 
-          <a href="#location-section" class="location-btn">
-            <i class="fas fa-map-marker-alt"></i> View Location
-          </a>
+        <!-- Follow Us -->
+        <p class="contact-block-title">Follow Us</p>
+        <div class="contact-follow-socials">
+          <a href="" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://github.com/robonexusaisg46" target="_blank"><i class="fa-brands fa-github"></i></a>
+          <a href="" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
         </div>
-      </section>
 
-      <!-- TEACHER INCHARGES SECTION -->
-      <section class="teacher-section reveal">
-        <h2 class="section-title">Teacher Incharge</h2>
-        <div class="teacher-cards">
-          <div class="teacher-card">
-            <div class="teacher-icon">
-              <i class="fas fa-chalkboard-teacher"></i>
-            </div>
-            <h3>Ms. Suvarna</h3>
-            <p>Teacher Incharge</p>
+        <div class="contact-block-divider"></div>
+
+        <!-- Teacher Incharge -->
+        <p class="contact-block-title">Teacher Incharge</p>
+        <div class="teacher-inline-row">
+          <div class="teacher-avatar-circle">S</div>
+          <div>
+            <p class="teacher-inline-name">Ms. Suvarna</p>
+            <p class="teacher-inline-role">Teacher Incharge</p>
           </div>
         </div>
-      </section>
 
-      <!-- LOCATION SECTION -->
-      <section class="location-section reveal" id="location-section">
-        <div class="location-card">
-          <div class="location-icon">
-            <i class="fas fa-school"></i>
-          </div>
-          <div class="location-details">
-            <h3>Our Location</h3>
-            <p class="school-name">Amity International School</p>
-            <p class="school-address">Sector 46, Gurugram, India</p>
-          </div>
-          <div class="location-map">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3508.5!2d77.0386!3d28.4177!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d229aec4a4a4d%3A0x6c5e8e8e8e8e8e8e!2sAmity%20International%20School%2C%20Sector%2046%2C%20Gurugram!5e0!3m2!1sen!2sin!4v1234567890"
-              width="100%" 
-              height="200" 
-              style="border:0; border-radius: 10px;" 
-              allowfullscreen="" 
-              loading="lazy">
-            </iframe>
-          </div>
+        <div class="contact-block-divider"></div>
+
+        <!-- Our Location -->
+        <p class="contact-block-title">Our Location</p>
+        <p class="contact-location-name-row">
+          <i class="fas fa-map-marker-alt"></i>
+          Amity International School
+        </p>
+        <p class="contact-location-addr-text">Sector 46, Gurugram, India</p>
+        <div class="contact-map-embed">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3508.5!2d77.0386!3d28.4177!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d229aec4a4a4d%3A0x6c5e8e8e8e8e8e8e!2sAmity%20International%20School%2C%20Sector%2046%2C%20Gurugram!5e0!3m2!1sen!2sin!4v1234567890"
+            width="100%" height="180" style="border:0; border-radius:10px; display:block;" allowfullscreen=""
+            loading="lazy">
+          </iframe>
         </div>
-      </section>
 
-      <!-- FOOTER -->
-      <footer class="footer">
-        <p>&copy; 2026 Robo Nexus. All rights reserved.</p>
-      </footer>
-    </div>
+      </div>
+    </section>
 
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <footer class="footer">
+      <p>&copy; 2026 Robo Nexus. All rights reserved.</p>
+    </footer>
+  </div>
 
-    <!-- SCRIPTS -->
-    <script src="/src/js/toast.js?v=18.0" defer></script>
-    <script src="/src/js/magnetic-button.js?v=18.0" defer></script>
-    <script src="/src/js/spotlight-navbar.js?v=18.0" defer></script>
-    <script src="/src/js/particles.js?v=18.0" defer></script>
-    <script src="/src/js/script.js?v=18.0" defer></script>
-    <script src="/src/js/contact.js?v=18.0" defer></script>
-    <script src="/src/js/prefetch.js?v=18.0" defer></script>
-    <script src="/src/js/protection.js?v=18.0" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="/src/js/toast.js?v=18.0" defer></script>
+  <script src="/src/js/magnetic-button.js?v=18.0" defer></script>
+  <script src="/src/js/spotlight-navbar.js?v=18.0" defer></script>
+  <script src="/src/js/particles.js?v=18.0" defer></script>
+  <script src="/src/js/script.js?v=18.0" defer></script>
+  <script src="/src/js/contact.js?v=18.0" defer></script>
+  <script src="/src/js/prefetch.js?v=18.0" defer></script>
+  <script src="/src/js/protection.js?v=18.0" defer></script>
+</body>
 
-
-  </body>
 </html>
