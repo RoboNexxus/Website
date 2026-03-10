@@ -5,9 +5,13 @@
     "category": "robots / iot / ai / drones",
     "image": "Image path (/src/assets/images/filename.jpg)",
     "description": "Project description",
-    "tech": ["Array of technologies used"],
+    "tech": [
+      "Array of technologies used"
+    ],
     "status": "Completed / In Progress",
-    "year": "Year (2024, 2025, etc.)"
+    "year": "Year (2024, 2025, etc.)",
+    "creator": "Full name of the student who made it",
+    "team": "Team name (optional — leave empty string if no team)"
   },
   "tutorials": [
     {
@@ -16,9 +20,15 @@
       "category": "robots",
       "image": "/src/assets/images/Robo_Nexus_Logo.webp",
       "description": "An autonomous robot that follows a black line using IR sensors and PID control.",
-      "tech": ["Arduino", "IR Sensors", "Motor Driver"],
+      "tech": [
+        "Arduino",
+        "IR Sensors",
+        "Motor Driver"
+      ],
       "status": "Completed",
-      "year": "2024"
+      "year": "2024",
+      "creator": "RoboNexus",
+      "team": "RoboNexus"
     }
   ]
 }
