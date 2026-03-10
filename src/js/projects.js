@@ -27,7 +27,7 @@ async function initProjects() {
 
   try {
     const [tutorialsRes] = await Promise.all([
-      fetch('/src/js/tutorials.json').then(r => r.json()),
+      fetch('/src/js/tutorials.json?v=19.0').then(r => r.json()),
       loadVotes()
     ]);
     tutorials = tutorialsRes.tutorials;
