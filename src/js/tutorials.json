@@ -29,22 +29,6 @@
       "year": "2024",
       "creator": "RoboNexus",
       "team": "RoboNexus"
-    },
-    {
-      "id": 2,
-      "title": "Hexapod Robot",
-      "category": "robots",
-      "image": "/src/assets/images/Robo_Nexus_Logo.webp",
-      "description": "A six-legged walking robot with 12-18 servos, capable of omnidirectional movement.",
-      "tech": [
-        "Arduino Mega",
-        "Servos",
-        "Inverse Kinematics"
-      ],
-      "status": "In Progress",
-      "year": "2025",
-      "creator": "Atharv Mandlavdiya",
-      "team": "RoboNexus"
     }
   ]
 }

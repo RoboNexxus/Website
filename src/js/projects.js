@@ -1,36 +1,40 @@
+// ── Supabase Config ─────────────────────────────────────────────
+// URL is public — not a real secret. Add SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL"
+// to netlify.toml if Netlify flags it.
+// Set SUPABASE_ANON_KEY in Netlify environment variables.
 const SUPABASE_URL = 'https://wgyrgoybcxegqgljhaat.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_KEY = typeof SUPABASE_ANON_KEY !== 'undefined' ? SUPABASE_ANON_KEY : '';
+
 const SB_HEADERS = {
   'apikey': SUPABASE_KEY,
   'Authorization': `Bearer ${SUPABASE_KEY}`,
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  'Prefer': 'return=minimal'
 };
 
 // ── State ────────────────────────────────────────────────────────
 let tutorials = [];
-let voteCounts = {};     // { projectId: number }
-let votedList = JSON.parse(localStorage.getItem('rn_voted_projects') || '[]');
+let voteCounts = {};
+let votedList = JSON.parse(localStorage.getItem('rn_voted') || '[]');
 
-let tutorialsGrid, modal, modalBody, modalClose;
+let modal, modalBody, modalClose;
 
 // ── Init ─────────────────────────────────────────────────────────
 async function initProjects() {
-  tutorialsGrid = document.getElementById('projects-grid');
   modal = document.getElementById('project-modal');
   modalBody = document.getElementById('modal-body');
   modalClose = document.querySelector('.modal-close');
 
-  // Modal close listeners
   modalClose?.addEventListener('click', closeModal);
   modal?.addEventListener('click', e => { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
   try {
-    const [tutorialsRes] = await Promise.all([
-      fetch('/src/js/tutorials.json?v=19.0').then(r => r.json()),
+    const [tutData] = await Promise.all([
+      fetch('/src/js/tutorials.json').then(r => r.json()),
       loadVotes()
     ]);
-    tutorials = tutorialsRes.tutorials;
+    tutorials = tutData.tutorials || [];
   } catch (err) {
     console.error('Init error:', err);
     tutorials = [];
@@ -44,6 +48,7 @@ document.addEventListener('DOMContentLoaded', initProjects);
 
 // ── Load votes from Supabase ─────────────────────────────────────
 async function loadVotes() {
+  if (!SUPABASE_KEY) return;
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/project_votes?select=project_id,vote_count`, {
       headers: SB_HEADERS
@@ -55,22 +60,22 @@ async function loadVotes() {
     }
   } catch (err) {
     console.warn('Could not load votes:', err);
-    voteCounts = {};
   }
 }
 
 // ── Cast a vote ───────────────────────────────────────────────────
 async function castVote(projectId) {
+  projectId = Number(projectId);
   if (votedList.includes(projectId)) return;
 
-  // Optimistic update
+  // Optimistic UI update
   voteCounts[projectId] = (voteCounts[projectId] || 0) + 1;
   votedList.push(projectId);
-  localStorage.setItem('rn_voted_projects', JSON.stringify(votedList));
-  renderVotingSection(); // instant UI update
+  localStorage.setItem('rn_voted', JSON.stringify(votedList));
+  renderVotingSection();
 
-  // Persist to Supabase via RPC
-  // SQL to create: see bottom of this file
+  // Persist to Supabase
+  if (!SUPABASE_KEY) return;
   try {
     await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_vote`, {
       method: 'POST',
@@ -84,9 +89,15 @@ async function castVote(projectId) {
 
 // ── Render project cards ──────────────────────────────────────────
 function renderTutorials() {
-  if (!tutorialsGrid) return;
+  const grid = document.getElementById('projects-grid');
+  if (!grid) return;
 
-  tutorialsGrid.innerHTML = tutorials.map(t => `
+  if (!tutorials.length) {
+    grid.innerHTML = '<p style="color:rgba(255,255,255,0.4); text-align:center; padding:40px 0;">No projects yet. Check back soon!</p>';
+    return;
+  }
+
+  grid.innerHTML = tutorials.map(t => `
     <div class="project-card" data-id="${t.id}">
       <div class="project-image">
         <img src="${t.image}" alt="${t.title}" width="400" height="300" loading="lazy"
@@ -120,72 +131,95 @@ function renderTutorials() {
   });
 }
 
-// ── Render voting section + leaderboard ──────────────────────────
+// ── Render voting cards + leaderboard ────────────────────────────
 function renderVotingSection() {
-  const votingCards = document.getElementById('voting-cards');
-  const leaderboard = document.getElementById('leaderboard-list');
-  if (!votingCards || !leaderboard) return;
+  renderVotingCards();
+  renderLeaderboard();
+}
 
-  // ── Voting cards
-  if (tutorials.length === 0) {
-    votingCards.innerHTML = `<p style="color:rgba(255,255,255,0.4); font-style:italic;">No projects to vote on yet.</p>`;
-  } else {
-    votingCards.innerHTML = tutorials.map(t => {
-      const votes = voteCounts[t.id] || 0;
-      const voted = votedList.includes(t.id);
-      return `
-        <div class="vote-card ${voted ? 'vote-card--voted' : ''}">
-          <div class="vote-card-info">
-            <p class="vote-card-title">${t.title}</p>
-            ${t.team ? `<p class="vote-card-team"><i class="fas fa-users"></i> ${t.team}</p>` : `<p class="vote-card-team"><i class="fas fa-user"></i> ${t.creator || 'Unknown'}</p>`}
-          </div>
-          <div class="vote-card-right">
-            <span class="vote-count" id="vc-${t.id}">${votes}</span>
-            <button class="vote-btn ${voted ? 'vote-btn--done' : ''}"
-                    onclick="castVote(${t.id})"
-                    ${voted ? 'disabled' : ''}
-                    title="${voted ? 'Already voted!' : 'Vote for this project'}">
-              <i class="fas ${voted ? 'fa-check' : 'fa-arrow-up'}"></i>
-              ${voted ? 'Voted' : 'Vote'}
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('');
+function renderVotingCards() {
+  const container = document.getElementById('voting-cards');
+  if (!container) return;
+
+  if (!tutorials.length) {
+    container.innerHTML = `<p style="color:rgba(255,255,255,0.4); font-style:italic;">No projects to vote on yet.</p>`;
+    return;
   }
 
-  // ── Leaderboard (top 5 by votes, grouped by team if available)
-  const ranked = [...tutorials]
+  container.innerHTML = tutorials.map(t => {
+    const votes = voteCounts[t.id] || 0;
+    const voted = votedList.includes(Number(t.id));
+    return `
+      <div class="vote-card ${voted ? 'vote-card--voted' : ''}">
+        <div class="vote-card-info">
+          <p class="vote-card-title">${t.title}</p>
+          <p class="vote-card-team">
+            ${t.team
+        ? `<i class="fas fa-users"></i> ${t.team}`
+        : `<i class="fas fa-user"></i> ${t.creator || 'Unknown'}`
+      }
+          </p>
+        </div>
+        <div class="vote-card-right">
+          <span class="vote-count">${votes}</span>
+          <button class="vote-btn ${voted ? 'vote-btn--done' : ''}"
+                  onclick="castVote(${t.id})"
+                  ${voted ? 'disabled' : ''}
+                  title="${voted ? 'Already voted!' : 'Vote for this project'}">
+            <i class="fas ${voted ? 'fa-check' : 'fa-arrow-up'}"></i>
+            ${voted ? 'Voted' : 'Vote'}
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderLeaderboard() {
+  const container = document.getElementById('leaderboard-list');
+  if (!container) return;
+
+  if (!tutorials.length) {
+    container.innerHTML = `<p class="leaderboard-empty">No projects yet.</p>`;
+    return;
+  }
+
+  const medals = ['🥇', '🥈', '🥉'];
+
+  // Aggregate by team (if set) or creator, then sort
+  const ranked = tutorials
     .map(t => ({
       label: t.team || t.creator || t.title,
-      votes: voteCounts[t.id] || 0,
       title: t.title,
+      votes: voteCounts[t.id] || 0,
       hasTeam: !!t.team
     }))
-    // aggregate by label
     .reduce((acc, cur) => {
-      const existing = acc.find(x => x.label === cur.label);
-      if (existing) { existing.votes += cur.votes; }
+      const ex = acc.find(x => x.label === cur.label);
+      if (ex) { ex.votes += cur.votes; }
       else { acc.push({ ...cur }); }
       return acc;
     }, [])
     .sort((a, b) => b.votes - a.votes)
     .slice(0, 5);
 
-  const medals = ['🥇', '🥈', '🥉'];
+  const hasAnyVotes = ranked.some(r => r.votes > 0);
 
-  leaderboard.innerHTML = ranked.length === 0
-    ? `<p class="leaderboard-empty">No votes yet — be the first!</p>`
-    : ranked.map((r, i) => `
-        <div class="lb-row">
-          <span class="lb-rank">${medals[i] || `#${i + 1}`}</span>
-          <div class="lb-info">
-            <p class="lb-label">${r.label}</p>
-            ${r.hasTeam ? `<p class="lb-sublabel">${r.title}</p>` : ''}
-          </div>
-          <span class="lb-votes">${r.votes} <i class="fas fa-arrow-up"></i></span>
-        </div>
-      `).join('');
+  if (!hasAnyVotes) {
+    container.innerHTML = `<p class="leaderboard-empty">No votes yet — be the first!</p>`;
+    return;
+  }
+
+  container.innerHTML = ranked.map((r, i) => `
+    <div class="lb-row">
+      <span class="lb-rank">${medals[i] || `#${i + 1}`}</span>
+      <div class="lb-info">
+        <p class="lb-label">${r.label}</p>
+        ${r.hasTeam ? `<p class="lb-sublabel">${r.title}</p>` : ''}
+      </div>
+      <span class="lb-votes">${r.votes} <i class="fas fa-arrow-up"></i></span>
+    </div>
+  `).join('');
 }
 
 // ── Modal ─────────────────────────────────────────────────────────
@@ -205,7 +239,7 @@ function openModal(id) {
         <p class="modal-year"><i class="fas fa-calendar"></i> ${t.year}</p>
         <p class="modal-creator-info">
           <i class="fas fa-user"></i> ${t.creator || 'Unknown'}
-          ${t.team ? `&nbsp;·&nbsp;<i class="fas fa-users"></i> ${t.team}` : ''}
+          ${t.team ? `&nbsp;&middot;&nbsp;<i class="fas fa-users"></i> ${t.team}` : ''}
         </p>
       </div>
       <p class="modal-desc">${t.description}</p>
@@ -230,4 +264,3 @@ function closeModal() {
   modal?.classList.remove('active');
   document.body.style.overflow = 'auto';
 }
-
