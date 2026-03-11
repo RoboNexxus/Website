@@ -53,16 +53,28 @@ exports.handler = async function (event, context) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    "Origin": "https://robonexusaisg46.netlify.app"
                 },
                 body: JSON.stringify(web3formsData)
             });
+
+            if (!emailResponse.ok) {
+                const errorText = await emailResponse.text();
+                console.error("Web3Forms HTTP error:", emailResponse.status, errorText);
+                throw new Error(`Web3Forms error: ${emailResponse.statusText}`);
+            }
 
             const emailResult = await emailResponse.json();
             if (emailResult.success) {
                 emailSuccess = true;
             } else {
                 console.error("Web3Forms error:", emailResult.message);
+                return {
+                    statusCode: 500,
+                    headers,
+                    body: JSON.stringify({ message: "Failed to send email", detail: emailResult.message })
+                };
             }
         } catch (emailError) {
             console.error("Email submission failed:", emailError);

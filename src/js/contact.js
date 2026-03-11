@@ -11,6 +11,13 @@ async function sendMail() {
         return;
     }
 
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        toast.error("Invalid Email", "Please enter a valid email address.");
+        return;
+    }
+
     // Show loading state
     const submitBtn = document.querySelector(".contact-send-button");
     const originalBtnHTML = submitBtn.innerHTML;
@@ -28,7 +35,8 @@ async function sendMail() {
         });
 
         if (!response.ok) {
-            throw new Error("Failed to submit form");
+            const errData = await response.json();
+            throw new Error(errData.detail || errData.message || "Failed to submit form");
         }
 
         // Clear form
@@ -57,7 +65,7 @@ async function sendMail() {
 
         toast.error(
             "Failed to Send Message",
-            "There was an error sending your message. Please try again or email us directly at robonexus.ais46@gmail.com",
+            error.message || "There was an error sending your message. Please try again or email us directly at robonexus.ais46@gmail.com",
             6000
         );
     }
