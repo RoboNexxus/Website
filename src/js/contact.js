@@ -1,43 +1,54 @@
 async function sendMail() {
-    // Get form values
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const subject = document.getElementById("subject").value;
     const message = document.getElementById("message").value;
 
-    // Validate fields
     if (!name || !email || !subject || !message) {
         toast.error("Missing Information", "Please fill in all fields before submitting.");
         return;
     }
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         toast.error("Invalid Email", "Please enter a valid email address.");
         return;
     }
 
-    // Show loading state
     const submitBtn = document.querySelector(".contact-send-button");
     const originalBtnHTML = submitBtn.innerHTML;
     submitBtn.innerHTML = '<span class="button-text"><i class="fas fa-spinner fa-spin"></i> Sending...</span>';
     submitBtn.disabled = true;
 
     try {
-        // Send data to our secure serverless function
-        const response = await fetch("/.netlify/functions/contact", {
+        // 1. Web3Forms called directly from browser — avoids Cloudflare bot block
+        const web3Response = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             },
-            body: JSON.stringify({ name, email, subject, message }),
+            body: JSON.stringify({
+                access_key: "YOUR_NEW_WEB3FORMS_KEY_HERE",
+                name: name,
+                email: email,
+                subject: subject,
+                message: message
+            })
         });
 
-        if (!response.ok) {
-            const errData = await response.json();
-            throw new Error(errData.detail || errData.message || "Failed to submit form");
+        const web3Result = await web3Response.json();
+        if (!web3Result.success) {
+            throw new Error(web3Result.message || "Web3Forms rejected the submission");
         }
+
+        // 2. Discord notification via Netlify function (server-side is fine for Discord)
+        await fetch("/.netlify/functions/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, subject, message })
+        }).catch(err => console.warn("Discord notification failed:", err));
+        // Non-fatal — if Discord fails, email already sent so don't throw
 
         // Clear form
         document.getElementById("name").value = "";
@@ -45,7 +56,6 @@ async function sendMail() {
         document.getElementById("subject").value = "";
         document.getElementById("message").value = "";
 
-        // Success message with toast
         submitBtn.innerHTML = '<span class="button-text"><i class="fas fa-check"></i> Sent!</span>';
         toast.success(
             "Message Sent Successfully!",
