@@ -1,16 +1,25 @@
-// ── Supabase Config ─────────────────────────────────────────────
-// URL is public — not a real secret. Add SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL"
-// to netlify.toml if Netlify flags it.
-// Set SUPABASE_ANON_KEY in Netlify environment variables.
-const SUPABASE_URL = 'https://wgyrgoybcxegqgljhaat.supabase.co';
-const SUPABASE_KEY = typeof SUPABASE_ANON_KEY !== 'undefined' ? SUPABASE_ANON_KEY : '';
+// ── Supabase Config — loaded from Netlify env via /.netlify/functions/config ──
+let SUPABASE_URL = '';
+let SUPABASE_KEY = '';
+let SB_HEADERS = {};
 
-const SB_HEADERS = {
-  'apikey': SUPABASE_KEY,
-  'Authorization': `Bearer ${SUPABASE_KEY}`,
-  'Content-Type': 'application/json',
-  'Prefer': 'return=minimal'
-};
+async function loadSupabaseConfig() {
+  try {
+    const res = await fetch('/.netlify/functions/config');
+    if (!res.ok) throw new Error('Config fetch failed');
+    const cfg = await res.json();
+    SUPABASE_URL = cfg.url;
+    SUPABASE_KEY = cfg.key;
+    SB_HEADERS = {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    };
+  } catch (err) {
+    console.warn('Could not load Supabase config:', err);
+  }
+}
 
 // ── State ────────────────────────────────────────────────────────
 let tutorials = [];
@@ -30,6 +39,7 @@ async function initProjects() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
   try {
+    await loadSupabaseConfig();
     const [tutData] = await Promise.all([
       fetch('/src/js/tutorials.json').then(r => r.json()),
       loadVotes()
@@ -186,7 +196,6 @@ function renderLeaderboard() {
 
   const medals = ['🥇', '🥈', '🥉'];
 
-  // Aggregate by team (if set) or creator, then sort
   const ranked = tutorials
     .map(t => ({
       label: t.team || t.creator || t.title,
