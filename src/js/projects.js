@@ -1,11 +1,11 @@
-// ── Supabase Config — loaded from Netlify env via /.netlify/functions/config ──
+// ── Supabase Config — loaded from Vercel env via /api/config ──
 let SUPABASE_URL = '';
 let SUPABASE_KEY = '';
 let SB_HEADERS = {};
 
 async function loadSupabaseConfig() {
   try {
-    const res = await fetch('/.netlify/functions/config');
+    const res = await fetch('/api/config');
     if (!res.ok) throw new Error('Config fetch failed');
     const cfg = await res.json();
     SUPABASE_URL = cfg.url;
