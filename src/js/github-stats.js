@@ -47,8 +47,13 @@
 
   // Parse repo count from README: "Across all X repositories"
   function parseRepoCountFromReadme(content) {
-    const match = content.match(/Across all (\d+) repositories/i);
-    return match ? parseInt(match[1], 10) : null;
+    // Try plain text first
+    const textMatch = content.match(/Across all (\d+) repositories/i);
+    if (textMatch) return parseInt(textMatch[1], 10);
+    
+    // Fall back to badge
+    const badgeMatch = content.match(/Repositories-(\d+)-00d9ff/i);
+    return badgeMatch ? parseInt(badgeMatch[1], 10) : null;
   }
 
   // Parse language breakdown from README comment: <!-- LANG_DATA:Python:12345,JavaScript:6789 -->

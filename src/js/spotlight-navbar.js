@@ -101,7 +101,7 @@ function initSpotlightNavbar() {
           (currentPage === '' && linkPage === 'index.html') ||
           (currentPage === 'index.html' && href === '/index.html') ||
           // Alumni page should highlight Team link
-          (currentPage === 'alumni.html' && (linkPage === 'team.html' || linkPage === 'team' || href === '/team'))) {
+          (currentPage === 'alumni' && (linkPage === 'team.html' || linkPage === 'team' || href === '/team'))) {
         activeIndex = index;
         link.classList.add('active');
         console.log('Spotlight Navbar - Active link set to:', linkPage, 'at index:', index);
