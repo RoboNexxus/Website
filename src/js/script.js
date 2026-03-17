@@ -40,18 +40,12 @@ initPageTransition();
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links-ul');
 
-console.log('Hamburger element:', hamburger);
-console.log('Nav links element:', navLinks);
-
 if (hamburger && navLinks) {
   hamburger.addEventListener('click', (e) => {
-    console.log('Hamburger clicked!');
     e.preventDefault();
     e.stopPropagation();
     hamburger.classList.toggle('active');
     navLinks.classList.toggle('active');
-    console.log('Hamburger active:', hamburger.classList.contains('active'));
-    console.log('Nav links active:', navLinks.classList.contains('active'));
   });
 
   // Close menu when clicking a link
@@ -61,8 +55,6 @@ if (hamburger && navLinks) {
       navLinks.classList.remove('active');
     });
   });
-} else {
-  console.error('Hamburger menu elements not found!');
 }
 
 /* ===============================
@@ -206,14 +198,12 @@ function loadTeamMembers() {
   const teamContainer = document.getElementById("team-container");
 
   if (teamContainer) {
-    console.log('Loading team members...');
     fetch('/src/js/team.json')
       .then(res => {
         if (!res.ok) throw new Error('Failed to load team data');
         return res.json();
       })
       .then(data => {
-        console.log('Team data loaded:', data);
         // Define role hierarchy for sorting
         const roleOrder = {
           "President": 1,
@@ -271,14 +261,11 @@ function loadTeamMembers() {
             }
           });
         });
-        console.log('Team members rendered');
       })
       .catch(err => {
         console.error('Team loading error:', err);
-        teamContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Team data loading...</p>';
+        teamContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Failed to load team data. Please try again later.</p>';
       });
-  } else {
-    console.log('Team container not found');
   }
 }
 
@@ -400,14 +387,12 @@ function loadAlumni() {
   const alumniContainer = document.getElementById("alumni-container");
 
   if (alumniContainer) {
-    console.log('Loading alumni...');
     fetch('/src/js/alumni.json')
       .then(res => {
         if (!res.ok) throw new Error('Failed to load alumni data');
         return res.json();
       })
       .then(data => {
-        console.log('Alumni data loaded:', data);
         const alumni = data.alumni;
         if (alumni.length === 0) {
           alumniContainer.innerHTML = '<p class="no-alumni">No alumni yet - our journey continues!</p>';
@@ -462,14 +447,11 @@ function loadAlumni() {
             }
           });
         });
-        console.log('Alumni rendered');
       })
       .catch(err => {
         console.error('Alumni loading error:', err);
-        alumniContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Alumni data loading...</p>';
+        alumniContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Failed to load alumni data. Please try again later.</p>';
       });
-  } else {
-    console.log('Alumni container not found');
   }
 }
 
@@ -480,8 +462,6 @@ if (document.readyState === 'loading') {
   // DOM already loaded, call with a small delay to ensure container exists
   setTimeout(loadAlumni, 100);
 }
-
-console.log('🤖 Robo Nexus - Website Loaded Successfully!');
 
 /* ===============================
    SCROLL BUTTONS

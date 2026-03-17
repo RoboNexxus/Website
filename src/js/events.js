@@ -6,7 +6,10 @@ let currentYear = new Date().getFullYear();
 
 function initEvents() {
   fetch('/src/js/events.json')
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to fetch events');
+      return res.json();
+    })
     .then(data => {
       upcomingEvents = data.upcomingEvents;
       pastEvents = data.pastEvents;
@@ -17,6 +20,11 @@ function initEvents() {
     })
     .catch(err => {
       console.error('Error loading events:', err);
+      const containers = ['upcoming-events', 'past-events'];
+      containers.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = '<p style="color:rgba(255,255,255,0.4); font-style:italic;">Failed to load events. Please try again later.</p>';
+      });
     });
 }
 
@@ -93,9 +101,19 @@ function setupEventListeners() {
 
   regForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    alert('Registration successful! You will receive a confirmation email shortly.');
+    
+    // In a real application, you would send this to a backend API
+    // For now, we'll simulate success and show a professional toast
+    
     regModal.classList.remove('active');
     document.body.style.overflow = 'auto';
+    
+    if (typeof toast !== 'undefined') {
+      toast.success('Registration Successful!', 'You will receive a confirmation email shortly.', 5000);
+    } else {
+      alert('Registration successful! You will receive a confirmation email shortly.');
+    }
+    
     regForm.reset();
   });
 }

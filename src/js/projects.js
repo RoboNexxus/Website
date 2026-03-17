@@ -78,22 +78,30 @@ async function castVote(projectId) {
   projectId = Number(projectId);
   if (votedList.includes(projectId)) return;
 
+  const project = tutorials.find(t => t.id == projectId);
+
   // Optimistic UI update
   voteCounts[projectId] = (voteCounts[projectId] || 0) + 1;
   votedList.push(projectId);
   localStorage.setItem('rn_voted', JSON.stringify(votedList));
   renderVotingSection();
 
+  if (typeof toast !== 'undefined') {
+    toast.success('Vote Registered!', `You voted for ${project ? project.title : 'this project'}.`, 4000);
+  }
+
   // Persist to Supabase
   if (!SUPABASE_KEY) return;
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_vote`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_vote`, {
       method: 'POST',
       headers: SB_HEADERS,
       body: JSON.stringify({ p_id: projectId })
     });
+    if (!res.ok) throw new Error('Vote sync failed');
   } catch (err) {
     console.warn('Vote sync failed:', err);
+    // Silent fail in UI as we already did optimistic update
   }
 }
 
