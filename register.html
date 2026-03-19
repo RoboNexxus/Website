@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-53TPG7NL');</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKPK7KF3CQ"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KKPK7KF3CQ');</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register | RoboNexus '26</title>
+  <meta name="description" content="Register for RoboNexus 2026 competitions - Robo War, Soccer, Drone, Line Follower & Race.">
+  <meta property="og:title" content="Register | RoboNexus '26">
+  <meta property="og:description" content="Register for RoboNexus 2026 competitions.">
+  <meta property="og:image" content="https://robonexus46.vercel.app/src/assets/images/Robo_Nexus_Logo.webp">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{width:100%;min-height:100%;overflow-x:hidden;}
+    body{background:#000;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+    .page-transition{position:fixed;inset:0;background:#000;z-index:9999;pointer-events:none;opacity:0;display:none;}
+    .page-content{position:relative;z-index:1;min-height:100vh;}
+    #particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+  </style>
+
+  <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
+  <link rel="stylesheet" href="/src/css/style.css?v=22.0" />
+  <link rel="stylesheet" href="/src/css/toast.css?v=22.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/></noscript>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png">
+
+  <style>
+    /* ══ Page Layout ══ */
+    .reg-hero{text-align:center;padding:60px 20px 24px;position:relative;z-index:1;}
+    .reg-hero .event-year{font-size:.9rem;letter-spacing:6px;text-transform:uppercase;color:#47a0b8;margin-bottom:10px;font-weight:600;}
+    .reg-hero .page-title{font-size:3.5rem;}
+    .reg-hero .hero-subtitle{margin-top:8px;}
+
+    .reg-outer{
+      max-width:1120px;margin:0 auto;padding:28px 60px 80px;
+      display:flex;gap:30px;align-items:flex-start;
+    }
+    .reg-form-col{flex:1;min-width:0;}
+
+    /* ── Card ── */
+    .reg-card{
+      background:linear-gradient(135deg,rgba(18,18,18,.97),rgba(28,28,28,.97));
+      border:1px solid rgba(71,160,184,.25);border-radius:20px;padding:34px 30px;
+    }
+    .reg-card+.reg-card{margin-top:16px;}
+
+    .reg-section-label{
+      font-size:.72rem;color:rgba(255,255,255,.35);
+      text-transform:uppercase;letter-spacing:2px;font-weight:600;
+      margin-bottom:16px;display:flex;align-items:center;gap:7px;
+    }
+    .reg-section-label i{color:#47a0b8;font-size:.75rem;}
+    .reg-divider{height:1px;background:rgba(71,160,184,.1);margin:22px 0 18px;}
+
+    /* ── Inputs ── */
+    .reg-row{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;}
+    .reg-field{display:flex;flex-direction:column;gap:7px;margin-bottom:13px;}
+    .reg-field:last-child{margin-bottom:0;}
+
+    .reg-field label{
+      font-size:.8rem;font-weight:600;color:rgba(255,255,255,.5);
+      display:flex;align-items:center;gap:6px;
+    }
+    .reg-field label i{color:#47a0b8;font-size:.73rem;}
+    .reg-field label .req{color:#e74c3c;margin-left:1px;}
+
+    .reg-field input,.reg-field select{
+      width:100%;background:rgba(255,255,255,.04);
+      border:1px solid rgba(71,160,184,.2);padding:11px 15px;
+      border-radius:10px;outline:none;font-size:.92rem;color:#fff;
+      transition:border-color .25s,box-shadow .25s;
+      -webkit-appearance:none;appearance:none;
+    }
+    .reg-field input::placeholder{color:rgba(255,255,255,.22);}
+    .reg-field input:focus,.reg-field select:focus{
+      border-color:#47a0b8;box-shadow:0 0 0 3px rgba(71,160,184,.1);
+    }
+    .reg-field input.error,.reg-field select.error{
+      border-color:#e74c3c;box-shadow:0 0 0 3px rgba(231,76,60,.1);
+    }
+
+    .select-wrap{position:relative;}
+    .select-wrap::after{
+      content:'\f107';font-family:'Font Awesome 6 Free';font-weight:900;
+      position:absolute;right:13px;top:50%;transform:translateY(-50%);
+      color:#47a0b8;pointer-events:none;font-size:.82rem;
+    }
+    .select-wrap select option{background:#111;color:#fff;}
+
+    /* ── Grade category chips ── */
+    .grade-chips{display:flex;gap:10px;margin-bottom:0;}
+    .grade-chip{flex:1;}
+    .grade-chip input[type="radio"]{position:absolute;opacity:0;width:0;height:0;}
+    .grade-chip label{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:4px;padding:12px 6px;border:1.5px solid rgba(71,160,184,.18);
+      border-radius:12px;cursor:pointer;transition:all .22s ease;
+      background:rgba(71,160,184,.03);text-align:center;
+    }
+    .grade-chip label .gc-label{font-size:.88rem;font-weight:700;color:rgba(255,255,255,.45);transition:color .22s;}
+    .grade-chip label .gc-sub{font-size:.65rem;color:rgba(255,255,255,.25);transition:color .22s;}
+    .grade-chip input:checked+label{border-color:#47a0b8;background:rgba(71,160,184,.12);box-shadow:0 0 0 2px rgba(71,160,184,.15);}
+    .grade-chip input:checked+label .gc-label,
+    .grade-chip input:checked+label .gc-sub{color:#47a0b8;}
+    .grade-chip label:hover{border-color:rgba(71,160,184,.45);background:rgba(71,160,184,.07);}
+
+    /* ── Event chips ── */
+    .events-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;}
+    .event-chip{position:relative;}
+    .event-chip input[type="checkbox"]{position:absolute;opacity:0;width:0;height:0;}
+    .event-chip label{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:5px;padding:13px 6px;border:1.5px solid rgba(71,160,184,.18);
+      border-radius:12px;cursor:pointer;transition:all .22s ease;
+      background:rgba(71,160,184,.03);text-align:center;
+    }
+    .event-chip label .chip-icon{font-size:1.3rem;color:rgba(255,255,255,.32);transition:color .22s;}
+    .event-chip label .chip-name{font-size:.72rem;font-weight:600;color:rgba(255,255,255,.4);transition:color .22s;}
+    .event-chip input:checked+label{border-color:#47a0b8;background:rgba(71,160,184,.12);box-shadow:0 0 0 2px rgba(71,160,184,.15);}
+    .event-chip input:checked+label .chip-icon,
+    .event-chip input:checked+label .chip-name{color:#47a0b8;}
+    .event-chip label:hover{border-color:rgba(71,160,184,.45);background:rgba(71,160,184,.07);}
+
+    /* ── Team section ── */
+    #team-fields{display:none;}
+    #team-fields.visible{display:block;}
+
+    .member-block{
+      border:1px solid rgba(71,160,184,.12);border-radius:13px;
+      padding:18px 16px;background:rgba(71,160,184,.02);margin-bottom:12px;
+    }
+    .member-block:last-child{margin-bottom:0;}
+
+    .member-header{
+      display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;
+    }
+    .member-label{
+      font-size:.78rem;font-weight:700;color:#47a0b8;
+      text-transform:uppercase;letter-spacing:1px;
+      display:flex;align-items:center;gap:6px;
+    }
+    .member-optional{
+      font-size:.68rem;color:rgba(255,255,255,.25);
+      background:rgba(255,255,255,.05);padding:3px 8px;
+      border-radius:6px;text-transform:uppercase;letter-spacing:.5px;
+    }
+    .member-block .reg-row{margin-bottom:11px;}
+    .member-block .reg-field{margin-bottom:0;}
+
+    /* ── Team size indicator ── */
+    .team-size-indicator{
+      display:flex;align-items:center;gap:10px;padding:10px 14px;
+      background:rgba(71,160,184,.06);border:1px solid rgba(71,160,184,.15);
+      border-radius:10px;margin-bottom:16px;
+    }
+    .ts-dots{display:flex;gap:6px;}
+    .ts-dot{
+      width:28px;height:28px;border-radius:50%;
+      border:2px solid rgba(71,160,184,.25);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.65rem;font-weight:700;color:rgba(255,255,255,.2);transition:all .25s;
+    }
+    .ts-dot.filled{background:#47a0b8;border-color:#47a0b8;color:#000;}
+    .ts-text{font-size:.78rem;color:rgba(255,255,255,.35);}
+    .ts-text span{color:#47a0b8;font-weight:700;}
+
+    /* ── Submit ── */
+    .reg-submit-btn{
+      width:100%;margin-top:26px;padding:15px 30px;
+      font-weight:700;font-size:1rem;
+      background:linear-gradient(135deg,#47a0b8,#02cadc);
+      border:none;border-radius:12px;cursor:pointer;color:#000;
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      transition:all .3s ease;
+    }
+    .reg-submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 35px rgba(71,160,184,.35);}
+    .reg-submit-btn:disabled{opacity:.65;cursor:not-allowed;}
+
+    /* ── RIGHT sidebar ── */
+    .reg-info-col{
+      width:280px;flex-shrink:0;position:sticky;top:90px;
+      display:flex;flex-direction:column;gap:14px;
+    }
+    .reg-info-card{
+      background:linear-gradient(135deg,rgba(18,18,18,.97),rgba(28,28,28,.97));
+      border:1px solid rgba(71,160,184,.18);border-radius:18px;padding:22px 20px;
+    }
+    .info-card-title{
+      font-size:.7rem;color:rgba(255,255,255,.3);
+      text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:13px;
+    }
+    .event-info-row{
+      display:flex;align-items:center;gap:11px;padding:9px 12px;
+      border-radius:9px;background:rgba(71,160,184,.04);
+      border:1px solid rgba(71,160,184,.09);margin-bottom:7px;transition:border-color .2s;
+    }
+    .event-info-row:hover{border-color:rgba(71,160,184,.28);}
+    .event-info-row:last-child{margin-bottom:0;}
+    .event-info-icon{font-size:1.1rem;width:20px;text-align:center;flex-shrink:0;}
+    .event-info-name{font-size:.85rem;font-weight:600;color:rgba(255,255,255,.7);}
+
+    .info-divider{height:1px;background:rgba(71,160,184,.1);margin:15px 0;}
+    .info-stat-row{display:flex;gap:8px;}
+    .info-stat{
+      flex:1;text-align:center;padding:10px 6px;
+      background:rgba(71,160,184,.05);border:1px solid rgba(71,160,184,.13);border-radius:10px;
+    }
+    .info-stat-num{font-size:1.25rem;font-weight:900;color:#47a0b8;}
+    .info-stat-lbl{font-size:.62rem;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;}
+
+    .info-note{font-size:.78rem;color:rgba(255,255,255,.35);line-height:1.6;display:flex;gap:7px;}
+    .info-note i{color:#47a0b8;margin-top:2px;flex-shrink:0;font-size:.72rem;}
+    .info-note+.info-note{margin-top:10px;}
+
+    /* ── Responsive ── */
+    @media (max-width:960px){
+      .reg-outer{flex-direction:column;padding:20px 20px 60px;}
+      .reg-info-col{width:100%;position:static;}
+      .reg-hero .page-title{font-size:2.2rem;}
+    }
+    @media (max-width:600px){
+      .reg-row{grid-template-columns:1fr;}
+      .events-grid{grid-template-columns:repeat(3,1fr);}
+      .grade-chips{flex-wrap:wrap;}
+      .grade-chip{flex:1 1 calc(33% - 7px);min-width:80px;}
+      .reg-card{padding:22px 15px;}
+    }
+    @media (max-width:400px){
+      .events-grid{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+</head>
+
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<canvas id="particle-canvas"></canvas>
+<div class="page-transition"></div>
+
+<div class="page-content">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      <div class="nav-logo">
+        <a href="/"><img src="/src/assets/images/Robo_Nexus_Logo.webp" alt="Robo Nexus Logo" /></a>
+      </div>
+      <div class="spotlight-nav-container">
+        <div class="spotlight-nav">
+          <ul class="nav-links-ul">
+            <li><a class="nav-links" href="/" data-index="0">Home</a></li>
+            <li><a class="nav-links" href="/about" data-index="1">About</a></li>
+            <li><a class="nav-links" href="/team" data-index="2">Team</a></li>
+            <li><a class="nav-links" href="/projects" data-index="3">Projects</a></li>
+            <li><a class="nav-links active" href="/events" data-index="4">Events</a></li>
+            <li><a class="nav-links" href="/contact" data-index="5">Contact</a></li>
+          </ul>
+          <div class="navbar-spotlight-overlay"></div>
+          <div class="navbar-ambience-line"></div>
+        </div>
+      </div>
+      <div class="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="reg-hero reveal">
+    <p class="event-year">RoboNexus 2026</p>
+    <h1 class="page-title">Register</h1>
+    <p class="hero-subtitle">Compete. Build. Innovate.</p>
+  </section>
+
+  <div class="reg-outer">
+
+    <!-- ══ LEFT: Form ══ -->
+    <div class="reg-form-col">
+
+      <!-- CARD 1: Personal + School + Grade -->
+      <div class="reg-card reveal">
+        <p class="reg-section-label"><i class="fas fa-user"></i> Personal Information</p>
+
+        <div class="reg-row">
+          <div class="reg-field">
+            <label><i class="fas fa-user"></i> Full Name <span class="req">*</span></label>
+            <input type="text" id="reg-name" placeholder="e.g. Atharv Mandlavdiya" />
+          </div>
+          <div class="reg-field">
+            <label><i class="fab fa-discord"></i> Discord ID <span class="req">*</span></label>
+            <input type="text" id="reg-discord" placeholder="e.g. atharv#0001" />
+          </div>
+        </div>
+        <div class="reg-row">
+          <div class="reg-field">
+            <label><i class="fas fa-envelope"></i> Email <span class="req">*</span></label>
+            <input type="email" id="reg-email" placeholder="you@email.com" />
+          </div>
+          <div class="reg-field">
+            <label><i class="fas fa-phone"></i> Phone <span class="req">*</span></label>
+            <input type="tel" id="reg-phone" placeholder="+91 XXXXX XXXXX" />
+          </div>
+        </div>
+
+        <div class="reg-divider"></div>
+        <p class="reg-section-label"><i class="fas fa-school"></i> School Details</p>
+
+        <div class="reg-field">
+          <label><i class="fas fa-building"></i> School Name <span class="req">*</span></label>
+          <input type="text" id="reg-school" placeholder="e.g. Amity International School, Sec 46" />
+        </div>
+
+        <div class="reg-divider"></div>
+        <p class="reg-section-label"><i class="fas fa-graduation-cap"></i> Grade Category <span style="color:#e74c3c;font-size:.9em;">*</span></p>
+
+        <div class="grade-chips" id="grade-chips">
+          <div class="grade-chip">
+            <input type="radio" name="grade" id="gc-15" value="1-5">
+            <label for="gc-15">
+              <span class="gc-label">1 – 5</span>
+              <span class="gc-sub">Primary</span>
+            </label>
+          </div>
+          <div class="grade-chip">
+            <input type="radio" name="grade" id="gc-68" value="6-8">
+            <label for="gc-68">
+              <span class="gc-label">6 – 8</span>
+              <span class="gc-sub">Middle</span>
+            </label>
+          </div>
+          <div class="grade-chip">
+            <input type="radio" name="grade" id="gc-912" value="9-12">
+            <label for="gc-912">
+              <span class="gc-label">9 – 12</span>
+              <span class="gc-sub">High School</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: Participation + Team Members -->
+      <div class="reg-card reveal">
+        <p class="reg-section-label"><i class="fas fa-users"></i> Participation</p>
+
+        <div class="reg-row">
+          <div class="reg-field">
+            <label><i class="fas fa-user-friends"></i> Participation Type <span class="req">*</span></label>
+            <div class="select-wrap">
+              <select id="reg-participation" onchange="onParticipationChange(this.value)">
+                <option value="">Select type</option>
+                <option value="Individual">Individual</option>
+                <option value="School Team">School Team</option>
+              </select>
+            </div>
+          </div>
+          <div class="reg-field" id="team-name-wrapper" style="display:none;">
+            <label><i class="fas fa-flag"></i> Team Name <span class="req">*</span></label>
+            <input type="text" id="reg-team" placeholder="e.g. Circuit Breakers" />
+          </div>
+        </div>
+
+        <!-- Expandable team member fields -->
+        <div id="team-fields">
+
+          <!-- Size indicator -->
+          <div class="team-size-indicator">
+            <div class="ts-dots">
+              <div class="ts-dot filled" id="ts-dot-1" title="You (Member 1)">1</div>
+              <div class="ts-dot" id="ts-dot-2" title="Member 2">2</div>
+              <div class="ts-dot" id="ts-dot-3" title="Member 3">3</div>
+            </div>
+            <p class="ts-text">Team size: <span id="ts-count">1</span> / 3 &nbsp;·&nbsp; Max 3 members</p>
+          </div>
+
+          <!-- Member 2 -->
+          <div class="member-block">
+            <div class="member-header">
+              <span class="member-label"><i class="fas fa-user-plus"></i> Member 2</span>
+              <span class="member-optional">Optional</span>
+            </div>
+            <div class="reg-row" style="margin-bottom:11px;">
+              <div class="reg-field">
+                <label><i class="fas fa-user"></i> Full Name</label>
+                <input type="text" id="m2-name" placeholder="Team member name" oninput="updateTeamSize()" />
+              </div>
+              <div class="reg-field">
+                <label><i class="fab fa-discord"></i> Discord ID</label>
+                <input type="text" id="m2-discord" placeholder="discord#0000" />
+              </div>
+            </div>
+            <div class="reg-field">
+              <label><i class="fas fa-envelope"></i> Email</label>
+              <input type="email" id="m2-email" placeholder="member2@email.com" />
+            </div>
+          </div>
+
+          <!-- Member 3 -->
+          <div class="member-block">
+            <div class="member-header">
+              <span class="member-label"><i class="fas fa-user-plus"></i> Member 3</span>
+              <span class="member-optional">Optional</span>
+            </div>
+            <div class="reg-row" style="margin-bottom:11px;">
+              <div class="reg-field">
+                <label><i class="fas fa-user"></i> Full Name</label>
+                <input type="text" id="m3-name" placeholder="Team member name" oninput="updateTeamSize()" />
+              </div>
+              <div class="reg-field">
+                <label><i class="fab fa-discord"></i> Discord ID</label>
+                <input type="text" id="m3-discord" placeholder="discord#0000" />
+              </div>
+            </div>
+            <div class="reg-field">
+              <label><i class="fas fa-envelope"></i> Email</label>
+              <input type="email" id="m3-email" placeholder="member3@email.com" />
+            </div>
+          </div>
+
+        </div><!-- /#team-fields -->
+      </div>
+
+      <!-- CARD 3: Events + Submit -->
+      <div class="reg-card reveal">
+        <p class="reg-section-label"><i class="fas fa-trophy"></i> Select Events <span style="color:#e74c3c;font-size:.9em;">*</span></p>
+        <div class="events-grid">
+          <div class="event-chip">
+            <input type="checkbox" id="ev-robowar" value="Robo War">
+            <label for="ev-robowar">
+              <span class="chip-icon">⚔️</span>
+              <span class="chip-name">Robo War</span>
+            </label>
+          </div>
+          <div class="event-chip">
+            <input type="checkbox" id="ev-soccer" value="Robo Soccer">
+            <label for="ev-soccer">
+              <span class="chip-icon">⚽</span>
+              <span class="chip-name">Robo Soccer</span>
+            </label>
+          </div>
+          <div class="event-chip">
+            <input type="checkbox" id="ev-drone" value="Drone">
+            <label for="ev-drone">
+              <span class="chip-icon">🚁</span>
+              <span class="chip-name">Drone</span>
+            </label>
+          </div>
+          <div class="event-chip">
+            <input type="checkbox" id="ev-line" value="Line Follower">
+            <label for="ev-line">
+              <span class="chip-icon">〰️</span>
+              <span class="chip-name">Line Follower</span>
+            </label>
+          </div>
+          <div class="event-chip">
+            <input type="checkbox" id="ev-race" value="Race">
+            <label for="ev-race">
+              <span class="chip-icon">🏁</span>
+              <span class="chip-name">Race</span>
+            </label>
+          </div>
+        </div>
+
+        <button class="reg-submit-btn" id="reg-submit-btn" onclick="submitRegistration()">
+          <i class="fas fa-rocket"></i>
+          Register Now
+        </button>
+      </div>
+
+    </div><!-- /.reg-form-col -->
+
+    <!-- ══ RIGHT: Sidebar ══ -->
+    <div class="reg-info-col">
+
+      <div class="reg-info-card reveal">
+        <p class="info-card-title">Events</p>
+        <div class="event-info-row"><span class="event-info-icon">⚔️</span><span class="event-info-name">Robo War</span></div>
+        <div class="event-info-row"><span class="event-info-icon">⚽</span><span class="event-info-name">Robo Soccer</span></div>
+        <div class="event-info-row"><span class="event-info-icon">🚁</span><span class="event-info-name">Drone</span></div>
+        <div class="event-info-row"><span class="event-info-icon">〰️</span><span class="event-info-name">Line Follower</span></div>
+        <div class="event-info-row"><span class="event-info-icon">🏁</span><span class="event-info-name">Race</span></div>
+        <div class="info-divider"></div>
+        <div class="info-stat-row">
+          <div class="info-stat"><div class="info-stat-num">5</div><div class="info-stat-lbl">Events</div></div>
+          <div class="info-stat"><div class="info-stat-num">3</div><div class="info-stat-lbl">Max Team</div></div>
+          <div class="info-stat"><div class="info-stat-num">3</div><div class="info-stat-lbl">Categories</div></div>
+        </div>
+      </div>
+
+      <div class="reg-info-card reveal">
+        <p class="info-card-title">Grade Categories</p>
+        <div class="event-info-row">
+          <span class="event-info-icon" style="font-size:.82rem;color:#47a0b8;font-weight:800;">1–5</span>
+          <span class="event-info-name">Primary School</span>
+        </div>
+        <div class="event-info-row">
+          <span class="event-info-icon" style="font-size:.82rem;color:#47a0b8;font-weight:800;">6–8</span>
+          <span class="event-info-name">Middle School</span>
+        </div>
+        <div class="event-info-row">
+          <span class="event-info-icon" style="font-size:.82rem;color:#47a0b8;font-weight:800;">9–12</span>
+          <span class="event-info-name">High School</span>
+        </div>
+        <div class="info-divider"></div>
+        <div class="info-note"><i class="fas fa-info-circle"></i><span>Select the grade bracket matching your current class.</span></div>
+      </div>
+
+      <div class="reg-info-card reveal">
+        <p class="info-card-title">Team Rules</p>
+        <div class="info-note"><i class="fas fa-users"></i><span>Max 3 members per team. All members register through this single form.</span></div>
+        <div class="info-note"><i class="fas fa-check-circle"></i><span>You can register for multiple events in one submission.</span></div>
+        <div class="info-divider"></div>
+        <div class="info-note"><i class="fas fa-envelope"></i><span>Questions? robonexus.ais46@gmail.com</span></div>
+      </div>
+
+    </div><!-- /.reg-info-col -->
+
+  </div><!-- /.reg-outer -->
+
+  <footer class="footer">
+    <p>&copy; 2026 Robo Nexus. All rights reserved.</p>
+  </footer>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="/src/js/toast.js?v=22.0" defer></script>
+<script src="/src/js/spotlight-navbar.js?v=22.0" defer></script>
+<script src="/src/js/particles.js?v=22.0" defer></script>
+<script src="/src/js/script.js?v=22.0" defer></script>
+<script src="/src/js/prefetch.js?v=22.0" defer></script>
+<script src="/src/js/protection.js?v=22.0" defer></script>
+
+<script>
+  /* ── Participation type toggle ── */
+  function onParticipationChange(val) {
+    const teamNameWrap = document.getElementById('team-name-wrapper');
+    const teamFields   = document.getElementById('team-fields');
+    if (val === 'School Team') {
+      teamNameWrap.style.display = 'flex';
+      teamFields.classList.add('visible');
+    } else {
+      teamNameWrap.style.display = 'none';
+      teamFields.classList.remove('visible');
+      // Clear team fields on switch back
+      ['m2-name','m2-discord','m2-email','m3-name','m3-discord','m3-email','reg-team'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      updateTeamSize();
+    }
+  }
+
+  /* ── Live team size indicator ── */
+  function updateTeamSize() {
+    const m2 = document.getElementById('m2-name')?.value.trim();
+    const m3 = document.getElementById('m3-name')?.value.trim();
+    let count = 1;
+    if (m2) count++;
+    if (m3) count++;
+
+    document.getElementById('ts-count').textContent = count;
+    document.getElementById('ts-dot-1').classList.add('filled');
+    document.getElementById('ts-dot-2').classList.toggle('filled', count >= 2);
+    document.getElementById('ts-dot-3').classList.toggle('filled', count >= 3);
+  }
+
+  /* ── Helpers ── */
+  function getSelectedEvents() {
+    return Array.from(document.querySelectorAll('.events-grid input[type="checkbox"]:checked'))
+      .map(cb => cb.value);
+  }
+
+  function getSelectedGrade() {
+    const el = document.querySelector('input[name="grade"]:checked');
+    return el ? el.value : '';
+  }
+
+  function clearErrors() {
+    document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+  }
+
+  function setError(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('error');
+  }
+
+  /* ── Submit ── */
+  async function submitRegistration() {
+    clearErrors();
+
+    const name              = document.getElementById('reg-name').value.trim();
+    const discord           = document.getElementById('reg-discord').value.trim();
+    const email             = document.getElementById('reg-email').value.trim();
+    const phone             = document.getElementById('reg-phone').value.trim();
+    const school            = document.getElementById('reg-school').value.trim();
+    const gradeCategory     = getSelectedGrade();
+    const participationType = document.getElementById('reg-participation').value;
+    const teamName          = document.getElementById('reg-team').value.trim();
+    const events            = getSelectedEvents();
+
+    const members = [
+      {
+        name:    document.getElementById('m2-name').value.trim(),
+        discord: document.getElementById('m2-discord').value.trim(),
+        email:   document.getElementById('m2-email').value.trim(),
+      },
+      {
+        name:    document.getElementById('m3-name').value.trim(),
+        discord: document.getElementById('m3-discord').value.trim(),
+        email:   document.getElementById('m3-email').value.trim(),
+      },
+    ];
+
+    // Validation
+    let hasError = false;
+    if (!name)    { setError('reg-name');    hasError = true; }
+    if (!discord) { setError('reg-discord'); hasError = true; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('reg-email'); hasError = true; }
+    if (!phone)   { setError('reg-phone');   hasError = true; }
+    if (!school)  { setError('reg-school');  hasError = true; }
+    if (!gradeCategory) {
+      document.getElementById('grade-chips').style.outline = '2px solid #e74c3c';
+      document.getElementById('grade-chips').style.borderRadius = '12px';
+      hasError = true;
+    } else {
+      document.getElementById('grade-chips').style.outline = '';
+    }
+    if (!participationType) { setError('reg-participation'); hasError = true; }
+    if (participationType === 'School Team' && !teamName) { setError('reg-team'); hasError = true; }
+
+    if (hasError) {
+      toast.error('Missing Fields', 'Please fill in all required fields.');
+      return;
+    }
+
+    if (!events.length) {
+      toast.error('No Events Selected', 'Please select at least one event.');
+      return;
+    }
+
+    const btn = document.getElementById('reg-submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, discord, email, phone, school, gradeCategory, participationType, teamName, events, members }),
+      });
+
+      if (!res.ok) throw new Error('Server error');
+
+      // Reset all fields
+      ['reg-name','reg-discord','reg-email','reg-phone','reg-school','reg-team',
+       'm2-name','m2-discord','m2-email','m3-name','m3-discord','m3-email'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      document.getElementById('reg-participation').value = '';
+      document.querySelectorAll('input[name="grade"]').forEach(r => r.checked = false);
+      document.querySelectorAll('.events-grid input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.getElementById('team-fields').classList.remove('visible');
+      document.getElementById('team-name-wrapper').style.display = 'none';
+      updateTeamSize();
+
+      btn.innerHTML = '<i class="fas fa-check"></i> Registered!';
+      toast.success("Registration Successful! 🎉", "You're in! We'll be in touch soon.", 6000);
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
+      }, 4000);
+
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
+      toast.error('Registration Failed', 'Something went wrong. Email us at robonexus.ais46@gmail.com', 6000);
+    }
+  }
+</script>
+
+</body>
+</html>
