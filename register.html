@@ -2,19 +2,40 @@
 <html lang="en">
 
 <head>
+  <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) { w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f); })(window, document, 'script', 'dataLayer', 'GTM-53TPG7NL');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKPK7KF3CQ"></script>
-  <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-KKPK7KF3CQ');</script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-KKPK7KF3CQ');
+  </script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register | RoboNexus '26</title>
+
+  <!-- Meta Tags for SEO -->
   <meta name="description"
     content="Register for RoboNexus 2026 competitions - Robo War, Soccer, Drone, Line Follower & Race.">
+
+  <!-- Open Graph -->
   <meta property="og:title" content="Register | RoboNexus '26">
   <meta property="og:description" content="Register for RoboNexus 2026 competitions.">
   <meta property="og:image" content="https://robonexus46.vercel.app/src/assets/images/Robo_Nexus_Logo.webp">
+  <meta property="og:url" content="https://robonexus46.vercel.app/register">
+  <meta property="og:type" content="website">
 
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Register | RoboNexus '26">
+  <meta name="twitter:description" content="Register for RoboNexus 2026 competitions.">
+  <meta name="twitter:image" content="https://robonexus46.vercel.app/src/assets/images/Robo_Nexus_Logo.webp">
+
+  <!-- Critical CSS -->
   <style>
     * {
       margin: 0;
@@ -61,120 +82,34 @@
     }
   </style>
 
+  <!-- Preload Critical Resources -->
   <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
+  <link rel="preload" href="/src/css/style.css?v=22.0" as="style" />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
+
   <link rel="stylesheet" href="/src/css/style.css?v=22.0" />
   <link rel="stylesheet" href="/src/css/subnav.css?v=22.0" />
   <link rel="stylesheet" href="/src/css/toast.css?v=22.0" />
+
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print"
     onload="this.media='all'" />
   <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   </noscript>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
+    as="style" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png">
 
   <style>
-    /* ══════════════════════════════════════
-       SUB-NAVBAR  — RoboNexus '26 bar
-       sits right below the main navbar
-    ══════════════════════════════════════ */
-    .subnav {
-      position: sticky;
-      top: 70px;
-      /* flush under main navbar */
-      z-index: 999;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(71, 160, 184, 0.2);
-      border-top: 1px solid rgba(71, 160, 184, 0.08);
-    }
-
-    .subnav-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 60px;
-      height: 42px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    /* Left: breadcrumb label */
-    .subnav-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: .78rem;
-      color: rgba(255, 255, 255, .35);
-      font-weight: 500;
-      letter-spacing: .3px;
-    }
-
-    .subnav-label .subnav-sep {
-      color: rgba(255, 255, 255, .15);
-      font-size: .9rem;
-    }
-
-    .subnav-label .subnav-title {
-      font-size: .82rem;
-      font-weight: 700;
-      color: #47a0b8;
-      letter-spacing: .5px;
-    }
-
-    .subnav-label .subnav-badge {
-      background: rgba(71, 160, 184, .15);
-      border: 1px solid rgba(71, 160, 184, .3);
-      color: #47a0b8;
-      font-size: .62rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 20px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    /* Right: single link */
-    .subnav-link {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: .8rem;
-      font-weight: 600;
-      color: rgba(255, 255, 255, .45);
-      text-decoration: none;
-      padding: 5px 12px;
-      border-radius: 8px;
-      transition: all .2s ease;
-      border: 1px solid transparent;
-    }
-
-    .subnav-link i {
-      font-size: .72rem;
-    }
-
-    .subnav-link:hover {
-      color: #47a0b8;
-      background: rgba(71, 160, 184, .08);
-      border-color: rgba(71, 160, 184, .2);
-    }
-
-    @media (max-width: 768px) {
-      .subnav-inner {
-        padding: 0 20px;
-      }
-
-      .subnav-label .subnav-badge {
-        display: none;
-      }
-    }
-
     /* ══════════════════════════════════════
        PAGE HERO
     ══════════════════════════════════════ */
@@ -345,7 +280,7 @@
       color: #fff;
     }
 
-    /* ── Grade chips ── */
+    /* ── Grade category chips ── */
     .grade-chips {
       display: flex;
       gap: 10px;
@@ -572,7 +507,7 @@
       font-weight: 700;
     }
 
-    /* ── Submit ── */
+    /* ── Submit button ── */
     .reg-submit-btn {
       width: 100%;
       margin-top: 26px;
@@ -608,8 +543,8 @@
       width: 280px;
       flex-shrink: 0;
       position: sticky;
-      top: 122px;
-      /* 70px navbar + 42px subnav + 10px gap */
+      top: 136px;
+      /* 70px main nav + ~56px subnav pill + 10px gap */
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -727,7 +662,9 @@
       text-decoration: underline;
     }
 
-    /* ── Responsive ── */
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
     @media (max-width: 960px) {
       .reg-outer {
         flex-direction: column;
@@ -776,20 +713,28 @@
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0"
       style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
+  <!-- PARTICLE BACKGROUND -->
   <canvas id="particle-canvas"></canvas>
+
+  <!-- PAGE TRANSITION OVERLAY -->
   <div class="page-transition"></div>
 
   <div class="page-content">
 
-    <!-- ══ MAIN NAVBAR (unchanged site navbar) ══ -->
+    <!-- MAIN NAVBAR -->
     <nav class="navbar">
       <div class="navbar-content">
         <div class="nav-logo">
-          <a href="/"><img src="/src/assets/images/Robo_Nexus_Logo.webp" alt="Robo Nexus Logo" /></a>
+          <a href="/">
+            <img src="/src/assets/images/Robo_Nexus_Logo.webp" alt="Robo Nexus Logo" />
+          </a>
         </div>
+
         <div class="spotlight-nav-container">
           <div class="spotlight-nav">
             <ul class="nav-links-ul">
@@ -800,59 +745,51 @@
               <li><a class="nav-links active" href="/events" data-index="4">Events</a></li>
               <li><a class="nav-links" href="/contact" data-index="5">Contact</a></li>
             </ul>
+            <!-- Spotlight overlay (follows mouse) -->
             <div class="navbar-spotlight-overlay"></div>
+            <!-- Ambience line (stays on active) -->
             <div class="navbar-ambience-line"></div>
           </div>
         </div>
-        <div class="hamburger"><span></span><span></span><span></span></div>
+
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </nav>
+    <!-- subnav.js injects the RoboNexus '26 pill navbar here automatically -->
 
-    <!-- ══ SUB-NAVBAR — RoboNexus '26 ══ -->
-    <div class="subnav">
-      <div class="subnav-inner">
-        <!-- Left: breadcrumb -->
-        <div class="subnav-label">
-          <span>RoboNexus</span>
-          <span class="subnav-sep">/</span>
-          <span class="subnav-title">RoboNexus '26</span>
-          <span class="subnav-badge">Registration Open</span>
-        </div>
-        <!-- Right: single link -->
-        <a href="/events" class="subnav-link">
-          <i class="fas fa-arrow-left"></i>
-          Back to Events
-        </a>
-      </div>
-    </div>
-
-    <!-- ══ HERO ══ -->
+    <!-- HERO -->
     <section class="reg-hero reveal">
       <p class="event-year">RoboNexus 2026</p>
       <h1 class="page-title">Register</h1>
       <p class="hero-subtitle">Compete. Build. Innovate.</p>
     </section>
 
-    <!-- ══ FORM + SIDEBAR ══ -->
+    <!-- MAIN LAYOUT -->
     <div class="reg-outer">
 
-      <!-- LEFT: Form cards -->
+      <!-- LEFT: Form Cards -->
       <div class="reg-form-col">
 
-        <!-- CARD 1: Personal + School + Grade -->
+        <!-- CARD 1: Personal Info + School + Grade -->
         <div class="reg-card reveal">
+
           <p class="reg-section-label"><i class="fas fa-user"></i> Personal Information</p>
 
           <div class="reg-row">
             <div class="reg-field">
               <label><i class="fas fa-user"></i> Full Name <span class="req">*</span></label>
-              <input type="text" id="reg-name" placeholder="e.g. Robo Nexus" />
+              <input type="text" id="reg-name" placeholder="e.g. Atharv Mandlavdiya" />
             </div>
             <div class="reg-field">
               <label><i class="fab fa-discord"></i> Discord ID <span class="req">*</span></label>
-              <input type="text" id="reg-discord" placeholder="e.g. Robo Nexus#2222" />
+              <input type="text" id="reg-discord" placeholder="e.g. atharv#0001" />
             </div>
           </div>
+
           <div class="reg-row">
             <div class="reg-field">
               <label><i class="fas fa-envelope"></i> Email <span class="req">*</span></label>
@@ -873,8 +810,10 @@
           </div>
 
           <div class="reg-divider"></div>
-          <p class="reg-section-label"><i class="fas fa-graduation-cap"></i> Grade Category <span
-              style="color:#e74c3c;font-size:.9em;">*</span></p>
+          <p class="reg-section-label">
+            <i class="fas fa-graduation-cap"></i> Grade Category
+            <span style="color:#e74c3c; font-size:.9em;">*</span>
+          </p>
 
           <div class="grade-chips" id="grade-chips">
             <div class="grade-chip">
@@ -899,10 +838,12 @@
               </label>
             </div>
           </div>
+
         </div>
 
-        <!-- CARD 2: Participation type + team members -->
+        <!-- CARD 2: Participation + Team Members -->
         <div class="reg-card reveal">
+
           <p class="reg-section-label"><i class="fas fa-users"></i> Participation</p>
 
           <div class="reg-row">
@@ -922,8 +863,10 @@
             </div>
           </div>
 
+          <!-- Team member fields — shown only for School Team -->
           <div id="team-fields">
-            <!-- Size indicator -->
+
+            <!-- Team size indicator -->
             <div class="team-size-indicator">
               <div class="ts-dots">
                 <div class="ts-dot filled" id="ts-dot-1" title="You (Member 1)">1</div>
@@ -976,33 +919,54 @@
                 <input type="email" id="m3-email" placeholder="member3@email.com" />
               </div>
             </div>
-          </div>
+
+          </div><!-- /#team-fields -->
+
         </div>
 
         <!-- CARD 3: Events + Submit -->
         <div class="reg-card reveal">
-          <p class="reg-section-label"><i class="fas fa-trophy"></i> Select Events <span
-              style="color:#e74c3c;font-size:.9em;">*</span></p>
+
+          <p class="reg-section-label">
+            <i class="fas fa-trophy"></i> Select Events
+            <span style="color:#e74c3c; font-size:.9em;">*</span>
+          </p>
+
           <div class="events-grid">
             <div class="event-chip">
               <input type="checkbox" id="ev-robowar" value="Robo War">
-              <label for="ev-robowar"><span class="chip-icon">⚔️</span><span class="chip-name">Robo War</span></label>
+              <label for="ev-robowar">
+                <span class="chip-icon">⚔️</span>
+                <span class="chip-name">Robo War</span>
+              </label>
             </div>
             <div class="event-chip">
               <input type="checkbox" id="ev-soccer" value="Robo Soccer">
-              <label for="ev-soccer"><span class="chip-icon">⚽</span><span class="chip-name">Robo Soccer</span></label>
+              <label for="ev-soccer">
+                <span class="chip-icon">⚽</span>
+                <span class="chip-name">Robo Soccer</span>
+              </label>
             </div>
             <div class="event-chip">
               <input type="checkbox" id="ev-drone" value="Drone">
-              <label for="ev-drone"><span class="chip-icon">🚁</span><span class="chip-name">Drone</span></label>
+              <label for="ev-drone">
+                <span class="chip-icon">🚁</span>
+                <span class="chip-name">Drone</span>
+              </label>
             </div>
             <div class="event-chip">
               <input type="checkbox" id="ev-line" value="Line Follower">
-              <label for="ev-line"><span class="chip-icon">〰️</span><span class="chip-name">Line Follower</span></label>
+              <label for="ev-line">
+                <span class="chip-icon">〰️</span>
+                <span class="chip-name">Line Follower</span>
+              </label>
             </div>
             <div class="event-chip">
               <input type="checkbox" id="ev-race" value="Race">
-              <label for="ev-race"><span class="chip-icon">🏁</span><span class="chip-name">Race</span></label>
+              <label for="ev-race">
+                <span class="chip-icon">🏁</span>
+                <span class="chip-name">Race</span>
+              </label>
             </div>
           </div>
 
@@ -1010,24 +974,35 @@
             <i class="fas fa-rocket"></i>
             Register Now
           </button>
+
         </div>
 
-      </div>
+      </div><!-- /.reg-form-col -->
 
       <!-- RIGHT: Sidebar -->
       <div class="reg-info-col">
 
         <div class="reg-info-card reveal">
           <p class="info-card-title">Events</p>
-          <div class="event-info-row"><span class="event-info-icon">⚔️</span><span class="event-info-name">Robo
-              War</span></div>
-          <div class="event-info-row"><span class="event-info-icon">⚽</span><span class="event-info-name">Robo
-              Soccer</span></div>
-          <div class="event-info-row"><span class="event-info-icon">🚁</span><span class="event-info-name">Drone</span>
+          <div class="event-info-row">
+            <span class="event-info-icon">⚔️</span>
+            <span class="event-info-name">Robo War</span>
           </div>
-          <div class="event-info-row"><span class="event-info-icon">〰️</span><span class="event-info-name">Line
-              Follower</span></div>
-          <div class="event-info-row"><span class="event-info-icon">🏁</span><span class="event-info-name">Race</span>
+          <div class="event-info-row">
+            <span class="event-info-icon">⚽</span>
+            <span class="event-info-name">Robo Soccer</span>
+          </div>
+          <div class="event-info-row">
+            <span class="event-info-icon">🚁</span>
+            <span class="event-info-name">Drone</span>
+          </div>
+          <div class="event-info-row">
+            <span class="event-info-icon">〰️</span>
+            <span class="event-info-name">Line Follower</span>
+          </div>
+          <div class="event-info-row">
+            <span class="event-info-icon">🏁</span>
+            <span class="event-info-name">Race</span>
           </div>
           <div class="info-divider"></div>
           <div class="info-stat-row">
@@ -1061,16 +1036,22 @@
             <span class="event-info-name">High School</span>
           </div>
           <div class="info-divider"></div>
-          <div class="info-note"><i class="fas fa-info-circle"></i><span>Select the grade bracket matching your current
-              class.</span></div>
+          <div class="info-note">
+            <i class="fas fa-info-circle"></i>
+            <span>Select the grade bracket matching your current class.</span>
+          </div>
         </div>
 
         <div class="reg-info-card reveal">
           <p class="info-card-title">Team Rules</p>
-          <div class="info-note"><i class="fas fa-users"></i><span>Max 3 members per team. All members register through
-              this single form.</span></div>
-          <div class="info-note"><i class="fas fa-check-circle"></i><span>You can register for multiple events in one
-              submission.</span></div>
+          <div class="info-note">
+            <i class="fas fa-users"></i>
+            <span>Max 3 members per team. All members register through this single form.</span>
+          </div>
+          <div class="info-note">
+            <i class="fas fa-check-circle"></i>
+            <span>You can register for multiple events in one submission.</span>
+          </div>
           <div class="info-divider"></div>
           <div class="info-note">
             <i class="fas fa-question-circle"></i>
@@ -1078,26 +1059,31 @@
           </div>
         </div>
 
-      </div>
+      </div><!-- /.reg-info-col -->
 
-    </div>
+    </div><!-- /.reg-outer -->
 
     <footer class="footer">
       <p>&copy; 2026 Robo Nexus. All rights reserved.</p>
     </footer>
-  </div>
 
+  </div><!-- /.page-content -->
+
+  <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+  <!-- SCRIPTS -->
   <script src="/src/js/toast.js?v=22.0" defer></script>
+  <script src="/src/js/subnav.js?v=22.0" defer></script>
   <script src="/src/js/spotlight-navbar.js?v=22.0" defer></script>
   <script src="/src/js/particles.js?v=22.0" defer></script>
   <script src="/src/js/script.js?v=22.0" defer></script>
   <script src="/src/js/prefetch.js?v=22.0" defer></script>
   <script src="/src/js/protection.js?v=22.0" defer></script>
-  <script src="/src/js/subnav.js?v=22.0" defer></script>
 
   <script>
+    /* ── Participation type toggle ── */
     function onParticipationChange(val) {
       const wrap = document.getElementById('team-name-wrapper');
       const fields = document.getElementById('team-fields');
@@ -1113,6 +1099,7 @@
       }
     }
 
+    /* ── Live team size indicator ── */
     function updateTeamSize() {
       const m2 = document.getElementById('m2-name')?.value.trim();
       const m3 = document.getElementById('m3-name')?.value.trim();
@@ -1125,8 +1112,10 @@
       document.getElementById('ts-dot-3').classList.toggle('filled', count >= 3);
     }
 
+    /* ── Helpers ── */
     function getSelectedEvents() {
-      return Array.from(document.querySelectorAll('.events-grid input[type="checkbox"]:checked')).map(cb => cb.value);
+      return Array.from(document.querySelectorAll('.events-grid input[type="checkbox"]:checked'))
+        .map(cb => cb.value);
     }
 
     function getSelectedGrade() {
@@ -1143,6 +1132,7 @@
       if (el) el.classList.add('error');
     }
 
+    /* ── Submit ── */
     async function submitRegistration() {
       clearErrors();
 
@@ -1156,10 +1146,19 @@
       const teamName = document.getElementById('reg-team').value.trim();
       const events = getSelectedEvents();
       const members = [
-        { name: document.getElementById('m2-name').value.trim(), discord: document.getElementById('m2-discord').value.trim(), email: document.getElementById('m2-email').value.trim() },
-        { name: document.getElementById('m3-name').value.trim(), discord: document.getElementById('m3-discord').value.trim(), email: document.getElementById('m3-email').value.trim() },
+        {
+          name: document.getElementById('m2-name').value.trim(),
+          discord: document.getElementById('m2-discord').value.trim(),
+          email: document.getElementById('m2-email').value.trim()
+        },
+        {
+          name: document.getElementById('m3-name').value.trim(),
+          discord: document.getElementById('m3-discord').value.trim(),
+          email: document.getElementById('m3-email').value.trim()
+        },
       ];
 
+      /* ── Client-side validation ── */
       let hasError = false;
       if (!name) { setError('reg-name'); hasError = true; }
       if (!discord) { setError('reg-discord'); hasError = true; }
@@ -1177,9 +1176,16 @@
       if (!participationType) { setError('reg-participation'); hasError = true; }
       if (participationType === 'School Team' && !teamName) { setError('reg-team'); hasError = true; }
 
-      if (hasError) { toast.error('Missing Fields', 'Please fill in all required fields.'); return; }
-      if (!events.length) { toast.error('No Events Selected', 'Please select at least one event.'); return; }
+      if (hasError) {
+        toast.error('Missing Fields', 'Please fill in all required fields.');
+        return;
+      }
+      if (!events.length) {
+        toast.error('No Events Selected', 'Please select at least one event.');
+        return;
+      }
 
+      /* ── Hit the API ── */
       const btn = document.getElementById('reg-submit-btn');
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
@@ -1188,11 +1194,19 @@
         const res = await fetch('/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, discord, email, phone, school, gradeCategory, participationType, teamName, events, members }),
+          body: JSON.stringify({
+            name, discord, email, phone, school,
+            gradeCategory, participationType, teamName, events, members
+          }),
         });
 
-        if (!res.ok) throw new Error('Server error');
+        // Read JSON first, then check status
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Server error');
 
+        const regId = data.regId || '';
+
+        /* ── Reset form ── */
         ['reg-name', 'reg-discord', 'reg-email', 'reg-phone', 'reg-school', 'reg-team',
           'm2-name', 'm2-discord', 'm2-email', 'm3-name', 'm3-discord', 'm3-email']
           .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
@@ -1204,8 +1218,17 @@
         updateTeamSize();
 
         btn.innerHTML = '<i class="fas fa-check"></i> Registered!';
-        toast.success("Registration Successful! 🎉", "You're in! We'll be in touch soon.", 6000);
-        setTimeout(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now'; }, 4000);
+        toast.success(
+          'Registration Successful! 🎉',
+          regId
+            ? 'Your Reg ID: ' + regId + ' — save this for reference.'
+            : "You're in! We'll be in touch soon.",
+          8000
+        );
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
+        }, 4000);
 
       } catch (err) {
         btn.disabled = false;
@@ -1214,6 +1237,7 @@
       }
     }
   </script>
+
 </body>
 
 </html>
