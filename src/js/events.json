@@ -16,19 +16,43 @@
       "title": "Event name",
       "date": "YYYY-MM-DD format",
       "description": "Event description",
-      "images": ["Array of image paths - use /src/assets/images/filename.jpg"],
-      "highlights": ["Array of highlights"]
+      "images": [
+        "Array of image paths - use /src/assets/images/filename.jpg"
+      ],
+      "highlights": [
+        "Array of highlights"
+      ]
     }
   },
   "upcomingEvents": [
+    {
+      "id": 1,
+      "title": "RoboNexus '26",
+      "date": "",
+      "time": "TBA",
+      "location": "Amity International School, Sector 46, Gurugram",
+      "description": "RoboNexus '26 is our annual inter-school robotics competition featuring 5 events — Robo War, Robo Soccer, Drone, Line Follower, and Race. Open to students from Grade 1 through 12 across three category brackets.",
+      "type": "competition",
+      "registrationOpen": true,
+      "spots": 0,
+      "spotsLeft": 0,
+      "registerLink": "/register",
+      "category": "9-12, 6-8, 1-5"
+    }
   ],
   "pastEvents": [
     {
       "title": "Club Inauguration",
       "date": "",
       "description": "Official launch of Robo Nexus with founding members.",
-      "images": ["/src/assets/images/Robo_Nexus_Logo.webp"],
-      "highlights": ["15+ members joined till now", "First project announced", "Team formation"]
+      "images": [
+        "/src/assets/images/Robo_Nexus_Logo.webp"
+      ],
+      "highlights": [
+        "15+ members joined till now",
+        "First project announced",
+        "Team formation"
+      ]
     }
   ]
 }
