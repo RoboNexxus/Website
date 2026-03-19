@@ -52,16 +52,36 @@
     const registerLink = document.getElementById('rn26-link-register');
     if (!registerLink) return;
 
-    // Mark active + position ambience on it
     if (path === '/register' || path.endsWith('/register')) {
       registerLink.classList.add('rn26-active');
+      document.body.classList.add('page-register');
+
+      // ── Kill main navbar spotlight JS on register page ──────────
+      // spotlight-navbar.js attaches mousemove/mouseleave directly to
+      // .spotlight-nav. Cloning the node strips ALL its event listeners,
+      // which is the only reliable way to stop inline style mutations
+      // that CSS !important cannot override.
+      requestAnimationFrame(function () {
+        const spotNav = document.querySelector('.spotlight-nav');
+        if (spotNav) {
+          const clone = spotNav.cloneNode(true);
+          spotNav.parentNode.replaceChild(clone, spotNav);
+        }
+
+        // Also hard-hide both overlay elements via inline style
+        // so there's zero chance of them flashing before the clone swap
+        const overlay = document.querySelector('.navbar-spotlight-overlay');
+        const ambience = document.querySelector('.navbar-ambience-line');
+        if (overlay) { overlay.style.cssText = 'opacity:0!important;display:none!important;'; }
+        if (ambience) { ambience.style.cssText = 'opacity:0!important;display:none!important;'; }
+      });
     }
 
     // Always position ambience on the register link (it's the only one)
     positionAmbienceOn(registerLink);
   }
 
-  /* ── Spotlight / ambience behaviour (mirrors spotlight-navbar.js) ── */
+  /* ── Spotlight / ambience behaviour on the RN26 pill ── */
   function initSpotlight() {
     const pill = document.getElementById('rn26-pill');
     const spotlight = document.getElementById('rn26-spotlight');
@@ -85,7 +105,6 @@
     const pill = document.getElementById('rn26-pill');
     if (!ambience || !pill || !linkEl) return;
 
-    // Use rAF so layout is settled
     requestAnimationFrame(function () {
       const pillRect = pill.getBoundingClientRect();
       const linkRect = linkEl.getBoundingClientRect();
