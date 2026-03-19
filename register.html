@@ -709,6 +709,19 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+
+    .navbar {
+      position: fixed !important;
+      z-index: 10001 !important;
+    }
+
+    .spotlight-nav-container,
+    .spotlight-nav,
+    .nav-links-ul,
+    .nav-links {
+      pointer-events: auto !important;
+      z-index: 10001 !important;
+    }
   </style>
 </head>
 
@@ -742,7 +755,7 @@
               <li><a class="nav-links" href="/about" data-index="1">About</a></li>
               <li><a class="nav-links" href="/team" data-index="2">Team</a></li>
               <li><a class="nav-links" href="/projects" data-index="3">Projects</a></li>
-              <li><a class="nav-links active" href="/events" data-index="4">Events</a></li>
+              <li><a class="nav-links" href="/events" data-index="4">Events</a></li>
               <li><a class="nav-links" href="/contact" data-index="5">Contact</a></li>
             </ul>
             <!-- Spotlight overlay (follows mouse) -->
@@ -782,11 +795,11 @@
           <div class="reg-row">
             <div class="reg-field">
               <label><i class="fas fa-user"></i> Full Name <span class="req">*</span></label>
-              <input type="text" id="reg-name" placeholder="e.g. Atharv Mandlavdiya" />
+              <input type="text" id="reg-name" placeholder="e.g. Robo Nexus" />
             </div>
             <div class="reg-field">
               <label><i class="fab fa-discord"></i> Discord ID <span class="req">*</span></label>
-              <input type="text" id="reg-discord" placeholder="e.g. atharv#0001" />
+              <input type="text" id="reg-discord" placeholder="e.g. RoboNexus#2222" />
             </div>
           </div>
 
