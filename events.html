@@ -167,19 +167,21 @@
       letter-spacing: 0.5px;
     }
 
-    .event-list-register-btn {
-      background: #47a0b8;
-      border: none;
-      color: #000;
-      padding: 10px 26px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.85rem;
-      transition: all 0.3s ease;
-      flex-shrink: 0;
-      margin-left: 16px;
-    }
+      .event-list-register-btn {
+        background: #47a0b8;
+        border: none;
+        color: #000;
+        padding: 10px 26px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+        margin-left: 16px;
+        text-decoration: none;
+        display: inline-block;
+      }
 
     .event-list-register-btn:hover {
       background: #02cadc;
@@ -416,40 +418,7 @@
     </footer>
   </div>
 
-  <!-- Registration Modal (unchanged) -->
-  <div class="registration-modal" id="registration-modal">
-    <div class="reg-modal-content">
-      <span class="reg-modal-close">&times;</span>
-      <h2>Event Registration</h2>
-      <h3 id="reg-event-title"></h3>
-      <form id="registration-form">
-        <input type="hidden" id="reg-event-id">
-        <div class="reg-form-group">
-          <label for="reg-name">Full Name</label>
-          <input type="text" id="reg-name" name="name" required placeholder="Enter your full name">
-        </div>
-        <div class="reg-form-group">
-          <label for="reg-email">Email Address</label>
-          <input type="email" id="reg-email" name="email" required placeholder="Enter your email">
-        </div>
-        <div class="reg-form-group">
-          <label for="reg-phone">Phone Number</label>
-          <input type="tel" id="reg-phone" name="phone" required placeholder="Enter your phone number">
-        </div>
-        <div class="reg-form-group">
-          <label for="reg-class">Class/Grade</label>
-          <select id="reg-class" name="class" required>
-            <option value="">Select your class</option>
-            <option value="9">Class 9</option>
-            <option value="10">Class 10</option>
-            <option value="11">Class 11</option>
-            <option value="12">Class 12</option>
-          </select>
-        </div>
-        <button type="submit" class="reg-submit-btn">Register Now</button>
-      </form>
-    </div>
-  </div>
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>

@@ -90,32 +90,6 @@ function setupEventListeners() {
     if (currentMonth > 11) { currentMonth = 0; currentYear++; }
     renderCalendar();
   });
-
-  const regModal = document.getElementById('registration-modal');
-  const regForm = document.getElementById('registration-form');
-
-  document.querySelector('.reg-modal-close')?.addEventListener('click', () => {
-    regModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-  });
-
-  regForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // In a real application, you would send this to a backend API
-    // For now, we'll simulate success and show a professional toast
-    
-    regModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    
-    if (typeof toast !== 'undefined') {
-      toast.success('Registration Successful!', 'You will receive a confirmation email shortly.', 5000);
-    } else {
-      alert('Registration successful! You will receive a confirmation email shortly.');
-    }
-    
-    regForm.reset();
-  });
 }
 
 // ── Upcoming Events: horizontal list card ──
@@ -141,7 +115,7 @@ function renderUpcomingEvents() {
         <div class="event-list-top">
           <span class="event-list-badge">${event.type}</span>
           ${event.registrationOpen
-        ? `<button class="event-list-register-btn" data-event="${event.id}">Register</button>`
+        ? `<a href="/register" class="event-list-register-btn">Register</a>`
         : ''
       }
         </div>
@@ -157,9 +131,7 @@ function renderUpcomingEvents() {
     `;
   }).join('');
 
-  container.querySelectorAll('.event-list-register-btn').forEach(btn => {
-    btn.addEventListener('click', () => openRegistrationModal(btn.dataset.event));
-  });
+  // Note: Register links now lead directly to /register
 }
 
 // ── Past Events: 3-column grid card ──
@@ -185,16 +157,4 @@ function renderPastEvents() {
       </div>
     `;
   }).join('');
-}
-
-// Registration Modal
-function openRegistrationModal(eventId) {
-  const event = upcomingEvents.find(e => e.id == eventId);
-  const regModal = document.getElementById('registration-modal');
-  if (!event || !regModal) return;
-
-  document.getElementById('reg-event-title').textContent = event.title;
-  document.getElementById('reg-event-id').value = eventId;
-  regModal.classList.add('active');
-  document.body.style.overflow = 'hidden';
 }
