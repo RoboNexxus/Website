@@ -28,12 +28,26 @@ export default async function handler(req, res) {
     }
 
     const NOTION_TOKEN = process.env.NOTION_TOKEN;
-    const NOTION_DB = '87d2689fed5147a49751bebb6e7e1fbb';
     const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 
     if (!NOTION_TOKEN) {
       console.error('Missing NOTION_TOKEN');
       return res.status(500).json({ message: 'Server configuration error' });
+    }
+
+    // ── Event → Notion Database ID map ──────────────────────────
+    // Each event has its own dedicated database
+    const EVENT_DB_MAP = {
+      'Robo War': '723ea79c8931405e9342696f47b81e68',
+      'Robo Soccer': '437ef7d538b54a158b46d0ac0308f369',
+      'Drone': 'c5b196b2142749e9877bc41b6ada98b5',
+      'Line Follower': 'fe308409369041c5b59f77dc1f2fcdc0',
+      'Race': '5e0ede808c1b4d9284bc29abfc3e7000',
+    };
+
+    const NOTION_DB = EVENT_DB_MAP[event];
+    if (!NOTION_DB) {
+      return res.status(400).json({ message: `Unknown event: ${event}` });
     }
 
     const NOTION_HEADERS = {
@@ -43,11 +57,10 @@ export default async function handler(req, res) {
     };
 
     // ── Generate next Reg ID ─────────────────────────────────────
-    // Query all existing Reg ID values, find the highest number, add 1.
-    // If DB is empty (after a reset) → starts at RN_001.
+    // Query THIS event's DB for the current highest number, add 1.
+    // If empty (after a reset) → starts at RN_001.
     let nextNum = 1;
     try {
-      // Fetch all pages sorted by created time, just the Reg ID property
       const queryRes = await fetch(`https://api.notion.com/v1/databases/${NOTION_DB}/query`, {
         method: 'POST',
         headers: NOTION_HEADERS,
@@ -62,7 +75,6 @@ export default async function handler(req, res) {
         let maxNum = 0;
         for (const page of queryData.results) {
           const regIdText = page.properties?.['Reg ID']?.rich_text?.[0]?.plain_text || '';
-          // Parse the number from "RN_001" → 1
           const match = regIdText.match(/RN_(\d+)/);
           if (match) {
             const n = parseInt(match[1], 10);
@@ -72,9 +84,7 @@ export default async function handler(req, res) {
         nextNum = maxNum + 1;
       }
     } catch (err) {
-      // If query fails for any reason, fall back to 1
       console.warn('Could not query existing reg IDs, defaulting to 1:', err.message);
-      nextNum = 1;
     }
 
     const regId = 'RN_' + String(nextNum).padStart(3, '0');
@@ -82,7 +92,7 @@ export default async function handler(req, res) {
     const m2 = teamMembers[0] || {};
     const m3 = teamMembers[1] || {};
 
-    // ── Save to Notion ───────────────────────────────────────────
+    // ── Save to the correct event's Notion DB ────────────────────
     const notionBody = {
       parent: { database_id: NOTION_DB },
       properties: {
@@ -95,7 +105,6 @@ export default async function handler(req, res) {
         'Grade Category': { select: { name: gradeCategory } },
         'Participation Type': { select: { name: participationType } },
         'Team Name': { rich_text: [{ text: { content: teamName || '' } }] },
-        Event: { select: { name: event } },
         'Team Size': { number: totalSize },
         Status: { select: { name: 'New' } },
         ...(m2.name?.trim() ? {
@@ -126,6 +135,10 @@ export default async function handler(req, res) {
     // ── Discord Webhook ──────────────────────────────────────────
     if (WEBHOOK_URL) {
       const typeEmoji = participationType === 'Individual' ? '👤' : '🏫';
+      const eventEmojis = {
+        'Robo War': '⚔️', 'Robo Soccer': '⚽',
+        'Drone': '🚁', 'Line Follower': '〰️', 'Race': '🏁'
+      };
       const memberFields = [];
       if (m2.name?.trim()) memberFields.push({
         name: '👤 Member 2',
@@ -143,7 +156,7 @@ export default async function handler(req, res) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           embeds: [{
-            title: `🤖 New RoboNexus '26 Registration!`,
+            title: `${eventEmojis[event] || '🤖'} New Registration — ${event}`,
             color: 0x47a0b8,
             fields: [
               { name: '🪪 Reg ID', value: `\`${regId}\``, inline: true },
@@ -155,10 +168,9 @@ export default async function handler(req, res) {
               { name: '📚 Grade', value: `Class ${gradeCategory}`, inline: true },
               { name: `${typeEmoji} Type`, value: `${participationType} · ${totalSize} member${totalSize > 1 ? 's' : ''}`, inline: true },
               ...(teamName ? [{ name: '🏆 Team', value: teamName, inline: true }] : []),
-              { name: '🎯 Event', value: event, inline: false },
               ...memberFields,
             ],
-            footer: { text: `RoboNexus '26 · Reg ID: ${regId}` },
+            footer: { text: `RoboNexus '26 · ${event} · Reg ID: ${regId}` },
             timestamp: new Date().toISOString(),
           }]
         }),
