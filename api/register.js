@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     const {
       name, discord, email, phone, school,
       gradeCategory, participationType, teamName,
-      event, members          // ← event is now a single string
+      event, members
     } = req.body;
 
     // ── Validation ──────────────────────────────────────────────
@@ -36,6 +36,49 @@ export default async function handler(req, res) {
       return res.status(500).json({ message: 'Server configuration error' });
     }
 
+    const NOTION_HEADERS = {
+      'Authorization': `Bearer ${NOTION_TOKEN}`,
+      'Content-Type': 'application/json',
+      'Notion-Version': '2022-06-28',
+    };
+
+    // ── Generate next Reg ID ─────────────────────────────────────
+    // Query all existing Reg ID values, find the highest number, add 1.
+    // If DB is empty (after a reset) → starts at RN_001.
+    let nextNum = 1;
+    try {
+      // Fetch all pages sorted by created time, just the Reg ID property
+      const queryRes = await fetch(`https://api.notion.com/v1/databases/${NOTION_DB}/query`, {
+        method: 'POST',
+        headers: NOTION_HEADERS,
+        body: JSON.stringify({
+          sorts: [{ property: 'Registered At', direction: 'descending' }],
+          page_size: 100,
+        }),
+      });
+      const queryData = await queryRes.json();
+
+      if (queryData.results && queryData.results.length > 0) {
+        let maxNum = 0;
+        for (const page of queryData.results) {
+          const regIdText = page.properties?.['Reg ID']?.rich_text?.[0]?.plain_text || '';
+          // Parse the number from "RN_001" → 1
+          const match = regIdText.match(/RN_(\d+)/);
+          if (match) {
+            const n = parseInt(match[1], 10);
+            if (n > maxNum) maxNum = n;
+          }
+        }
+        nextNum = maxNum + 1;
+      }
+    } catch (err) {
+      // If query fails for any reason, fall back to 1
+      console.warn('Could not query existing reg IDs, defaulting to 1:', err.message);
+      nextNum = 1;
+    }
+
+    const regId = 'RN_' + String(nextNum).padStart(3, '0');
+
     const m2 = teamMembers[0] || {};
     const m3 = teamMembers[1] || {};
 
@@ -44,6 +87,7 @@ export default async function handler(req, res) {
       parent: { database_id: NOTION_DB },
       properties: {
         Name: { title: [{ text: { content: name } }] },
+        'Reg ID': { rich_text: [{ text: { content: regId } }] },
         'Discord ID': { rich_text: [{ text: { content: discord } }] },
         Email: { email: email },
         Phone: { phone_number: phone },
@@ -51,7 +95,7 @@ export default async function handler(req, res) {
         'Grade Category': { select: { name: gradeCategory } },
         'Participation Type': { select: { name: participationType } },
         'Team Name': { rich_text: [{ text: { content: teamName || '' } }] },
-        Event: { select: { name: event } },       // single select
+        Event: { select: { name: event } },
         'Team Size': { number: totalSize },
         Status: { select: { name: 'New' } },
         ...(m2.name?.trim() ? {
@@ -69,11 +113,7 @@ export default async function handler(req, res) {
 
     const notionRes = await fetch('https://api.notion.com/v1/pages', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${NOTION_TOKEN}`,
-        'Content-Type': 'application/json',
-        'Notion-Version': '2022-06-28',
-      },
+      headers: NOTION_HEADERS,
       body: JSON.stringify(notionBody),
     });
 
@@ -82,14 +122,6 @@ export default async function handler(req, res) {
       console.error('Notion error:', err);
       return res.status(500).json({ message: 'Failed to save registration' });
     }
-
-    // ── Read back auto-generated Reg ID → format as RN_001 ──────
-    const notionPage = await notionRes.json();
-    const regIdProp = notionPage.properties?.['Reg ID'];
-    const regNum = regIdProp?.unique_id?.number;
-    const regId = regNum != null
-      ? 'RN_' + String(regNum).padStart(3, '0')
-      : 'N/A';
 
     // ── Discord Webhook ──────────────────────────────────────────
     if (WEBHOOK_URL) {
