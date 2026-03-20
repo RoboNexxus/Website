@@ -1,7 +1,6 @@
 /**
  * RoboNexus '26 — Second Navbar
- * Injects a proper pill navbar (matching the main nav style)
- * immediately after .navbar on every page.
+ * Injects a proper pill navbar immediately after .navbar on every page.
  *
  * Add to every HTML page:
  *   <link rel="stylesheet" href="/src/css/subnav.css?v=22.0" />
@@ -12,14 +11,10 @@
   const SUBNAV_HTML = `
     <div class="rn26-navbar" id="rn26-navbar" role="navigation" aria-label="RoboNexus '26">
       <div class="rn26-pill" id="rn26-pill">
-
-        <!-- Event label -->
         <div class="rn26-pill-label">
           <span class="rn26-dot"></span>
           <span class="rn26-year">RoboNexus '26</span>
         </div>
-
-        <!-- Nav links — currently just Register -->
         <ul class="rn26-pill-links" id="rn26-links">
           <li>
             <a class="rn26-pill-link" href="/register" id="rn26-link-register">
@@ -28,11 +23,8 @@
             </a>
           </li>
         </ul>
-
-        <!-- Spotlight + ambience (mirrors main navbar) -->
         <div class="rn26-spotlight" id="rn26-spotlight"></div>
         <div class="rn26-ambience"  id="rn26-ambience"></div>
-
       </div>
     </div>
   `;
@@ -46,42 +38,44 @@
     setActiveLink();
   }
 
-  /* ── Mark current page link as active ── */
+  /* ── Mark active link + kill main nav glow on register page ── */
   function setActiveLink() {
     const path = window.location.pathname.replace(/\/$/, '') || '/';
     const registerLink = document.getElementById('rn26-link-register');
     if (!registerLink) return;
 
-    if (path === '/register' || path.endsWith('/register')) {
+    const isRegisterPage = (path === '/register' || path.endsWith('/register'));
+
+    if (isRegisterPage) {
       registerLink.classList.add('rn26-active');
       document.body.classList.add('page-register');
 
-      // ── Kill main navbar spotlight JS on register page ──────────
-      // spotlight-navbar.js attaches mousemove/mouseleave directly to
-      // .spotlight-nav. Cloning the node strips ALL its event listeners,
-      // which is the only reliable way to stop inline style mutations
-      // that CSS !important cannot override.
-      requestAnimationFrame(function () {
-        const spotNav = document.querySelector('.spotlight-nav');
-        if (spotNav) {
-          const clone = spotNav.cloneNode(true);
-          spotNav.parentNode.replaceChild(clone, spotNav);
-        }
+      // Kill main navbar spotlight using MutationObserver —
+      // watches the overlay/ambience elements and immediately resets
+      // any inline opacity/display that spotlight-navbar.js tries to set.
+      const targets = [
+        document.querySelector('.navbar-spotlight-overlay'),
+        document.querySelector('.navbar-ambience-line'),
+      ].filter(Boolean);
 
-        // Also hard-hide both overlay elements via inline style
-        // so there's zero chance of them flashing before the clone swap
-        const overlay = document.querySelector('.navbar-spotlight-overlay');
-        const ambience = document.querySelector('.navbar-ambience-line');
-        if (overlay) { overlay.style.cssText = 'opacity:0!important;display:none!important;'; }
-        if (ambience) { ambience.style.cssText = 'opacity:0!important;display:none!important;'; }
+      targets.forEach(function (el) {
+        // Hard-reset immediately
+        el.style.setProperty('opacity', '0', 'important');
+        el.style.setProperty('display', 'none', 'important');
+
+        // Watch for any JS trying to change these inline styles
+        const observer = new MutationObserver(function () {
+          el.style.setProperty('opacity', '0', 'important');
+          el.style.setProperty('display', 'none', 'important');
+        });
+        observer.observe(el, { attributes: true, attributeFilter: ['style'] });
       });
     }
 
-    // Always position ambience on the register link (it's the only one)
     positionAmbienceOn(registerLink);
   }
 
-  /* ── Spotlight / ambience behaviour on the RN26 pill ── */
+  /* ── Spotlight / ambience on the RN26 pill ── */
   function initSpotlight() {
     const pill = document.getElementById('rn26-pill');
     const spotlight = document.getElementById('rn26-spotlight');
@@ -90,8 +84,7 @@
 
     pill.addEventListener('mousemove', function (e) {
       const rect = pill.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      spotlight.style.setProperty('--rn26-x', x + 'px');
+      spotlight.style.setProperty('--rn26-x', (e.clientX - rect.left) + 'px');
       spotlight.style.opacity = '1';
     });
 
@@ -104,12 +97,10 @@
     const ambience = document.getElementById('rn26-ambience');
     const pill = document.getElementById('rn26-pill');
     if (!ambience || !pill || !linkEl) return;
-
     requestAnimationFrame(function () {
       const pillRect = pill.getBoundingClientRect();
       const linkRect = linkEl.getBoundingClientRect();
-      const x = linkRect.left - pillRect.left + linkRect.width / 2;
-      ambience.style.setProperty('--rn26-amb-x', x + 'px');
+      ambience.style.setProperty('--rn26-amb-x', (linkRect.left - pillRect.left + linkRect.width / 2) + 'px');
     });
   }
 

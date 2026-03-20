@@ -18,18 +18,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register | RoboNexus '26</title>
 
-  <!-- Meta Tags for SEO -->
   <meta name="description"
     content="Register for RoboNexus 2026 competitions - Robo War, Soccer, Drone, Line Follower & Race.">
-
-  <!-- Open Graph -->
   <meta property="og:title" content="Register | RoboNexus '26">
   <meta property="og:description" content="Register for RoboNexus 2026 competitions.">
   <meta property="og:image" content="https://robonexus46.vercel.app/src/assets/images/Robo_Nexus_Logo.webp">
   <meta property="og:url" content="https://robonexus46.vercel.app/register">
   <meta property="og:type" content="website">
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Register | RoboNexus '26">
   <meta name="twitter:description" content="Register for RoboNexus 2026 competitions.">
@@ -104,7 +99,6 @@
     as="style" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-  <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/images/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png">
@@ -280,7 +274,7 @@
       color: #fff;
     }
 
-    /* ── Grade category chips ── */
+    /* ── Grade chips ── */
     .grade-chips {
       display: flex;
       gap: 10px;
@@ -341,18 +335,23 @@
       background: rgba(71, 160, 184, .07);
     }
 
-    /* ── Event chips ── */
+    /* ══════════════════════════════════════
+       EVENT CHIPS — single select (radio)
+       One event per team
+    ══════════════════════════════════════ */
     .events-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 9px;
+      margin-bottom: 6px;
     }
 
     .event-chip {
       position: relative;
     }
 
-    .event-chip input[type="checkbox"] {
+    /* Hide the real radio input */
+    .event-chip input[type="radio"] {
       position: absolute;
       opacity: 0;
       width: 0;
@@ -401,6 +400,20 @@
     .event-chip label:hover {
       border-color: rgba(71, 160, 184, .45);
       background: rgba(71, 160, 184, .07);
+    }
+
+    .events-hint {
+      font-size: .73rem;
+      color: rgba(255, 255, 255, .28);
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .events-hint i {
+      color: #47a0b8;
+      font-size: .68rem;
     }
 
     /* ── Team section ── */
@@ -544,7 +557,6 @@
       flex-shrink: 0;
       position: sticky;
       top: 136px;
-      /* 70px main nav + ~56px subnav pill + 10px gap */
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -709,19 +721,6 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
-
-    .navbar {
-      position: fixed !important;
-      z-index: 10001 !important;
-    }
-
-    .spotlight-nav-container,
-    .spotlight-nav,
-    .nav-links-ul,
-    .nav-links {
-      pointer-events: auto !important;
-      z-index: 10001 !important;
-    }
   </style>
 </head>
 
@@ -729,12 +728,8 @@
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0"
       style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
-  <!-- PARTICLE BACKGROUND -->
   <canvas id="particle-canvas"></canvas>
-
-  <!-- PAGE TRANSITION OVERLAY -->
   <div class="page-transition"></div>
 
   <div class="page-content">
@@ -755,12 +750,10 @@
               <li><a class="nav-links" href="/about" data-index="1">About</a></li>
               <li><a class="nav-links" href="/team" data-index="2">Team</a></li>
               <li><a class="nav-links" href="/projects" data-index="3">Projects</a></li>
-              <li><a class="nav-links" href="/events" data-index="4">Events</a></li>
+              <li><a class="nav-links active" href="/events" data-index="4">Events</a></li>
               <li><a class="nav-links" href="/contact" data-index="5">Contact</a></li>
             </ul>
-            <!-- Spotlight overlay (follows mouse) -->
             <div class="navbar-spotlight-overlay"></div>
-            <!-- Ambience line (stays on active) -->
             <div class="navbar-ambience-line"></div>
           </div>
         </div>
@@ -781,7 +774,6 @@
       <p class="hero-subtitle">Compete. Build. Innovate.</p>
     </section>
 
-    <!-- MAIN LAYOUT -->
     <div class="reg-outer">
 
       <!-- LEFT: Form Cards -->
@@ -795,11 +787,11 @@
           <div class="reg-row">
             <div class="reg-field">
               <label><i class="fas fa-user"></i> Full Name <span class="req">*</span></label>
-              <input type="text" id="reg-name" placeholder="e.g. Robo Nexus" />
+              <input type="text" id="reg-name" placeholder="e.g. Atharv Mandlavdiya" />
             </div>
             <div class="reg-field">
               <label><i class="fab fa-discord"></i> Discord ID <span class="req">*</span></label>
-              <input type="text" id="reg-discord" placeholder="e.g. RoboNexus#2222" />
+              <input type="text" id="reg-discord" placeholder="e.g. atharv#0001" />
             </div>
           </div>
 
@@ -876,10 +868,8 @@
             </div>
           </div>
 
-          <!-- Team member fields — shown only for School Team -->
           <div id="team-fields">
 
-            <!-- Team size indicator -->
             <div class="team-size-indicator">
               <div class="ts-dots">
                 <div class="ts-dot filled" id="ts-dot-1" title="You (Member 1)">1</div>
@@ -937,51 +927,57 @@
 
         </div>
 
-        <!-- CARD 3: Events + Submit -->
+        <!-- CARD 3: Event (single) + Submit -->
         <div class="reg-card reveal">
 
           <p class="reg-section-label">
-            <i class="fas fa-trophy"></i> Select Events
+            <i class="fas fa-trophy"></i> Select Your Event
             <span style="color:#e74c3c; font-size:.9em;">*</span>
           </p>
 
-          <div class="events-grid">
+          <!-- Radio buttons — only ONE can be selected -->
+          <div class="events-grid" id="events-grid">
             <div class="event-chip">
-              <input type="checkbox" id="ev-robowar" value="Robo War">
+              <input type="radio" name="event" id="ev-robowar" value="Robo War">
               <label for="ev-robowar">
                 <span class="chip-icon">⚔️</span>
                 <span class="chip-name">Robo War</span>
               </label>
             </div>
             <div class="event-chip">
-              <input type="checkbox" id="ev-soccer" value="Robo Soccer">
+              <input type="radio" name="event" id="ev-soccer" value="Robo Soccer">
               <label for="ev-soccer">
                 <span class="chip-icon">⚽</span>
                 <span class="chip-name">Robo Soccer</span>
               </label>
             </div>
             <div class="event-chip">
-              <input type="checkbox" id="ev-drone" value="Drone">
+              <input type="radio" name="event" id="ev-drone" value="Drone">
               <label for="ev-drone">
                 <span class="chip-icon">🚁</span>
                 <span class="chip-name">Drone</span>
               </label>
             </div>
             <div class="event-chip">
-              <input type="checkbox" id="ev-line" value="Line Follower">
+              <input type="radio" name="event" id="ev-line" value="Line Follower">
               <label for="ev-line">
                 <span class="chip-icon">〰️</span>
                 <span class="chip-name">Line Follower</span>
               </label>
             </div>
             <div class="event-chip">
-              <input type="checkbox" id="ev-race" value="Race">
+              <input type="radio" name="event" id="ev-race" value="Race">
               <label for="ev-race">
                 <span class="chip-icon">🏁</span>
                 <span class="chip-name">Race</span>
               </label>
             </div>
           </div>
+
+          <p class="events-hint">
+            <i class="fas fa-info-circle"></i>
+            One event per team — choose wisely!
+          </p>
 
           <button class="reg-submit-btn" id="reg-submit-btn" onclick="submitRegistration()">
             <i class="fas fa-rocket"></i>
@@ -997,25 +993,15 @@
 
         <div class="reg-info-card reveal">
           <p class="info-card-title">Events</p>
-          <div class="event-info-row">
-            <span class="event-info-icon">⚔️</span>
-            <span class="event-info-name">Robo War</span>
+          <div class="event-info-row"><span class="event-info-icon">⚔️</span><span class="event-info-name">Robo
+              War</span></div>
+          <div class="event-info-row"><span class="event-info-icon">⚽</span><span class="event-info-name">Robo
+              Soccer</span></div>
+          <div class="event-info-row"><span class="event-info-icon">🚁</span><span class="event-info-name">Drone</span>
           </div>
-          <div class="event-info-row">
-            <span class="event-info-icon">⚽</span>
-            <span class="event-info-name">Robo Soccer</span>
-          </div>
-          <div class="event-info-row">
-            <span class="event-info-icon">🚁</span>
-            <span class="event-info-name">Drone</span>
-          </div>
-          <div class="event-info-row">
-            <span class="event-info-icon">〰️</span>
-            <span class="event-info-name">Line Follower</span>
-          </div>
-          <div class="event-info-row">
-            <span class="event-info-icon">🏁</span>
-            <span class="event-info-name">Race</span>
+          <div class="event-info-row"><span class="event-info-icon">〰️</span><span class="event-info-name">Line
+              Follower</span></div>
+          <div class="event-info-row"><span class="event-info-icon">🏁</span><span class="event-info-name">Race</span>
           </div>
           <div class="info-divider"></div>
           <div class="info-stat-row">
@@ -1062,8 +1048,8 @@
             <span>Max 3 members per team. All members register through this single form.</span>
           </div>
           <div class="info-note">
-            <i class="fas fa-check-circle"></i>
-            <span>You can register for multiple events in one submission.</span>
+            <i class="fas fa-trophy"></i>
+            <span>Each team competes in one event only.</span>
           </div>
           <div class="info-divider"></div>
           <div class="info-note">
@@ -1086,7 +1072,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 
-  <!-- SCRIPTS -->
+  <!-- SCRIPTS — subnav before spotlight so observers are set up first -->
   <script src="/src/js/toast.js?v=22.0" defer></script>
   <script src="/src/js/subnav.js?v=22.0" defer></script>
   <script src="/src/js/spotlight-navbar.js?v=22.0" defer></script>
@@ -1107,16 +1093,16 @@
         wrap.style.display = 'none';
         fields.classList.remove('visible');
         ['m2-name', 'm2-discord', 'm2-email', 'm3-name', 'm3-discord', 'm3-email', 'reg-team']
-          .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+          .forEach(function (id) { var el = document.getElementById(id); if (el) el.value = ''; });
         updateTeamSize();
       }
     }
 
     /* ── Live team size indicator ── */
     function updateTeamSize() {
-      const m2 = document.getElementById('m2-name')?.value.trim();
-      const m3 = document.getElementById('m3-name')?.value.trim();
-      let count = 1;
+      var m2 = document.getElementById('m2-name') ? document.getElementById('m2-name').value.trim() : '';
+      var m3 = document.getElementById('m3-name') ? document.getElementById('m3-name').value.trim() : '';
+      var count = 1;
       if (m2) count++;
       if (m3) count++;
       document.getElementById('ts-count').textContent = count;
@@ -1126,22 +1112,22 @@
     }
 
     /* ── Helpers ── */
-    function getSelectedEvents() {
-      return Array.from(document.querySelectorAll('.events-grid input[type="checkbox"]:checked'))
-        .map(cb => cb.value);
+    function getSelectedEvent() {
+      var el = document.querySelector('input[name="event"]:checked');
+      return el ? el.value : '';
     }
 
     function getSelectedGrade() {
-      const el = document.querySelector('input[name="grade"]:checked');
+      var el = document.querySelector('input[name="grade"]:checked');
       return el ? el.value : '';
     }
 
     function clearErrors() {
-      document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+      document.querySelectorAll('.error').forEach(function (el) { el.classList.remove('error'); });
     }
 
     function setError(id) {
-      const el = document.getElementById(id);
+      var el = document.getElementById(id);
       if (el) el.classList.add('error');
     }
 
@@ -1149,16 +1135,16 @@
     async function submitRegistration() {
       clearErrors();
 
-      const name = document.getElementById('reg-name').value.trim();
-      const discord = document.getElementById('reg-discord').value.trim();
-      const email = document.getElementById('reg-email').value.trim();
-      const phone = document.getElementById('reg-phone').value.trim();
-      const school = document.getElementById('reg-school').value.trim();
-      const gradeCategory = getSelectedGrade();
-      const participationType = document.getElementById('reg-participation').value;
-      const teamName = document.getElementById('reg-team').value.trim();
-      const events = getSelectedEvents();
-      const members = [
+      var name = document.getElementById('reg-name').value.trim();
+      var discord = document.getElementById('reg-discord').value.trim();
+      var email = document.getElementById('reg-email').value.trim();
+      var phone = document.getElementById('reg-phone').value.trim();
+      var school = document.getElementById('reg-school').value.trim();
+      var gradeCategory = getSelectedGrade();
+      var participationType = document.getElementById('reg-participation').value;
+      var teamName = document.getElementById('reg-team').value.trim();
+      var event = getSelectedEvent();
+      var members = [
         {
           name: document.getElementById('m2-name').value.trim(),
           discord: document.getElementById('m2-discord').value.trim(),
@@ -1168,18 +1154,18 @@
           name: document.getElementById('m3-name').value.trim(),
           discord: document.getElementById('m3-discord').value.trim(),
           email: document.getElementById('m3-email').value.trim()
-        },
+        }
       ];
 
       /* ── Client-side validation ── */
-      let hasError = false;
+      var hasError = false;
       if (!name) { setError('reg-name'); hasError = true; }
       if (!discord) { setError('reg-discord'); hasError = true; }
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('reg-email'); hasError = true; }
       if (!phone) { setError('reg-phone'); hasError = true; }
       if (!school) { setError('reg-school'); hasError = true; }
       if (!gradeCategory) {
-        const gc = document.getElementById('grade-chips');
+        var gc = document.getElementById('grade-chips');
         gc.style.outline = '2px solid #e74c3c';
         gc.style.borderRadius = '12px';
         hasError = true;
@@ -1193,39 +1179,43 @@
         toast.error('Missing Fields', 'Please fill in all required fields.');
         return;
       }
-      if (!events.length) {
-        toast.error('No Events Selected', 'Please select at least one event.');
+      if (!event) {
+        var eg = document.getElementById('events-grid');
+        eg.style.outline = '2px solid #e74c3c';
+        eg.style.borderRadius = '12px';
+        toast.error('No Event Selected', 'Please select the event you want to compete in.');
         return;
+      } else {
+        document.getElementById('events-grid').style.outline = '';
       }
 
       /* ── Hit the API ── */
-      const btn = document.getElementById('reg-submit-btn');
+      var btn = document.getElementById('reg-submit-btn');
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
 
       try {
-        const res = await fetch('/api/register', {
+        var res = await fetch('/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name, discord, email, phone, school,
-            gradeCategory, participationType, teamName, events, members
+            gradeCategory, participationType, teamName, event, members
           }),
         });
 
-        // Read JSON first, then check status
-        const data = await res.json();
+        var data = await res.json();
         if (!res.ok) throw new Error(data.message || 'Server error');
 
-        const regId = data.regId || '';
+        var regId = data.regId || '';
 
         /* ── Reset form ── */
         ['reg-name', 'reg-discord', 'reg-email', 'reg-phone', 'reg-school', 'reg-team',
           'm2-name', 'm2-discord', 'm2-email', 'm3-name', 'm3-discord', 'm3-email']
-          .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+          .forEach(function (id) { var el = document.getElementById(id); if (el) el.value = ''; });
         document.getElementById('reg-participation').value = '';
-        document.querySelectorAll('input[name="grade"]').forEach(r => r.checked = false);
-        document.querySelectorAll('.events-grid input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('input[name="grade"]').forEach(function (r) { r.checked = false; });
+        document.querySelectorAll('input[name="event"]').forEach(function (r) { r.checked = false; });
         document.getElementById('team-fields').classList.remove('visible');
         document.getElementById('team-name-wrapper').style.display = 'none';
         updateTeamSize();
@@ -1233,12 +1223,10 @@
         btn.innerHTML = '<i class="fas fa-check"></i> Registered!';
         toast.success(
           'Registration Successful! 🎉',
-          regId
-            ? 'Your Reg ID: ' + regId + ' — save this for reference.'
-            : "You're in! We'll be in touch soon.",
+          regId ? 'Your Reg ID: ' + regId + ' — save this for reference.' : "You're in! We'll be in touch soon.",
           8000
         );
-        setTimeout(() => {
+        setTimeout(function () {
           btn.disabled = false;
           btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
         }, 4000);

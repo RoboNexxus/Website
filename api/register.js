@@ -10,11 +10,11 @@ export default async function handler(req, res) {
     const {
       name, discord, email, phone, school,
       gradeCategory, participationType, teamName,
-      events, members
+      event, members          // ← event is now a single string
     } = req.body;
 
     // ── Validation ──────────────────────────────────────────────
-    if (!name || !discord || !email || !phone || !school || !gradeCategory || !participationType || !events?.length) {
+    if (!name || !discord || !email || !phone || !school || !gradeCategory || !participationType || !event) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
     if (participationType === 'School Team' && !teamName) {
@@ -36,7 +36,6 @@ export default async function handler(req, res) {
       return res.status(500).json({ message: 'Server configuration error' });
     }
 
-    const eventsArray = Array.isArray(events) ? events : [events];
     const m2 = teamMembers[0] || {};
     const m3 = teamMembers[1] || {};
 
@@ -52,7 +51,7 @@ export default async function handler(req, res) {
         'Grade Category': { select: { name: gradeCategory } },
         'Participation Type': { select: { name: participationType } },
         'Team Name': { rich_text: [{ text: { content: teamName || '' } }] },
-        Events: { multi_select: eventsArray.map(e => ({ name: e })) },
+        Event: { select: { name: event } },       // single select
         'Team Size': { number: totalSize },
         Status: { select: { name: 'New' } },
         ...(m2.name?.trim() ? {
@@ -84,11 +83,12 @@ export default async function handler(req, res) {
       return res.status(500).json({ message: 'Failed to save registration' });
     }
 
-    // ── Read back the auto-generated Reg ID ──────────────────────
+    // ── Read back auto-generated Reg ID → format as RN_001 ──────
     const notionPage = await notionRes.json();
     const regIdProp = notionPage.properties?.['Reg ID'];
-    const regId = regIdProp?.unique_id
-      ? `${regIdProp.unique_id.prefix}-${regIdProp.unique_id.number}`
+    const regNum = regIdProp?.unique_id?.number;
+    const regId = regNum != null
+      ? 'RN_' + String(regNum).padStart(3, '0')
       : 'N/A';
 
     // ── Discord Webhook ──────────────────────────────────────────
@@ -123,17 +123,16 @@ export default async function handler(req, res) {
               { name: '📚 Grade', value: `Class ${gradeCategory}`, inline: true },
               { name: `${typeEmoji} Type`, value: `${participationType} · ${totalSize} member${totalSize > 1 ? 's' : ''}`, inline: true },
               ...(teamName ? [{ name: '🏆 Team', value: teamName, inline: true }] : []),
-              { name: '🎯 Events', value: eventsArray.join(', '), inline: false },
+              { name: '🎯 Event', value: event, inline: false },
               ...memberFields,
             ],
-            footer: { text: `RoboNexus '26 · Registration ID: ${regId}` },
+            footer: { text: `RoboNexus '26 · Reg ID: ${regId}` },
             timestamp: new Date().toISOString(),
           }]
         }),
       }).catch(e => console.error('Discord webhook failed:', e));
     }
 
-    // ── Return Reg ID to client so we can show it in the success toast ──
     return res.status(200).json({ message: 'Registration successful', regId });
 
   } catch (error) {
