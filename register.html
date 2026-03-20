@@ -105,6 +105,47 @@
 
   <style>
     /* ══════════════════════════════════════
+       FORCE DARK NAVBAR — register page
+       style.css defaults to light pill with
+       dark text; only dark-mode media query
+       flips it. We hardcode dark here so it
+       works regardless of OS colour scheme.
+    ══════════════════════════════════════ */
+    .spotlight-nav {
+      background: rgba(10, 10, 10, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, .5),
+        0 4px 6px -4px rgba(0, 0, 0, .5) !important;
+    }
+
+    .nav-links {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .nav-links:hover {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .nav-links.active {
+      color: #ffffff !important;
+    }
+
+    .navbar-ambience-line {
+      background: radial-gradient(60px circle at var(--ambience-x, 50%) 0%,
+          rgba(255, 255, 255, 1) 0%,
+          transparent 100%) !important;
+    }
+
+    .navbar-spotlight-overlay {
+      background: radial-gradient(120px circle at var(--spotlight-x, 50%) 100%,
+          rgba(255, 255, 255, 0.15) 0%,
+          transparent 50%) !important;
+    }
+  </style>
+
+  <style>
+    /* ══════════════════════════════════════
        PAGE HERO
     ══════════════════════════════════════ */
     .reg-hero {
