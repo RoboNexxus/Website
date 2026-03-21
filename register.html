@@ -1269,13 +1269,13 @@
           toast.error('Already Registered', data.message || 'This email is already registered for this event.');
           return;
         }
-
         if (res.status === 410) {
           btn.disabled = false;
           btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
           toast.error('Event Full', data.message || 'Registrations for this event are now closed.');
           return;
-        }        if (!res.ok) throw new Error(data.message || 'Server error');
+        }
+        if (!res.ok) throw new Error(data.message || 'Server error');
 
         var regId = data.regId || '';
 
