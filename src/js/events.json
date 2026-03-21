@@ -10,7 +10,8 @@
       "type": "workshop / competition / bootcamp",
       "registrationOpen": "true or false",
       "spots": "Total spots available",
-      "spotsLeft": "Remaining spots"
+      "spotsLeft": "Remaining spots",
+      "maxParticipants": "Maximum number of individual registrations allowed for this event (0 = unlimited)"
     },
     "pastEvents": {
       "title": "Event name",
@@ -37,7 +38,8 @@
       "spots": 0,
       "spotsLeft": 0,
       "registerLink": "/register",
-      "category": "9-12, 6-8, 1-5"
+      "category": "9-12, 6-8, 1-5",
+      "maxParticipants": 100
     }
   ],
   "pastEvents": [

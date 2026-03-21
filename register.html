@@ -1165,6 +1165,10 @@
 
     function clearErrors() {
       document.querySelectorAll('.error').forEach(function (el) { el.classList.remove('error'); });
+      var gc = document.getElementById('grade-chips');
+      var eg = document.getElementById('events-grid');
+      if (gc) gc.style.outline = '';
+      if (eg) eg.style.outline = '';
     }
 
     function setError(id) {
@@ -1173,6 +1177,10 @@
     }
 
     /* ── Submit ── */
+    function isValidDiscordId(id) {
+      return /^[a-zA-Z0-9_.]{2,32}(#\d{4})?$/.test(id.trim());
+    }
+
     async function submitRegistration() {
       clearErrors();
 
@@ -1185,23 +1193,32 @@
       var participationType = document.getElementById('reg-participation').value;
       var teamName = document.getElementById('reg-team').value.trim();
       var event = getSelectedEvent();
-      var members = [
-        {
-          name: document.getElementById('m2-name').value.trim(),
-          discord: document.getElementById('m2-discord').value.trim(),
-          email: document.getElementById('m2-email').value.trim()
-        },
-        {
-          name: document.getElementById('m3-name').value.trim(),
-          discord: document.getElementById('m3-discord').value.trim(),
-          email: document.getElementById('m3-email').value.trim()
-        }
-      ];
+      var members = [];
+      if (participationType === 'School Team') {
+        members = [
+          {
+            name:    document.getElementById('m2-name').value.trim(),
+            discord: document.getElementById('m2-discord').value.trim(),
+            email:   document.getElementById('m2-email').value.trim()
+          },
+          {
+            name:    document.getElementById('m3-name').value.trim(),
+            discord: document.getElementById('m3-discord').value.trim(),
+            email:   document.getElementById('m3-email').value.trim()
+          }
+        ];
+      }
 
       /* ── Client-side validation ── */
       var hasError = false;
       if (!name) { setError('reg-name'); hasError = true; }
-      if (!discord) { setError('reg-discord'); hasError = true; }
+      if (!discord) {
+        setError('reg-discord'); hasError = true;
+      } else if (!isValidDiscordId(discord)) {
+        setError('reg-discord');
+        toast.error('Invalid Discord ID', 'Enter your Discord username (e.g. robonexus or RoboNexus#1234)');
+        return;
+      }
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('reg-email'); hasError = true; }
       if (!phone) { setError('reg-phone'); hasError = true; }
       if (!school) { setError('reg-school'); hasError = true; }
@@ -1246,7 +1263,19 @@
         });
 
         var data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Server error');
+        if (res.status === 409) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
+          toast.error('Already Registered', data.message || 'This email is already registered for this event.');
+          return;
+        }
+
+        if (res.status === 410) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
+          toast.error('Event Full', data.message || 'Registrations for this event are now closed.');
+          return;
+        }        if (!res.ok) throw new Error(data.message || 'Server error');
 
         var regId = data.regId || '';
 
