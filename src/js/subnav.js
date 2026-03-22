@@ -3,8 +3,8 @@
  * Injects a proper pill navbar immediately after .navbar on every page.
  *
  * Add to every HTML page:
- *   <link rel="stylesheet" href="/src/css/subnav.css?v=27" />
- *   <script src="/src/js/subnav.js?v=27" defer></script>
+ *   <link rel="stylesheet" href="/src/css/subnav.css?v=28" />
+ *   <script src="/src/js/subnav.js?v=28" defer></script>
  */
 (function () {
 
@@ -27,14 +27,13 @@
     </div>
   `;
 
-  /* ── Inject into .navbar-content ── */
+  /* ── Inject into .spotlight-nav-container ── */
   function inject() {
-    const navbarContent = document.querySelector('.navbar-content');
-    const hamburger = navbarContent?.querySelector('.hamburger');
+    const navContainer = document.querySelector('.spotlight-nav-container');
     
-    if (!navbarContent || !hamburger || document.getElementById('rn26-pill')) return;
+    if (!navContainer || document.getElementById('rn26-pill')) return;
     
-    hamburger.insertAdjacentHTML('beforebegin', SUBNAV_HTML);
+    navContainer.insertAdjacentHTML('beforeend', SUBNAV_HTML);
     initSpotlight();
     setActiveLink();
   }

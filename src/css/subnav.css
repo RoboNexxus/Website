@@ -4,6 +4,12 @@
    Sits inside the main navbar content
 ══════════════════════════════════════════════ */
 
+/* Ensure the container can hold both pills side-by-side */
+.spotlight-nav-container {
+  gap: 20px;
+  align-items: center;
+}
+
 /* ── The pill — mirrors .spotlight-nav ── */
 .rn26-pill {
   pointer-events: all;
