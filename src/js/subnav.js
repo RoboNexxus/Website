@@ -8,7 +8,7 @@
  */
 (function () {
 
-  const SUBNAV_HTML = `
+  const PILL_HTML = `
     <div class="rn26-pill" id="rn26-pill">
       <div class="rn26-pill-label">
         <span class="rn26-dot"></span>
@@ -27,13 +27,18 @@
     </div>
   `;
 
-  /* ── Inject into .spotlight-nav-container ── */
+  /* ── Inject into .navbar-content, before .hamburger ── */
   function inject() {
-    const navContainer = document.querySelector('.spotlight-nav-container');
+    const navbarContent = document.querySelector('.navbar-content');
+    if (!navbarContent || document.getElementById('rn26-pill')) return;
+
+    const hamburger = navbarContent.querySelector('.hamburger');
+    if (hamburger) {
+      hamburger.insertAdjacentHTML('beforebegin', PILL_HTML);
+    } else {
+      navbarContent.insertAdjacentHTML('beforeend', PILL_HTML);
+    }
     
-    if (!navContainer || document.getElementById('rn26-pill')) return;
-    
-    navContainer.insertAdjacentHTML('beforeend', SUBNAV_HTML);
     initSpotlight();
     setActiveLink();
   }
