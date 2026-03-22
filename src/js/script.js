@@ -35,27 +35,55 @@ function initPageTransition() {
 initPageTransition();
 
 /* ===============================
-   HAMBURGER MENU
+   HAMBURGER MENU (DRAWER)
 ================================ */
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links-ul');
+
+// Create backdrop element
+const backdrop = document.createElement('div');
+backdrop.className = 'mobile-nav-backdrop';
+document.body.appendChild(backdrop);
+
+function openMobileNav() {
+  hamburger.classList.add('active');
+  navLinks.classList.add('active');
+  backdrop.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileNav() {
+  hamburger.classList.remove('active');
+  navLinks.classList.remove('active');
+  backdrop.classList.remove('active');
+  document.body.style.overflow = '';
+}
 
 if (hamburger && navLinks) {
   hamburger.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('active');
+    if (hamburger.classList.contains('active')) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
   });
+
+  // Close when clicking backdrop
+  backdrop.addEventListener('click', closeMobileNav);
 
   // Close menu when clicking a link
   document.querySelectorAll('.nav-links').forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.classList.remove('active');
-      navLinks.classList.remove('active');
-    });
+    link.addEventListener('click', closeMobileNav);
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMobileNav();
   });
 }
+
 
 /* ===============================
    NAVBAR ANIMATION

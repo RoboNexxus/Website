@@ -9,31 +9,32 @@
 (function () {
 
   const SUBNAV_HTML = `
-    <div class="rn26-navbar" id="rn26-navbar" role="navigation" aria-label="RoboNexus '26">
-      <div class="rn26-pill" id="rn26-pill">
-        <div class="rn26-pill-label">
-          <span class="rn26-dot"></span>
-          <span class="rn26-year">RoboNexus '26</span>
-        </div>
-        <ul class="rn26-pill-links" id="rn26-links">
-          <li>
-            <a class="rn26-pill-link" href="/register" id="rn26-link-register">
-              <i class="fas fa-rocket"></i>
-              Register
-            </a>
-          </li>
-        </ul>
-        <div class="rn26-spotlight" id="rn26-spotlight"></div>
-        <div class="rn26-ambience"  id="rn26-ambience"></div>
+    <div class="rn26-pill" id="rn26-pill">
+      <div class="rn26-pill-label">
+        <span class="rn26-dot"></span>
+        <span class="rn26-year">RoboNexus '26</span>
       </div>
+      <ul class="rn26-pill-links" id="rn26-links">
+        <li>
+          <a class="rn26-pill-link" href="/register" id="rn26-link-register">
+            <i class="fas fa-rocket"></i>
+            Register
+          </a>
+        </li>
+      </ul>
+      <div class="rn26-spotlight" id="rn26-spotlight"></div>
+      <div class="rn26-ambience"  id="rn26-ambience"></div>
     </div>
   `;
 
-  /* ── Inject after .navbar ── */
+  /* ── Inject into .navbar-content ── */
   function inject() {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar || document.getElementById('rn26-navbar')) return;
-    navbar.insertAdjacentHTML('afterend', SUBNAV_HTML);
+    const navbarContent = document.querySelector('.navbar-content');
+    const hamburger = navbarContent?.querySelector('.hamburger');
+    
+    if (!navbarContent || !hamburger || document.getElementById('rn26-pill')) return;
+    
+    hamburger.insertAdjacentHTML('beforebegin', SUBNAV_HTML);
     initSpotlight();
     setActiveLink();
   }
