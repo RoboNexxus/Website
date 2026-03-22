@@ -226,8 +226,8 @@ body {
    NAVBAR - Spotlight Style
 ================================ */
 .navbar {
-  min-height: 100px;
-  padding: 20px 60px;
+  min-height: 80px;
+  padding: 12px 60px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -352,7 +352,7 @@ body {
   flex-direction: column;
   gap: 6px;
   cursor: pointer;
-  z-index: 1100;
+  z-index: 60;
   padding: 10px;
   margin-right: -10px;
 }
@@ -387,7 +387,7 @@ body {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 1000;
+  z-index: 40;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.32s ease, visibility 0.32s ease;
@@ -2740,20 +2740,6 @@ textarea::placeholder {
 }
 
 /* ===============================
-   NAVBAR SIZE FIX
-================================ */
-.navbar {
-  min-height: 70px;
-  height: 70px;
-  padding: 0 60px;
-}
-
-.navbar-content {
-  height: 100%;
-}
-
-
-/* ===============================
    SCROLL INDICATOR
 ================================ */
 .scroll-indicator {
@@ -3588,7 +3574,7 @@ input, textarea {
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  z-index: 998;
+  z-index: 40;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.4s ease, visibility 0.4s ease;
@@ -3625,7 +3611,7 @@ input, textarea {
     flex-direction: column;
     padding: 80px 0 40px;
     margin: 0;
-    z-index: 1050;
+    z-index: 50;
     transform: translateX(100%);
     transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
   }

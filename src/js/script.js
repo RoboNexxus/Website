@@ -403,7 +403,7 @@ cursorGlow.style.cssText = `
   background: radial-gradient(circle, rgba(71, 160, 184, 0.15) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9998;
+  z-index: 5;
   transform: translate(-50%, -50%);
   transition: opacity 0.3s ease;
 `;

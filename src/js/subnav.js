@@ -27,17 +27,12 @@
     </div>
   `;
 
-  /* ── Inject into .navbar-content, before .hamburger ── */
+  /* ── Inject into .spotlight-nav-container, after the main nav ── */
   function inject() {
-    const navbarContent = document.querySelector('.navbar-content');
-    if (!navbarContent || document.getElementById('rn26-pill')) return;
+    const navContainer = document.querySelector('.spotlight-nav-container');
+    if (!navContainer || document.getElementById('rn26-pill')) return;
 
-    const hamburger = navbarContent.querySelector('.hamburger');
-    if (hamburger) {
-      hamburger.insertAdjacentHTML('beforebegin', PILL_HTML);
-    } else {
-      navbarContent.insertAdjacentHTML('beforeend', PILL_HTML);
-    }
+    navContainer.insertAdjacentHTML('beforeend', PILL_HTML);
     
     initSpotlight();
     setActiveLink();
