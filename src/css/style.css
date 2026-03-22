@@ -218,7 +218,7 @@ body {
 
 .page-content {
   position: relative;
-  z-index: 1;
+  z-index: 0;
   opacity: 1;
 }
 
@@ -376,26 +376,6 @@ body {
 
 .hamburger.active span:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -6px);
-}
-
-.mobile-nav-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: 40;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.32s ease, visibility 0.32s ease;
-}
-
-.mobile-nav-backdrop.active {
-  opacity: 1;
-  visibility: visible;
 }
 
 /* ===============================
