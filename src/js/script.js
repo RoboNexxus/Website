@@ -35,17 +35,18 @@ function initPageTransition() {
 initPageTransition();
 
 /* ===============================
-   HAMBURGER MENU (DRAWER)
+   HAMBURGER MENU (GLASS SIDE TRAY)
 ================================ */
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links-ul');
 
-// Create backdrop element
+// Create and append backdrop dynamically
 const backdrop = document.createElement('div');
 backdrop.className = 'mobile-nav-backdrop';
 document.body.appendChild(backdrop);
 
 function openMobileNav() {
+  if (!hamburger || !navLinks) return;
   hamburger.classList.add('active');
   navLinks.classList.add('active');
   backdrop.classList.add('active');
@@ -53,6 +54,7 @@ function openMobileNav() {
 }
 
 function closeMobileNav() {
+  if (!hamburger || !navLinks) return;
   hamburger.classList.remove('active');
   navLinks.classList.remove('active');
   backdrop.classList.remove('active');
@@ -75,7 +77,10 @@ if (hamburger && navLinks) {
 
   // Close menu when clicking a link
   document.querySelectorAll('.nav-links').forEach(link => {
-    link.addEventListener('click', closeMobileNav);
+    link.addEventListener('click', () => {
+      // Small delay to let the click through before closing animation
+      setTimeout(closeMobileNav, 100);
+    });
   });
 
   // Close on Escape key
@@ -83,6 +88,7 @@ if (hamburger && navLinks) {
     if (e.key === 'Escape') closeMobileNav();
   });
 }
+
 
 
 /* ===============================
