@@ -144,7 +144,15 @@ export default async function handler(req, res) {
       });
       
       if (!sbRes.ok) throw new Error(`Supabase RPC failed: ${sbRes.status}`);
-      nextNum = await sbRes.json();
+      const raw = await sbRes.json();
+      if (typeof raw === 'number') {
+        nextNum = raw;
+      } else if (Array.isArray(raw)) {
+        nextNum = raw[0]?.next_reg_id ?? raw[0];
+      } else if (raw && typeof raw === 'object') {
+        nextNum = raw.next_reg_id ?? raw.counter ?? raw;
+      }
+      if (!nextNum || isNaN(nextNum)) throw new Error('Invalid nextNum from RPC: ' + JSON.stringify(raw));
     } catch (err) {
       console.error('Supabase Reg ID generation failed, falling back to timestamp:', err.message);
       nextNum = Date.now() % 100000;
