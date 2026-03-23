@@ -96,6 +96,29 @@ if (hamburger && navLinks) {
   });
 }
 
+/* ===============================
+   EVENTS BADGE (MOBILE)
+================================ */
+(async function() {
+  try {
+    const res = await fetch('/src/js/events.json');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.upcomingEvents && data.upcomingEvents.length > 0) {
+      document.querySelectorAll('.nav-links[href="/events"]').forEach(link => {
+        if (!link.querySelector('.nav-new-badge')) {
+          const badge = document.createElement('span');
+          badge.className = 'nav-new-badge';
+          badge.textContent = 'New';
+          link.appendChild(badge);
+        }
+      });
+    }
+  } catch (e) {
+    // Silent catch
+  }
+})();
+
 
 
 /* ===============================

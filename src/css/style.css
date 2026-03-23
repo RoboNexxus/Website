@@ -3565,7 +3565,26 @@ input, textarea {
   visibility: visible;
 }
 
+.nav-new-badge {
+  display: none;
+}
+
 @media (max-width: 992px) {
+  .nav-new-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(71, 160, 184, 0.15);
+    border: 1px solid rgba(71, 160, 184, 0.45);
+    color: #47a0b8;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
   /* Strip desktop pill styling */
   .spotlight-nav {
     background: transparent !important;
