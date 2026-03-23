@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       event, members
     } = req.body;
 
-    // ── BUG-06 FIX: Server-side validation (regex) ──────────────────────
+    // ── Server-side validation ───────────────────────────────────────────
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const PHONE_RE = /^\+?[\d\s\-()\\.]{7,20}$/;
 
@@ -27,7 +27,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Invalid phone number format' });
     }
 
-    // ── BUG-04 FIX: Validate team size BEFORE slicing ───────────────────
     const rawMembers = Array.isArray(members) ? members : [];
     const filledExtraMembers = rawMembers.filter(m => m?.name?.trim());
     if (participationType === 'School Team' && !teamName) {
@@ -42,15 +41,13 @@ export default async function handler(req, res) {
 
     const NOTION_TOKEN = process.env.NOTION_TOKEN;
     const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
-    const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
     if (!NOTION_TOKEN) {
       console.error('Missing NOTION_TOKEN');
       return res.status(500).json({ message: 'Server configuration error' });
     }
 
-    // ── SB-4 FIX: Event-prefixed Reg IDs ────────────────────────────────
+    // ── Event map ────────────────────────────────────────────────────────
     const EVENT_DB_MAP = {
       'Robo War': { id: '723ea79c8931405e9342696f47b81e68', prefix: 'WAR' },
       'Robo Soccer': { id: '437ef7d538b54a158b46d0ac0308f369', prefix: 'SOC' },
@@ -73,7 +70,7 @@ export default async function handler(req, res) {
       'Notion-Version': '2022-06-28',
     };
 
-    // ── BUG-05 FIX: Duplicate email check ───────────────────────────────
+    // ── Duplicate email check ────────────────────────────────────────────
     try {
       const dupRes = await fetch(`https://api.notion.com/v1/databases/${NOTION_DB}/query`, {
         method: 'POST',
@@ -91,79 +88,54 @@ export default async function handler(req, res) {
       console.warn('Duplicate check failed, proceeding:', err.message);
     }
 
-    // ── MF-04: Per-event registration cap check ─────────────────────────
+    // ── Per-event registration cap check ─────────────────────────────────
     const EVENT_CAPS = {
-      'Robo War':      100,
-      'Robo Soccer':   100,
-      'Drone':         100,
+      'Robo War': 100,
+      'Robo Soccer': 100,
+      'Drone': 100,
       'Line Follower': 100,
-      'Race':          100,
+      'Race': 100,
     };
 
-    if (EVENT_CAPS[event] > 0) {
-      try {
-        let registrationCount = 0;
-        let startCursor = undefined;
-        while (true) {
-          const body = {
-            page_size: 100,
-            ...(startCursor ? { start_cursor: startCursor } : {}),
-          };
-          const r = await fetch(`https://api.notion.com/v1/databases/${NOTION_DB}/query`, {
-            method: 'POST',
-            headers: NOTION_HEADERS,
-            body: JSON.stringify(body),
-          });
-          const d = await r.json();
-          registrationCount += (d.results || []).length;
-          if (!d.has_more || registrationCount >= EVENT_CAPS[event]) break;
-          startCursor = d.next_cursor;
-        }
-
-        if (registrationCount >= EVENT_CAPS[event]) {
-          return res.status(410).json({ message: 'Registrations for this event are now closed. All spots are filled.' });
-        }
-      } catch (err) {
-        console.warn('Cap check failed, proceeding:', err.message);
-      }
-    }
-
-    // ── BUG-03 proper: Atomic Reg ID counter via Supabase ──────────────
-    let nextNum;
+    // ── Count ALL entries in this event's Notion DB → derive Reg ID ──────
+    // Also used for cap check — one loop does both jobs.
+    let registrationCount = 0;
     try {
-      if (!SUPABASE_URL || !SUPABASE_ANON_KEY) throw new Error('Supabase config missing');
-      
-      const sbRes = await fetch(`${SUPABASE_URL}/rest/v1/rpc/next_reg_id`, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ event_prefix: EVENT_PREFIX.toLowerCase() })
-      });
-      
-      if (!sbRes.ok) throw new Error(`Supabase RPC failed: ${sbRes.status}`);
-      const raw = await sbRes.json();
-      if (typeof raw === 'number') {
-        nextNum = raw;
-      } else if (Array.isArray(raw)) {
-        nextNum = raw[0]?.next_reg_id ?? raw[0];
-      } else if (raw && typeof raw === 'object') {
-        nextNum = raw.next_reg_id ?? raw.counter ?? raw;
+      let startCursor = undefined;
+      while (true) {
+        const body = {
+          page_size: 100,
+          ...(startCursor ? { start_cursor: startCursor } : {}),
+        };
+        const r = await fetch(`https://api.notion.com/v1/databases/${NOTION_DB}/query`, {
+          method: 'POST',
+          headers: NOTION_HEADERS,
+          body: JSON.stringify(body),
+        });
+        const d = await r.json();
+        registrationCount += (d.results || []).length;
+        if (!d.has_more) break;
+        startCursor = d.next_cursor;
       }
-      if (!nextNum || isNaN(nextNum)) throw new Error('Invalid nextNum from RPC: ' + JSON.stringify(raw));
     } catch (err) {
-      console.error('Supabase Reg ID generation failed, falling back to timestamp:', err.message);
-      nextNum = Date.now() % 100000;
+      console.warn('Count query failed:', err.message);
+      // Don't block registration if count fails — worst case ID falls back below
     }
 
+    // Cap check
+    if (EVENT_CAPS[event] > 0 && registrationCount >= EVENT_CAPS[event]) {
+      return res.status(410).json({ message: 'Registrations for this event are now closed. All spots are filled.' });
+    }
+
+    // Reg ID = count of existing entries + 1 (per event DB, so always per-event)
+    // If you delete entry #3, next new one gets #3 again. ✓
+    const nextNum = registrationCount + 1;
     const regId = `RN-${EVENT_PREFIX}-${String(nextNum).padStart(3, '0')}`;
 
+    // ── Member props ─────────────────────────────────────────────────────
     const m2 = teamMembers[0] || {};
     const m3 = teamMembers[1] || {};
 
-    // ── BUG-01 FIX: Never pass null to Notion email properties ──────────
     const member2Props = m2.name?.trim() ? {
       'Member 2 Name': { rich_text: [{ text: { content: m2.name } }] },
       'Member 2 Discord': { rich_text: [{ text: { content: m2.discord || '' } }] },
@@ -176,7 +148,7 @@ export default async function handler(req, res) {
       ...(m3.email?.trim() ? { 'Member 3 Email': { email: m3.email } } : {}),
     } : {};
 
-    // ── Write to Notion ──────────────────────────────────────────────────
+    // ── Write to Notion ───────────────────────────────────────────────────
     const notionBody = {
       parent: { database_id: NOTION_DB },
       properties: {
@@ -208,7 +180,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ message: 'Failed to save registration' });
     }
 
-    // ── CS-03 FIX: Discord webhook ───────────────────────────────────────
+    // ── Discord webhook ───────────────────────────────────────────────────
     if (WEBHOOK_URL) {
       const typeEmoji = participationType === 'Individual' ? '👤' : '🏫';
       const eventEmojis = {
