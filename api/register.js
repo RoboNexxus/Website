@@ -34,7 +34,7 @@ function memberBlock(num, m) {
   if (!m?.name?.trim()) return '';
   return `
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
-         style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;margin-bottom:10px;">
+         style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:6px;margin-bottom:10px;">
     <tr>
       <td style="padding:8px 16px;border-bottom:1px solid rgba(255,255,255,0.06);">
         <span style="font-size:10px;font-weight:700;color:rgba(71,160,184,0.8);letter-spacing:2px;text-transform:uppercase;">
@@ -86,7 +86,6 @@ function buildEmailHTML(data) {
     teamSize, event, regId, members, registeredAt,
   } = data;
 
-  const emoji = EVENT_EMOJI[event] || '🤖';
   const m2 = members?.[0] || {};
   const m3 = members?.[1] || {};
   const hasTeam = m2?.name?.trim() || m3?.name?.trim();
@@ -139,11 +138,11 @@ function buildEmailHTML(data) {
           </tr>
 
           <tr>
-            <td style="padding:32px 40px;background:rgba(8,8,8,0.97);color:#ffffff;font-size:15px;line-height:1.6;">
+            <td style="padding:32px 40px;background:#000000;color:#ffffff;font-size:15px;line-height:1.6;">
 
-              <div style="display:inline-block;padding:5px 16px;background:rgba(71,160,184,0.12);border:1px solid rgba(71,160,184,0.45);border-radius:20px;margin-bottom:24px;">
+              <div style="display:inline-block;padding:5px 16px;background:transparent;border:1px solid rgba(71,160,184,0.45);border-radius:20px;margin-bottom:24px;">
                 <p style="margin:0;color:#47a0b8;font-size:10px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">
-                  ${emoji} ${event} &nbsp;·&nbsp; RoboNexus '26
+                  ${event} &nbsp;·&nbsp; RoboNexus '26
                 </p>
               </div>
 
@@ -156,7 +155,7 @@ function buildEmailHTML(data) {
               </p>
 
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
-                     style="background:rgba(71,160,184,0.07);border:1px solid rgba(71,160,184,0.3);border-radius:8px;margin-bottom:28px;">
+                     style="background:transparent;border:1px solid rgba(71,160,184,0.3);border-radius:8px;margin-bottom:28px;">
                 <tr>
                   <td style="padding:20px 24px;">
                     <p style="margin:0 0 4px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(71,160,184,0.7);">
