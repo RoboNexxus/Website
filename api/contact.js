@@ -38,7 +38,8 @@ export default async function handler(req, res) {
     });
 
     if (!discordRes.ok) {
-      console.error('Discord webhook failed:', discordRes.status);
+      const errorBody = await discordRes.text();
+      console.error(`Discord webhook failed [${discordRes.status}]:`, errorBody);
       return res.status(500).json({ message: 'Failed to send notification' });
     }
 

@@ -360,7 +360,7 @@ async function sendDiscordNotification(webhookUrl, {
     });
   }
 
-  await fetch(webhookUrl, {
+  const res = await fetch(webhookUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -385,6 +385,11 @@ async function sendDiscordNotification(webhookUrl, {
       }],
     }),
   });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Discord notification failed: ${res.status} ${errText}`);
+  }
 
   console.log(`📣 Discord notified [${regId}]`);
 }
@@ -565,30 +570,34 @@ export default async function handler(req, res) {
       hour12: true,
     });
 
-    Promise.allSettled([
-      sendConfirmationEmail({
-        name, email, phone, discord, school,
-        gradeCategory, participationType,
-        teamName: teamName || '',
-        teamSize: totalSize,
-        event,
-        regId,
-        members: [m2, m3],
-        registeredAt,
-      }),
-      sendDiscordNotification(WEBHOOK_URL, {
-        event, regId, name, discord, email, phone,
-        school, gradeCategory, participationType,
-        teamName: teamName || '',
-        totalSize, m2, m3,
-      }),
-    ]).then(results => {
+    try {
+      const results = await Promise.allSettled([
+        sendConfirmationEmail({
+          name, email, phone, discord, school,
+          gradeCategory, participationType,
+          teamName: teamName || '',
+          teamSize: totalSize,
+          event,
+          regId,
+          members: [m2, m3],
+          registeredAt,
+        }),
+        sendDiscordNotification(WEBHOOK_URL, {
+          event, regId, name, discord, email, phone,
+          school, gradeCategory, participationType,
+          teamName: teamName || '',
+          totalSize, m2, m3,
+        }),
+      ]);
+
       results.forEach((r, i) => {
         if (r.status === 'rejected') {
           console.error(`Post-reg task[${i}] failed:`, r.reason?.message || r.reason);
         }
       });
-    });
+    } catch (err) {
+      console.error('Post-registration tasks failed:', err.message);
+    }
 
     return res.status(200).json({
       message: 'Registration successful',
