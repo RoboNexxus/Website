@@ -12,24 +12,6 @@
   },
   "members": [
     {
-      "name": "Aryaman Yadav",
-      "role": "President",
-      "image": "assets/images/ARAY.webp",
-      "leavingSoon": true,
-      "links": {
-        "linkedin": "https://www.linkedin.com/in/-aryamanyadav"
-      }
-    },
-    {
-      "name": "Akshar Yadav",
-      "role": "Vice President",
-      "image": "assets/images/AKSY.webp",
-      "leavingSoon": true,
-      "links": {
-        "linkedin": "https://www.linkedin.com/in/aksharyadav26/"
-      }
-    },
-    {
       "name": "Atharv Mandlavdiya",
       "role": "Member",
       "image": "assets/images/AM.webp",
