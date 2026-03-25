@@ -1,6 +1,7 @@
 /**
- * Robo Nexus - Buttery Smooth Landing Intro
+ * Robo Nexus - Buttery Smooth Landing Intro v2
  * Rises from bottom -> Center -> Hero Position -> Page Reveal
+ * Perfectly matches target size and handles background reveal.
  */
 
 (function () {
@@ -19,6 +20,9 @@
 
   // Lock scroll during intro
   document.body.style.overflow = 'hidden';
+  
+  // Set initial black background to fade out later
+  intro.style.backgroundColor = '#000000';
 
   // Wait for GSAP to be available
   function waitForGSAP(cb) {
@@ -32,11 +36,12 @@
   }
 
   waitForGSAP(() => {
-    // Hide the real hero logo initially to avoid double logos
     const targetLogo = document.querySelector('.home-logo-img');
+    
+    // Preparation
     if (targetLogo) {
       targetLogo.classList.add('no-animation');
-      gsap.set(targetLogo, { opacity: 0, scale: 0.8 });
+      gsap.set(targetLogo, { opacity: 0 });
     }
 
     const tl = gsap.timeline({
@@ -44,77 +49,84 @@
         sessionStorage.setItem('introSeen', '1');
         document.body.style.overflow = '';
         intro.remove();
-        // Trigger other animations if needed
         window.dispatchEvent(new CustomEvent('introComplete'));
       }
     });
 
-    // Phase 1: Logo rises from below the screen to the center
+    // Phase 1: Logo rises from below screen to center
+    // We start invisible and below
+    gsap.set(introLogo, { opacity: 0, y: '100vh', scale: 0.8 });
+
     tl.to(introLogo, {
       opacity: 1,
       y: 0,
-      duration: 1.8,
+      scale: 1,
+      duration: 2,
       ease: "expo.out",
       delay: 0.5
     });
 
-    // Phase 2: Subtle pulse/glow while in center
-    tl.to(introLogo, {
-      filter: 'drop-shadow(0 0 50px rgba(71, 160, 184, 0.8))',
-      scale: 1.05,
-      duration: 1,
-      ease: "sine.inOut"
-    });
+    // Phase 2: Fade background to reveal particles + Pulse
+    tl.to(intro, {
+      backgroundColor: 'rgba(0,0,0,0)',
+      duration: 1.5,
+      ease: "power2.inOut"
+    }, "-=1");
 
-    // Phase 3: Move to original position
+    tl.to(introLogo, {
+      filter: 'drop-shadow(0 0 60px rgba(71, 160, 184, 0.9))',
+      scale: 1.05,
+      duration: 1.2,
+      yoyo: true,
+      repeat: 1,
+      ease: "sine.inOut"
+    }, "-=0.5");
+
+    // Phase 3: Glide to original position with precise resizing
     tl.add(() => {
-      // Calculate target position
       if (targetLogo) {
-        const rect = targetLogo.getBoundingClientRect();
+        const targetRect = targetLogo.getBoundingClientRect();
         const introRect = introLogo.getBoundingClientRect();
         
         // Calculate center-to-center delta
-        const deltaX = (rect.left + rect.width / 2) - (window.innerWidth / 2);
-        const deltaY = (rect.top + rect.height / 2) - (window.innerHeight / 2);
+        const deltaX = (targetRect.left + targetRect.width / 2) - (window.innerWidth / 2);
+        const deltaY = (targetRect.top + targetRect.height / 2) - (window.innerHeight / 2);
         
-        // Final scale based on target size vs intro size
-        const targetScale = rect.width / introRect.width;
+        // Final scale to match targetLogo size exactly
+        // targetRect.width is the current width of the hero logo
+        // introRect.width is the current width of the intro logo (which is at scale 1.05 due to pulse)
+        const currentIntroWidth = introLogo.offsetWidth; // intrinsic width
+        const targetScale = targetRect.width / currentIntroWidth;
 
         gsap.to(introLogo, {
           x: deltaX,
           y: deltaY,
           scale: targetScale,
-          duration: 1.5,
+          duration: 1.8,
           ease: "expo.inOut",
           onStart: () => {
-            // Start revealing the page as the logo moves
+            // Reveal page content as logo glides
             gsap.to(mainContent, {
               opacity: 1,
-              duration: 1.2,
-              ease: "power2.out"
-            });
-            // Fade out the black intro background
-            gsap.to(intro, {
-              backgroundColor: 'rgba(0,0,0,0)',
-              duration: 1.2,
+              duration: 1.5,
               ease: "power2.out"
             });
           },
           onComplete: () => {
-            // Swap intro logo for real hero logo
+            // Smooth swap
+            gsap.set(targetLogo, { opacity: 1 });
             targetLogo.classList.remove('no-animation');
-            gsap.set(targetLogo, { opacity: 1, scale: 1 });
-            gsap.to(introLogo, { opacity: 0, duration: 0.2 });
+            gsap.to(introLogo, { opacity: 0, duration: 0.3 });
           }
         });
       } else {
-        // Fallback if no hero logo (e.g. inner pages, though intro only runs on home)
+        // Fallback
         gsap.to(intro, { opacity: 0, duration: 1 });
         gsap.to(mainContent, { opacity: 1, duration: 1 });
       }
-    }, "+=0.2");
+    }, "+=0.1");
 
-    // Add a small buffer to the timeline to wait for the dynamic animation
+    // Timeline buffer
     tl.to({}, { duration: 2.5 });
   });
 })();
