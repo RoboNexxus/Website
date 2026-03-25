@@ -95,121 +95,18 @@
 
   <style>
     /* ══════════════════════════════════════════════════════
-         MAIN WRAPPER — projects grid LEFT + leaderboard RIGHT
-         at the exact same vertical position
+         MAIN WRAPPER — projects grid
       ══════════════════════════════════════════════════════ */
 
     .projects-outer {
-      display: flex;
-      gap: 28px;
       padding: 40px 60px 0;
       max-width: 1400px;
       margin: 0 auto;
-      align-items: flex-start;
-    }
-
-    /* Left: projects grid — takes all remaining space */
-    .projects-main {
-      flex: 1;
-      min-width: 0;
     }
 
     /* Override the section padding since outer handles it */
     .projects-main .projects-section {
       padding: 0 !important;
-    }
-
-    /* Right: leaderboard sidebar — fixed width, sticky */
-    .leaderboard-sidebar {
-      width: 250px;
-      flex-shrink: 0;
-      position: sticky;
-      top: 90px;
-      align-self: flex-start;
-    }
-
-    .leaderboard-card {
-      background: linear-gradient(135deg, rgba(18, 18, 18, 0.97), rgba(26, 26, 26, 0.97));
-      border: 1px solid rgba(71, 160, 184, 0.25);
-      border-radius: 18px;
-      padding: 22px 18px;
-    }
-
-    .leaderboard-card h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 16px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid rgba(71, 160, 184, 0.15);
-      letter-spacing: 0.3px;
-    }
-
-    .lb-row {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 9px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .lb-row:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .lb-rank {
-      font-size: 1rem;
-      width: 24px;
-      flex-shrink: 0;
-      text-align: center;
-    }
-
-    .lb-info {
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    .lb-label {
-      font-size: 0.83rem;
-      font-weight: 600;
-      color: #fff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .lb-sublabel {
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.32);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-top: 2px;
-    }
-
-    .lb-votes {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #47a0b8;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .lb-votes i {
-      font-size: 0.62rem;
-      opacity: 0.65;
-    }
-
-    .leaderboard-empty {
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.28);
-      font-style: italic;
-      text-align: center;
-      padding: 8px 0;
     }
 
     /* ── Creator / Team row on project card ── */
@@ -274,135 +171,6 @@
       color: #47a0b8;
     }
 
-    /* ══════════════════════════════════════════════════════
-         VOTING SECTION — full width, below the grid
-      ══════════════════════════════════════════════════════ */
-
-    .voting-section {
-      padding: 40px 60px 80px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .voting-section-header {
-      margin-bottom: 24px;
-    }
-
-    .voting-section-header h2 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 5px;
-    }
-
-    .voting-section-header p {
-      color: rgba(255, 255, 255, 0.36);
-      font-size: 0.86rem;
-    }
-
-    /* Vote cards in a 2-col grid */
-    #voting-cards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 13px;
-    }
-
-    .vote-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(14, 14, 14, 0.92);
-      border: 1px solid rgba(71, 160, 184, 0.17);
-      border-radius: 13px;
-      padding: 17px 20px;
-      transition: border-color 0.25s, box-shadow 0.25s;
-      gap: 12px;
-    }
-
-    .vote-card:hover {
-      border-color: rgba(71, 160, 184, 0.42);
-      box-shadow: 0 5px 22px rgba(71, 160, 184, 0.07);
-    }
-
-    .vote-card--voted {
-      border-color: rgba(71, 160, 184, 0.32);
-      background: rgba(71, 160, 184, 0.035);
-    }
-
-    .vote-card-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .vote-card-title {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: #fff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .vote-card-team {
-      font-size: 0.76rem;
-      color: rgba(255, 255, 255, 0.38);
-      margin-top: 3px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .vote-card-team i {
-      color: #47a0b8;
-      font-size: 0.68rem;
-    }
-
-    .vote-card-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .vote-count {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #47a0b8;
-      min-width: 24px;
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .vote-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      border-radius: 9px;
-      border: 1.5px solid rgba(71, 160, 184, 0.48);
-      background: transparent;
-      color: #47a0b8;
-      font-size: 0.81rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.22s ease;
-      white-space: nowrap;
-    }
-
-    .vote-btn:hover:not(:disabled) {
-      background: #47a0b8;
-      color: #000;
-      border-color: #47a0b8;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(71, 160, 184, 0.28);
-    }
-
-    .vote-btn--done {
-      border-color: rgba(71, 160, 184, 0.22);
-      color: rgba(71, 160, 184, 0.42);
-      cursor: default;
-    }
-
     /* ══════════════════════════════════════════
          RESPONSIVE
       ══════════════════════════════════════════ */
@@ -410,47 +178,12 @@
     @media (max-width: 1200px) {
       .projects-outer {
         padding: 40px 30px 0;
-        gap: 22px;
-      }
-
-      .leaderboard-sidebar {
-        width: 220px;
-      }
-
-      .voting-section {
-        padding: 30px 30px 60px;
       }
     }
 
     @media (max-width: 960px) {
-
-      /* Stack on tablet — leaderboard goes BELOW grid */
       .projects-outer {
-        flex-direction: column;
         padding: 30px 20px 0;
-      }
-
-      .leaderboard-sidebar {
-        width: 100%;
-        position: static;
-      }
-
-      .voting-section {
-        padding: 24px 20px 60px;
-      }
-
-      #voting-cards {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .vote-card {
-        padding: 13px 15px;
-      }
-
-      .vote-btn {
-        padding: 7px 13px;
       }
     }
   </style>
@@ -496,10 +229,10 @@
       <div class="scroll-indicator"><i class="fas fa-chevron-down"></i></div>
     </section>
 
-    <!-- ══ PROJECTS GRID + LEADERBOARD SIDEBAR (same row) ══ -->
+    <!-- ══ PROJECTS GRID (same row) ══ -->
     <div class="projects-outer">
 
-      <!-- LEFT: project cards -->
+      <!-- project cards -->
       <div class="projects-main">
         <section class="projects-section">
           <div class="projects-grid" id="projects-grid">
@@ -508,28 +241,7 @@
         </section>
       </div>
 
-      <!-- RIGHT: leaderboard — sticky top, starts at same height as grid -->
-      <aside class="leaderboard-sidebar">
-        <div class="leaderboard-card">
-          <h3>🏆 Leaderboard</h3>
-          <div id="leaderboard-list">
-            <p class="leaderboard-empty">No votes yet — be the first!</p>
-          </div>
-        </div>
-      </aside>
-
     </div>
-
-    <!-- ══ VOTING — below the grid, full width ══ -->
-    <section class="voting-section reveal">
-      <div class="voting-section-header">
-        <h2>Vote for Best Project</h2>
-        <p>One vote per project &middot; Show your support for your favourite build</p>
-      </div>
-      <div id="voting-cards">
-        <!-- Injected by projects.js -->
-      </div>
-    </section>
 
     <footer class="footer">
       <p>&copy; 2026 Robo Nexus. All rights reserved.</p>

@@ -3495,18 +3495,6 @@ input, textarea {
     background: linear-gradient(90deg, #47a0b8, transparent);
   }
 
-  /* "NAVIGATION" label */
-  .nav-links-ul::before {
-    content: "NAVIGATION";
-    display: block;
-    font-size: 10px;
-    font-weight: 800;
-    color: #47a0b8;
-    letter-spacing: 2px;
-    margin: 0 24px 20px;
-    opacity: 0.8;
-  }
-
   .nav-links-ul.active {
     transform: translateX(0);
   }
