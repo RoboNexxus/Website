@@ -107,18 +107,10 @@ function buildEmailHTML(data) {
     <tr>
       <td style="padding:30px 20px;">
         <table role="presentation" width="650" cellpadding="0" cellspacing="0" border="0"
-               style="max-width:100%;margin:0 auto;background:#000000;">
+               style="max-width:100%;margin:0 auto;background-image:url('https://raw.githubusercontent.com/RoboNexxus/Assets/main/particles-bg.gif');background-size:cover;background-position:center;background-repeat:no-repeat;">
 
           <tr>
-            <td style="padding:0;margin:0;line-height:0;">
-              <img src="https://raw.githubusercontent.com/RoboNexxus/Assets/main/particles-bg.gif"
-                   alt="" width="650"
-                   style="width:100%;height:100px;object-fit:cover;display:block;opacity:0.8;margin:0;padding:0;border:0;vertical-align:bottom;">
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:36px 0 24px 0;text-align:center;background:#000000;">
+            <td style="padding:36px 0 24px 0;text-align:center;background:rgba(0,0,0,0.75);">
               <img src="https://raw.githubusercontent.com/RoboNexxus/Assets/main/android-chrome-512x512.png"
                    alt="Robo Nexus" width="130"
                    style="width:130px;height:auto;display:block;margin:0 auto;">
@@ -126,7 +118,7 @@ function buildEmailHTML(data) {
           </tr>
 
           <tr>
-            <td style="padding:0 40px 30px 40px;text-align:center;background:#000000;">
+            <td style="padding:0 40px 30px 40px;text-align:center;background:rgba(0,0,0,0.75);">
               <h1 style="margin:0 0 6px 0;font-size:40px;font-weight:900;color:#ffffff;letter-spacing:1px;">
                 RoboNexus '26
               </h1>
@@ -138,7 +130,7 @@ function buildEmailHTML(data) {
           </tr>
 
           <tr>
-            <td style="padding:32px 40px;background:#000000;color:#ffffff;font-size:15px;line-height:1.6;">
+            <td style="padding:32px 40px;background:rgba(0,0,0,0.75);color:#ffffff;font-size:15px;line-height:1.6;">
 
               <div style="display:inline-block;padding:5px 16px;background:transparent;border:1px solid rgba(71,160,184,0.45);border-radius:20px;margin-bottom:24px;">
                 <p style="margin:0;color:#47a0b8;font-size:10px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">
@@ -248,7 +240,7 @@ function buildEmailHTML(data) {
           </tr>
 
           <tr>
-            <td style="padding:24px 40px;background:#000000;text-align:center;border-top:1px solid rgba(71,160,184,0.12);">
+            <td style="padding:24px 40px;background:rgba(0,0,0,0.75);text-align:center;border-top:1px solid rgba(71,160,184,0.12);">
               <p style="margin:0 0 6px 0;color:rgba(255,255,255,0.45);font-size:12px;">
                 <a href="https://robonexus46.vercel.app" target="_blank"
                    style="color:#47a0b8;text-decoration:underline;font-weight:700;">Robo Nexus</a>
@@ -261,14 +253,6 @@ function buildEmailHTML(data) {
               <p style="margin:0;color:rgba(255,255,255,0.25);font-size:10px;line-height:1.6;">
                 This is an automated confirmation email. If you did not register for RoboNexus '26, please disregard this message.
               </p>
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:0;margin:0;line-height:0;">
-              <img src="https://raw.githubusercontent.com/RoboNexxus/Assets/main/particles-bg.gif"
-                   alt="" width="650"
-                   style="width:100%;height:100px;object-fit:cover;display:block;opacity:0.8;margin:0;padding:0;border:0;vertical-align:top;">
             </td>
           </tr>
 
