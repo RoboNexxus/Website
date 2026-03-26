@@ -762,6 +762,333 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+
+    /* ══════════════════════════════════════
+       TICKET OVERLAY
+    ══════════════════════════════════════ */
+    .ticket-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .4s ease;
+    }
+
+    .ticket-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .ticket-backdrop {
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(18px) brightness(0.35);
+      -webkit-backdrop-filter: blur(18px) brightness(0.35);
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .ticket-scene {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      transform: translateY(100vh);
+    }
+
+    /* ── Ticket wrapper (3D tilt) ── */
+    .ticket-wrapper {
+      --t-bg: #0d1117;
+      --t-bg-light: #161b22;
+      --t-accent: #47a0b8;
+      --t-accent-glow: rgba(71, 160, 184, 0.5);
+      --t-text-main: #f8fafc;
+      --t-text-muted: #94a3b8;
+      font-size: 10px;
+      perspective: 1000px;
+      display: inline-block;
+      cursor: default;
+    }
+
+    .ticket {
+      position: relative;
+      width: 26em;
+      color: var(--t-text-main);
+      font-family: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+      transform-style: preserve-3d;
+      transition: transform .6s cubic-bezier(.23, 1, .32, 1), box-shadow .6s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .9), 0 0 0 1px rgba(255, 255, 255, .05);
+      background: transparent;
+      filter: drop-shadow(0 0 20px rgba(71, 160, 184, 0.2));
+    }
+
+    .ticket-wrapper:hover .ticket {
+      transform: rotateX(5deg) rotateY(-10deg) scale(1.02);
+      box-shadow: 20px 20px 60px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .1), -5px -5px 30px var(--t-accent-glow);
+    }
+
+    .ticket::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 1em;
+      pointer-events: none;
+      background: linear-gradient(115deg, transparent 0%, transparent 40%, rgba(255,255,255,.08) 45%, rgba(255,255,255,.22) 50%, rgba(255,255,255,.08) 55%, transparent 60%, transparent 100%);
+      z-index: 10;
+      background-size: 250% 250%;
+      background-position: 100% 100%;
+      transition: background-position .6s cubic-bezier(.23, 1, .32, 1);
+      mix-blend-mode: overlay;
+    }
+
+    .ticket-wrapper:hover .ticket::after {
+      background-position: 0% 0%;
+    }
+
+    .t-main {
+      padding: 2em;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at bottom left, transparent 1em, var(--t-bg) 1.05em),
+                  radial-gradient(circle at bottom right, transparent 1em, var(--t-bg) 1.05em);
+      background-size: 51% 100%;
+      background-position: bottom left, bottom right;
+      background-repeat: no-repeat;
+      border-top-left-radius: 1em;
+      border-top-right-radius: 1em;
+    }
+
+    .t-main::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(71,160,184,.12) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(71,160,184,.12) 1px, transparent 1px);
+      background-size: 2em 2em;
+      opacity: .6;
+      z-index: 0;
+      pointer-events: none;
+      transform: perspective(500px) rotateX(20deg) scale(1.5);
+      animation: t-grid-scroll 20s linear infinite;
+    }
+
+    @keyframes t-grid-scroll {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 4em; }
+    }
+
+    .t-content { position: relative; z-index: 1; }
+
+    .t-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.6em;
+    }
+
+    .t-logo {
+      display: flex;
+      align-items: center;
+      gap: .5em;
+      font-weight: 900;
+      font-size: 1.1em;
+      letter-spacing: -.05em;
+      color: #fff;
+    }
+
+    .t-logo img {
+      width: 2em;
+      height: 2em;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px var(--t-accent));
+      animation: t-logo-pulse 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes t-logo-pulse {
+      0%   { filter: drop-shadow(0 0 3px var(--t-accent)); }
+      100% { filter: drop-shadow(0 0 12px var(--t-accent)) brightness(1.2); }
+    }
+
+    .t-type {
+      font-size: .6em;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+      color: var(--t-accent);
+      border: 1px solid var(--t-accent);
+      padding: .4em .8em;
+      border-radius: 99em;
+      font-weight: 700;
+    }
+
+    .t-title {
+      font-size: 2.4em;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: .2em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff 0%, #7dd3e8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .t-subtitle {
+      color: var(--t-text-muted);
+      font-size: .85em;
+      margin-bottom: 2em;
+    }
+
+    .t-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2em;
+      margin-bottom: .8em;
+    }
+
+    .t-detail-item { display: flex; flex-direction: column; gap: .2em; }
+
+    .t-label {
+      font-size: .58em;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--t-text-muted);
+    }
+
+    .t-value {
+      font-size: 1em;
+      font-weight: 700;
+      color: var(--t-text-main);
+    }
+
+    .t-perforation {
+      display: flex;
+      justify-content: space-between;
+      height: 1em;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .t-perf-line {
+      flex-grow: 1;
+      height: 0;
+      border-top: 2px dashed rgba(255, 255, 255, .15);
+      margin: 0 1.5em;
+    }
+
+    .t-stub {
+      padding: 1.8em 2em;
+      background: radial-gradient(circle at top left, transparent 1em, var(--t-bg-light) 1.05em),
+                  radial-gradient(circle at top right, transparent 1em, var(--t-bg-light) 1.05em);
+      background-size: 51% 100%;
+      background-position: top left, top right;
+      background-repeat: no-repeat;
+      border-bottom-left-radius: 1em;
+      border-bottom-right-radius: 1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .t-barcode-container { display: flex; flex-direction: column; gap: .5em; }
+
+    .t-barcode {
+      width: 9em;
+      height: 2.8em;
+      background: repeating-linear-gradient(90deg, #fff 0, #fff 2px, transparent 2px, transparent 4px, #fff 4px, #fff 5px, transparent 5px, transparent 8px, #fff 8px, #fff 12px, transparent 12px, transparent 15px, #fff 15px, #fff 16px, transparent 16px, transparent 18px);
+      opacity: .75;
+    }
+
+    .t-barcode-id {
+      font-family: monospace;
+      font-size: .68em;
+      color: var(--t-text-muted);
+      letter-spacing: .15em;
+    }
+
+    .t-admit { text-align: right; }
+
+    .t-admit-text {
+      font-size: .65em;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--t-text-muted);
+    }
+
+    .t-admit-num {
+      font-size: 2.6em;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--t-accent);
+      text-shadow: 0 0 20px var(--t-accent-glow);
+    }
+
+    /* ── Rotating stats strip ── */
+    .t-stats-strip {
+      display: flex;
+      gap: 1.5em;
+      justify-content: center;
+      overflow: hidden;
+      width: 26em;
+      font-size: 10px;
+    }
+
+    .t-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .3em;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .t-stat-num {
+      font-size: 1.8em;
+      font-weight: 900;
+      color: var(--t-accent, #47a0b8);
+      font-family: "Space Grotesk", monospace;
+      text-shadow: 0 0 12px rgba(71,160,184,.5);
+    }
+
+    .t-stat-lbl {
+      font-size: .62em;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.35);
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    /* ── Back button ── */
+    .ticket-back-btn {
+      padding: 11px 32px;
+      background: transparent;
+      border: 1px solid rgba(71, 160, 184, .45);
+      border-radius: 99em;
+      color: rgba(255,255,255,.7);
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: .5px;
+      transition: all .25s;
+      opacity: 0;
+    }
+
+    .ticket-back-btn:hover {
+      background: rgba(71, 160, 184, .12);
+      border-color: #47a0b8;
+      color: #fff;
+    }
+
+    @media (max-width: 480px) {
+      .ticket { width: 22em; }
+      .t-stats-strip { width: 22em; }
+      .t-title { font-size: 2em; }
+    }
   </style>
 </head>
 
@@ -772,6 +1099,83 @@
 
   <canvas id="particle-canvas"></canvas>
   <div class="page-transition"></div>
+
+  <!-- TICKET OVERLAY -->
+  <div class="ticket-overlay" id="ticket-overlay">
+    <div class="ticket-backdrop"></div>
+    <div class="ticket-scene" id="ticket-scene">
+
+      <div class="ticket-wrapper">
+        <div class="ticket">
+          <div class="t-main">
+            <div class="t-content">
+              <div class="t-header">
+                <div class="t-logo">
+                  <img src="/src/assets/images/Robo_Nexus_Logo.webp" alt="Robo Nexus" />
+                  ROBO NEXUS
+                </div>
+                <div class="t-type">Competitor Pass</div>
+              </div>
+              <div class="t-title">RoboNexus<br />'26</div>
+              <div class="t-subtitle" id="tk-event-subtitle">— Event —</div>
+              <div class="t-details">
+                <div class="t-detail-item">
+                  <span class="t-label">Name</span>
+                  <span class="t-value" id="tk-name">—</span>
+                </div>
+                <div class="t-detail-item">
+                  <span class="t-label">Event</span>
+                  <span class="t-value" id="tk-event">—</span>
+                </div>
+                <div class="t-detail-item">
+                  <span class="t-label">School</span>
+                  <span class="t-value" id="tk-school">—</span>
+                </div>
+                <div class="t-detail-item">
+                  <span class="t-label">Grade</span>
+                  <span class="t-value" id="tk-grade">—</span>
+                </div>
+              </div>
+            </div>
+            <div class="t-perforation" style="position:absolute;bottom:0;left:0;width:100%;transform:translateY(50%);">
+              <div class="t-perf-line"></div>
+            </div>
+          </div>
+          <div class="t-stub">
+            <div class="t-barcode-container">
+              <div class="t-barcode"></div>
+              <div class="t-barcode-id" id="tk-regid">RN-XXX-000</div>
+            </div>
+            <div class="t-admit">
+              <div class="t-admit-text">Reg ID</div>
+              <div class="t-admit-num" id="tk-regid-short">000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rotating stats -->
+      <div class="t-stats-strip" id="tk-stats">
+        <div class="t-stat" id="tks-1">
+          <span class="t-stat-num">5</span>
+          <span class="t-stat-lbl">Events</span>
+        </div>
+        <div class="t-stat" id="tks-2">
+          <span class="t-stat-num">3</span>
+          <span class="t-stat-lbl">Max Team</span>
+        </div>
+        <div class="t-stat" id="tks-3">
+          <span class="t-stat-num" id="tks-num">1</span>
+          <span class="t-stat-lbl">Your Team</span>
+        </div>
+      </div>
+
+      <button class="ticket-back-btn" id="ticket-back-btn" onclick="closeTicket()">
+        ← Back to Registration
+      </button>
+
+    </div>
+  </div>
 
   <div class="page-content">
 
@@ -1290,22 +1694,81 @@
         document.getElementById('team-name-wrapper').style.display = 'none';
         updateTeamSize();
 
-        btn.innerHTML = '<i class="fas fa-check"></i> Registered!';
-        toast.success(
-          'Registration Successful!',
-          regId ? 'Your Reg ID: ' + regId + ' — check your mail for confirmation.' : 'Registration received — check your mail for confirmation.',
-          8000
-        );
-        setTimeout(function () {
-          btn.disabled = false;
-          btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
-        }, 4000);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
+
+        /* ── Show ticket ── */
+        showTicket({
+          name: name, event: event, school: school,
+          grade: gradeCategory, regId: regId,
+          teamSize: 1 + members.filter(function(m){ return m.name; }).length
+        });
 
       } catch (err) {
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-rocket"></i> Register Now';
         toast.error('Registration Failed', 'Something went wrong. Please try again or contact us.', 6000);
       }
+    }
+
+    /* ── Ticket overlay ── */
+    var _ticketOpen = false;
+
+    function showTicket(d) {
+      document.getElementById('tk-name').textContent    = d.name || '—';
+      document.getElementById('tk-event').textContent   = d.event || '—';
+      document.getElementById('tk-event-subtitle').textContent = d.event || '—';
+      document.getElementById('tk-school').textContent  = d.school.length > 22 ? d.school.slice(0, 20) + '…' : d.school;
+      document.getElementById('tk-grade').textContent   = 'Class ' + (d.grade || '—');
+      document.getElementById('tk-regid').textContent   = d.regId || 'RN-XXX-000';
+      document.getElementById('tks-num').textContent    = d.teamSize || 1;
+      var short = (d.regId || '').split('-').pop() || '?';
+      document.getElementById('tk-regid-short').textContent = short;
+
+      var overlay = document.getElementById('ticket-overlay');
+      var scene   = document.getElementById('ticket-scene');
+      var backBtn = document.getElementById('ticket-back-btn');
+      var stats   = [document.getElementById('tks-1'), document.getElementById('tks-2'), document.getElementById('tks-3')];
+
+      overlay.classList.add('active');
+      _ticketOpen = true;
+      document.body.style.overflow = 'hidden';
+
+      gsap.set(scene,   { y: '100vh' });
+      gsap.set(backBtn, { opacity: 0 });
+      stats.forEach(function(s){ gsap.set(s, { opacity: 0, y: 20 }); });
+
+      var tl = gsap.timeline();
+
+      tl.to(scene, { y: 0, duration: 1.1, ease: 'expo.out' });
+      tl.to(stats, { opacity: 1, y: 0, duration: .55, stagger: .12, ease: 'back.out(1.4)' }, '-=.3');
+      tl.to(backBtn, { opacity: 1, duration: .4, ease: 'power2.out' }, '-=.2');
+
+      var toastContainer = document.querySelector('.toast-container');
+      if (toastContainer) toastContainer.style.zIndex = '9999';
+
+      toast.success(
+        'Registration Successful!',
+        d.regId ? 'Reg ID: ' + d.regId + ' — check your email!' : 'Check your email for confirmation.',
+        7000
+      );
+    }
+
+    function closeTicket() {
+      if (!_ticketOpen) return;
+      var overlay = document.getElementById('ticket-overlay');
+      var scene   = document.getElementById('ticket-scene');
+
+      gsap.to(scene, {
+        y: '100vh',
+        duration: .7,
+        ease: 'expo.in',
+        onComplete: function() {
+          overlay.classList.remove('active');
+          _ticketOpen = false;
+          document.body.style.overflow = '';
+        }
+      });
     }
   </script>
 
