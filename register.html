@@ -79,12 +79,12 @@
 
   <!-- Preload Critical Resources -->
   <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
-  <link rel="preload" href="/src/css/style.css?v=38" as="style" />
+  <link rel="preload" href="/src/css/style.css?v=39" as="style" />
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
 
-  <link rel="stylesheet" href="/src/css/style.css?v=38" />
-  <link rel="stylesheet" href="/src/css/subnav.css?v=38" />
-  <link rel="stylesheet" href="/src/css/toast.css?v=38" />
+  <link rel="stylesheet" href="/src/css/style.css?v=39" />
+  <link rel="stylesheet" href="/src/css/subnav.css?v=39" />
+  <link rel="stylesheet" href="/src/css/toast.css?v=39" />
 
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print"
@@ -808,7 +808,7 @@
       --t-accent-glow: rgba(71,160,184,0.5);
       --t-text-main: #f8fafc;
       --t-text-muted: #94a3b8;
-      font-size: 9px;
+      font-size: 13px;
       perspective: 900px;
       display: inline-block;
       cursor: default;
@@ -944,7 +944,7 @@
     .t-admit-text { font-size: .65em; text-transform: uppercase; letter-spacing: .1em; color: var(--t-text-muted); }
     .t-admit-num { font-size: 2.6em; font-weight: 900; line-height: 1; color: var(--t-accent); text-shadow: 0 0 20px var(--t-accent-glow); }
 
-    .t-stats-strip { display: flex; gap: 1.5em; justify-content: center; width: 22em; font-size: 9px; }
+    .t-stats-strip { display: flex; gap: 1.5em; justify-content: center; width: 22em; font-size: 13px; }
     .t-stat { display: flex; flex-direction: column; align-items: center; gap: .3em; visibility: hidden; }
     .t-stat-num { font-size: 1.8em; font-weight: 900; color: #47a0b8; text-shadow: 0 0 12px rgba(71,160,184,.5); }
     .t-stat-lbl { font-size: .62em; text-transform: uppercase; letter-spacing: .12em; color: rgba(255,255,255,.35); }
@@ -972,7 +972,7 @@
     .ticket-discord-btn:hover { background: #4752c4; transform: translateY(-2px); }
 
     @media (max-width: 480px) {
-      .ticket-wrapper, .t-stats-strip { font-size: 7.5px; }
+      .ticket-wrapper, .t-stats-strip { font-size: 10px; }
     }
   </style>
 </head>
@@ -1416,13 +1416,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 
   <!-- SCRIPTS — subnav before spotlight so observers are set up first -->
-  <script src="/src/js/toast.js?v=38" defer></script>
-  <script src="/src/js/subnav.js?v=38" defer></script>
-  <script src="/src/js/spotlight-navbar.js?v=38" defer></script>
-  <script src="/src/js/particles.js?v=38" defer></script>
-  <script src="/src/js/script.js?v=38" defer></script>
-  <script src="/src/js/prefetch.js?v=38" defer></script>
-  <script src="/src/js/protection.js?v=38" defer></script>
+  <script src="/src/js/toast.js?v=39" defer></script>
+  <script src="/src/js/subnav.js?v=39" defer></script>
+  <script src="/src/js/spotlight-navbar.js?v=39" defer></script>
+  <script src="/src/js/particles.js?v=39" defer></script>
+  <script src="/src/js/script.js?v=39" defer></script>
+  <script src="/src/js/prefetch.js?v=39" defer></script>
+  <script src="/src/js/protection.js?v=39" defer></script>
 
   <script>
     /* ── Participation type toggle ── */
@@ -1717,7 +1717,10 @@
           t.overlay.classList.remove('active');
           _ticketOpen = false;
           document.body.style.overflow = '';
-          gsap.set(t.ticket, { rotationY: 0, rotationX: 0, scale: 1 });
+          gsap.set(t.ticket,     { rotationY: 0, rotationX: 0, scale: 1 });
+          gsap.set(t.stats,      { autoAlpha: 0, y: 16 });
+          gsap.set(t.backBtn,    { autoAlpha: 0, y: 12 });
+          gsap.set(t.discordBtn, { autoAlpha: 0, y: 12 });
         }
       });
     }
