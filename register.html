@@ -773,22 +773,22 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
       pointer-events: none;
-      transition: opacity .4s ease;
     }
-
-    .ticket-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .ticket-overlay.active { pointer-events: all; }
 
     .ticket-backdrop {
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(18px) brightness(0.35);
-      -webkit-backdrop-filter: blur(18px) brightness(0.35);
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0,0,0,0);
+      backdrop-filter: blur(0px) brightness(1);
+      -webkit-backdrop-filter: blur(0px) brightness(1);
+      transition: background .7s ease, backdrop-filter .7s ease, -webkit-backdrop-filter .7s ease;
+    }
+    .ticket-overlay.active .ticket-backdrop {
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(20px) brightness(0.3);
+      -webkit-backdrop-filter: blur(20px) brightness(0.3);
     }
 
     .ticket-scene {
@@ -798,38 +798,29 @@
       flex-direction: column;
       align-items: center;
       gap: 20px;
-      transform: translateY(100vh);
     }
 
-    /* ── Ticket wrapper (3D tilt) ── */
     .ticket-wrapper {
       --t-bg: #0d1117;
       --t-bg-light: #161b22;
       --t-accent: #47a0b8;
-      --t-accent-glow: rgba(71, 160, 184, 0.5);
+      --t-accent-glow: rgba(71,160,184,0.5);
       --t-text-main: #f8fafc;
       --t-text-muted: #94a3b8;
-      font-size: 10px;
-      perspective: 1000px;
+      font-size: 9px;
+      perspective: 900px;
       display: inline-block;
       cursor: default;
     }
 
     .ticket {
       position: relative;
-      width: 26em;
+      width: 22em;
       color: var(--t-text-main);
-      font-family: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+      font-family: "Segoe UI", system-ui, sans-serif;
       transform-style: preserve-3d;
-      transition: transform .6s cubic-bezier(.23, 1, .32, 1), box-shadow .6s ease;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .9), 0 0 0 1px rgba(255, 255, 255, .05);
-      background: transparent;
-      filter: drop-shadow(0 0 20px rgba(71, 160, 184, 0.2));
-    }
-
-    .ticket-wrapper:hover .ticket {
-      transform: rotateX(5deg) rotateY(-10deg) scale(1.02);
-      box-shadow: 20px 20px 60px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .1), -5px -5px 30px var(--t-accent-glow);
+      will-change: transform;
+      box-shadow: 0 20px 60px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.05), 0 0 30px rgba(71,160,184,.15);
     }
 
     .ticket::after {
@@ -838,24 +829,22 @@
       inset: 0;
       border-radius: 1em;
       pointer-events: none;
-      background: linear-gradient(115deg, transparent 0%, transparent 40%, rgba(255,255,255,.08) 45%, rgba(255,255,255,.22) 50%, rgba(255,255,255,.08) 55%, transparent 60%, transparent 100%);
+      background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.18) 50%, transparent 60%);
       z-index: 10;
       background-size: 250% 250%;
       background-position: 100% 100%;
-      transition: background-position .6s cubic-bezier(.23, 1, .32, 1);
+      transition: background-position .5s cubic-bezier(.23,1,.32,1);
       mix-blend-mode: overlay;
     }
-
-    .ticket-wrapper:hover .ticket::after {
-      background-position: 0% 0%;
-    }
+    .ticket-wrapper:hover .ticket::after { background-position: 0% 0%; }
 
     .t-main {
       padding: 2em;
       position: relative;
       overflow: hidden;
-      background: radial-gradient(circle at bottom left, transparent 1em, var(--t-bg) 1.05em),
-                  radial-gradient(circle at bottom right, transparent 1em, var(--t-bg) 1.05em);
+      background:
+        radial-gradient(circle at bottom left,  transparent 1em, var(--t-bg) 1.05em),
+        radial-gradient(circle at bottom right, transparent 1em, var(--t-bg) 1.05em);
       background-size: 51% 100%;
       background-position: bottom left, bottom right;
       background-repeat: no-repeat;
@@ -867,124 +856,68 @@
       content: "";
       position: absolute;
       inset: 0;
-      background-image: linear-gradient(rgba(71,160,184,.12) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(71,160,184,.12) 1px, transparent 1px);
+      background-image:
+        linear-gradient(rgba(71,160,184,.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(71,160,184,.1) 1px, transparent 1px);
       background-size: 2em 2em;
-      opacity: .6;
+      opacity: .5;
       z-index: 0;
       pointer-events: none;
       transform: perspective(500px) rotateX(20deg) scale(1.5);
-      animation: t-grid-scroll 20s linear infinite;
+      animation: t-grid-scroll 20s linear infinite paused;
     }
+    .ticket-overlay.active .t-main::after { animation-play-state: running; }
 
     @keyframes t-grid-scroll {
-      0%   { background-position: 0 0; }
-      100% { background-position: 0 4em; }
+      to { background-position: 0 4em; }
     }
 
     .t-content { position: relative; z-index: 1; }
 
-    .t-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1.6em;
-    }
+    .t-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.6em; }
 
-    .t-logo {
-      display: flex;
-      align-items: center;
-      gap: .5em;
-      font-weight: 900;
-      font-size: 1.1em;
-      letter-spacing: -.05em;
-      color: #fff;
-    }
+    .t-logo { display: flex; align-items: center; gap: .5em; font-weight: 900; font-size: 1.1em; letter-spacing: -.05em; color: #fff; }
 
     .t-logo img {
-      width: 2em;
-      height: 2em;
-      object-fit: contain;
+      width: 2em; height: 2em; object-fit: contain;
       filter: drop-shadow(0 0 6px var(--t-accent));
-      animation: t-logo-pulse 3s ease-in-out infinite alternate;
+      animation: t-logo-pulse 3s ease-in-out infinite alternate paused;
     }
+    .ticket-overlay.active .t-logo img { animation-play-state: running; }
 
     @keyframes t-logo-pulse {
-      0%   { filter: drop-shadow(0 0 3px var(--t-accent)); }
-      100% { filter: drop-shadow(0 0 12px var(--t-accent)) brightness(1.2); }
+      from { filter: drop-shadow(0 0 3px var(--t-accent)); }
+      to   { filter: drop-shadow(0 0 12px var(--t-accent)) brightness(1.2); }
     }
 
     .t-type {
-      font-size: .6em;
-      text-transform: uppercase;
-      letter-spacing: .2em;
-      color: var(--t-accent);
-      border: 1px solid var(--t-accent);
-      padding: .4em .8em;
-      border-radius: 99em;
-      font-weight: 700;
+      font-size: .6em; text-transform: uppercase; letter-spacing: .2em;
+      color: var(--t-accent); border: 1px solid var(--t-accent);
+      padding: .4em .8em; border-radius: 99em; font-weight: 700;
     }
 
     .t-title {
-      font-size: 2.4em;
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: .2em;
+      font-size: 2.4em; font-weight: 900; line-height: 1.1; margin-bottom: .2em;
       text-transform: uppercase;
       background: linear-gradient(135deg, #fff 0%, #7dd3e8 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    .t-subtitle {
-      color: var(--t-text-muted);
-      font-size: .85em;
-      margin-bottom: 2em;
-    }
+    .t-subtitle { color: var(--t-text-muted); font-size: .85em; margin-bottom: 2em; }
 
-    .t-details {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2em;
-      margin-bottom: .8em;
-    }
-
+    .t-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; margin-bottom: .8em; }
     .t-detail-item { display: flex; flex-direction: column; gap: .2em; }
+    .t-label { font-size: .58em; text-transform: uppercase; letter-spacing: .1em; color: var(--t-text-muted); }
+    .t-value { font-size: 1em; font-weight: 700; color: var(--t-text-main); }
 
-    .t-label {
-      font-size: .58em;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--t-text-muted);
-    }
-
-    .t-value {
-      font-size: 1em;
-      font-weight: 700;
-      color: var(--t-text-main);
-    }
-
-    .t-perforation {
-      display: flex;
-      justify-content: space-between;
-      height: 1em;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .t-perf-line {
-      flex-grow: 1;
-      height: 0;
-      border-top: 2px dashed rgba(255, 255, 255, .15);
-      margin: 0 1.5em;
-    }
+    .t-perforation { display: flex; height: 1em; align-items: center; position: relative; z-index: 2; }
+    .t-perf-line { flex-grow: 1; border-top: 2px dashed rgba(255,255,255,.15); margin: 0 1.5em; }
 
     .t-stub {
       padding: 1.8em 2em;
-      background: radial-gradient(circle at top left, transparent 1em, var(--t-bg-light) 1.05em),
-                  radial-gradient(circle at top right, transparent 1em, var(--t-bg-light) 1.05em);
+      background:
+        radial-gradient(circle at top left,  transparent 1em, var(--t-bg-light) 1.05em),
+        radial-gradient(circle at top right, transparent 1em, var(--t-bg-light) 1.05em);
       background-size: 51% 100%;
       background-position: top left, top right;
       background-repeat: no-repeat;
@@ -996,98 +929,49 @@
     }
 
     .t-barcode-container { display: flex; flex-direction: column; gap: .5em; }
-
     .t-barcode {
-      width: 9em;
-      height: 2.8em;
-      background: repeating-linear-gradient(90deg, #fff 0, #fff 2px, transparent 2px, transparent 4px, #fff 4px, #fff 5px, transparent 5px, transparent 8px, #fff 8px, #fff 12px, transparent 12px, transparent 15px, #fff 15px, #fff 16px, transparent 16px, transparent 18px);
-      opacity: .75;
+      width: 9em; height: 2.8em; opacity: .75;
+      background: repeating-linear-gradient(90deg,
+        #fff 0,#fff 2px,transparent 2px,transparent 4px,
+        #fff 4px,#fff 5px,transparent 5px,transparent 8px,
+        #fff 8px,#fff 12px,transparent 12px,transparent 15px,
+        #fff 15px,#fff 16px,transparent 16px,transparent 18px);
     }
-
-    .t-barcode-id {
-      font-family: monospace;
-      font-size: .68em;
-      color: var(--t-text-muted);
-      letter-spacing: .15em;
-    }
+    .t-barcode-id { font-family: monospace; font-size: .68em; color: var(--t-text-muted); letter-spacing: .15em; }
 
     .t-admit { text-align: right; }
+    .t-admit-text { font-size: .65em; text-transform: uppercase; letter-spacing: .1em; color: var(--t-text-muted); }
+    .t-admit-num { font-size: 2.6em; font-weight: 900; line-height: 1; color: var(--t-accent); text-shadow: 0 0 20px var(--t-accent-glow); }
 
-    .t-admit-text {
-      font-size: .65em;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--t-text-muted);
-    }
+    .t-stats-strip { display: flex; gap: 1.5em; justify-content: center; width: 22em; font-size: 9px; }
+    .t-stat { display: flex; flex-direction: column; align-items: center; gap: .3em; visibility: hidden; }
+    .t-stat-num { font-size: 1.8em; font-weight: 900; color: #47a0b8; text-shadow: 0 0 12px rgba(71,160,184,.5); }
+    .t-stat-lbl { font-size: .62em; text-transform: uppercase; letter-spacing: .12em; color: rgba(255,255,255,.35); }
 
-    .t-admit-num {
-      font-size: 2.6em;
-      font-weight: 900;
-      line-height: 1;
-      color: var(--t-accent);
-      text-shadow: 0 0 20px var(--t-accent-glow);
-    }
-
-    /* ── Rotating stats strip ── */
-    .t-stats-strip {
-      display: flex;
-      gap: 1.5em;
-      justify-content: center;
-      overflow: hidden;
-      width: 26em;
-      font-size: 10px;
-    }
-
-    .t-stat {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: .3em;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    .t-stat-num {
-      font-size: 1.8em;
-      font-weight: 900;
-      color: var(--t-accent, #47a0b8);
-      font-family: "Space Grotesk", monospace;
-      text-shadow: 0 0 12px rgba(71,160,184,.5);
-    }
-
-    .t-stat-lbl {
-      font-size: .62em;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: rgba(255,255,255,.35);
-      font-family: "Space Grotesk", sans-serif;
-    }
-
-    /* ── Back button ── */
     .ticket-back-btn {
-      padding: 11px 32px;
-      background: transparent;
-      border: 1px solid rgba(71, 160, 184, .45);
-      border-radius: 99em;
-      color: rgba(255,255,255,.7);
-      font-size: .88rem;
-      font-weight: 600;
-      cursor: pointer;
-      letter-spacing: .5px;
-      transition: all .25s;
-      opacity: 0;
+      padding: 11px 32px; background: transparent;
+      border: 1px solid rgba(71,160,184,.45); border-radius: 99em;
+      color: rgba(255,255,255,.7); font-size: .88rem; font-weight: 600;
+      cursor: pointer; letter-spacing: .5px;
+      transition: background .2s, border-color .2s, color .2s;
+      visibility: hidden;
     }
+    .ticket-back-btn:hover { background: rgba(71,160,184,.12); border-color: #47a0b8; color: #fff; }
 
-    .ticket-back-btn:hover {
-      background: rgba(71, 160, 184, .12);
-      border-color: #47a0b8;
-      color: #fff;
+    .ticket-discord-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 11px 28px;
+      background: #5865F2;
+      border-radius: 99em;
+      color: #fff; font-size: .88rem; font-weight: 700;
+      text-decoration: none; letter-spacing: .3px;
+      transition: background .2s, transform .2s;
+      visibility: hidden;
     }
+    .ticket-discord-btn:hover { background: #4752c4; transform: translateY(-2px); }
 
     @media (max-width: 480px) {
-      .ticket { width: 22em; }
-      .t-stats-strip { width: 22em; }
-      .t-title { font-size: 2em; }
+      .ticket-wrapper, .t-stats-strip { font-size: 7.5px; }
     }
   </style>
 </head>
@@ -1118,7 +1002,7 @@
               </div>
               <div class="t-title">RoboNexus<br />'26</div>
               <div class="t-subtitle" id="tk-event-subtitle">— Event —</div>
-              <div class="t-details">
+              <div class="t-details" id="tk-details-grid">
                 <div class="t-detail-item">
                   <span class="t-label">Name</span>
                   <span class="t-value" id="tk-name">—</span>
@@ -1127,13 +1011,21 @@
                   <span class="t-label">Event</span>
                   <span class="t-value" id="tk-event">—</span>
                 </div>
-                <div class="t-detail-item">
-                  <span class="t-label">School</span>
-                  <span class="t-value" id="tk-school">—</span>
+                <div class="t-detail-item" id="tk-team-row" style="display:none;">
+                  <span class="t-label">Team</span>
+                  <span class="t-value" id="tk-team">—</span>
                 </div>
                 <div class="t-detail-item">
                   <span class="t-label">Grade</span>
                   <span class="t-value" id="tk-grade">—</span>
+                </div>
+                <div class="t-detail-item">
+                  <span class="t-label">Venue</span>
+                  <span class="t-value">AIS Sec-46</span>
+                </div>
+                <div class="t-detail-item">
+                  <span class="t-label">Date</span>
+                  <span class="t-value">TBA</span>
                 </div>
               </div>
             </div>
@@ -1173,6 +1065,11 @@
       <button class="ticket-back-btn" id="ticket-back-btn" onclick="closeTicket()">
         ← Back to Registration
       </button>
+
+      <a class="ticket-discord-btn" href="https://discord.gg/dbSfP4mXej" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        Join our Discord Server
+      </a>
 
     </div>
   </div>
@@ -1701,6 +1598,7 @@
         showTicket({
           name: name, event: event, school: school,
           grade: gradeCategory, regId: regId,
+          teamName: participationType === 'School Team' ? teamName : '',
           teamSize: 1 + members.filter(function(m){ return m.name; }).length
         });
 
@@ -1711,38 +1609,89 @@
       }
     }
 
-    /* ── Ticket overlay ── */
+    /* ── Ticket — cache DOM once ── */
+    var _tk = null;
+    function _tkInit() {
+      if (_tk) return;
+      var overlay = document.getElementById('ticket-overlay');
+      var scene   = document.getElementById('ticket-scene');
+      var ticket  = scene.querySelector('.ticket');
+      var wrapper = scene.querySelector('.ticket-wrapper');
+      _tk = {
+        overlay: overlay,
+        backdrop: overlay.querySelector('.ticket-backdrop'),
+        scene: scene, ticket: ticket, wrapper: wrapper,
+        backBtn: document.getElementById('ticket-back-btn'),
+        discordBtn: document.querySelector('.ticket-discord-btn'),
+        stats: [document.getElementById('tks-1'), document.getElementById('tks-2'), document.getElementById('tks-3')],
+        // GSAP quickSetters — zero allocation on every mousemove frame
+        setRY: gsap.quickSetter(ticket, 'rotationY', 'deg'),
+        setRX: gsap.quickSetter(ticket, 'rotationX', 'deg'),
+      };
+    }
+
     var _ticketOpen = false;
 
     function showTicket(d) {
-      document.getElementById('tk-name').textContent    = d.name || '—';
-      document.getElementById('tk-event').textContent   = d.event || '—';
+      _tkInit();
+      var t = _tk;
+
+      document.getElementById('tk-name').textContent  = d.name  || '—';
+      document.getElementById('tk-event').textContent = d.event || '—';
       document.getElementById('tk-event-subtitle').textContent = d.event || '—';
-      document.getElementById('tk-school').textContent  = d.school.length > 22 ? d.school.slice(0, 20) + '…' : d.school;
-      document.getElementById('tk-grade').textContent   = 'Class ' + (d.grade || '—');
-      document.getElementById('tk-regid').textContent   = d.regId || 'RN-XXX-000';
-      document.getElementById('tks-num').textContent    = d.teamSize || 1;
-      var short = (d.regId || '').split('-').pop() || '?';
-      document.getElementById('tk-regid-short').textContent = short;
+      document.getElementById('tk-grade').textContent = 'Class ' + (d.grade || '—');
+      document.getElementById('tk-regid').textContent = d.regId || 'RN-XXX-000';
+      document.getElementById('tks-num').textContent  = d.teamSize || 1;
+      document.getElementById('tk-regid-short').textContent = (d.regId || '').split('-').pop() || '?';
 
-      var overlay = document.getElementById('ticket-overlay');
-      var scene   = document.getElementById('ticket-scene');
-      var backBtn = document.getElementById('ticket-back-btn');
-      var stats   = [document.getElementById('tks-1'), document.getElementById('tks-2'), document.getElementById('tks-3')];
+      var teamRow = document.getElementById('tk-team-row');
+      teamRow.style.display = d.teamName ? '' : 'none';
+      if (d.teamName) document.getElementById('tk-team').textContent = d.teamName;
 
-      overlay.classList.add('active');
+      t.overlay.classList.add('active');
       _ticketOpen = true;
       document.body.style.overflow = 'hidden';
 
-      gsap.set(scene,   { y: '100vh' });
-      gsap.set(backBtn, { opacity: 0 });
-      stats.forEach(function(s){ gsap.set(s, { opacity: 0, y: 20 }); });
+      // Reset
+      gsap.set(t.scene,   { y: '110vh', force3D: true });
+      gsap.set(t.ticket,  { rotationY: 0, rotationX: 0, scale: 1, force3D: true });
+      t.stats.forEach(function(s) { gsap.set(s, { y: 16, autoAlpha: 0 }); });
+      gsap.set(t.backBtn,    { y: 12, autoAlpha: 0 });
+      gsap.set(t.discordBtn, { y: 12, autoAlpha: 0 });
 
-      var tl = gsap.timeline();
+      var tl = gsap.timeline({ defaults: { force3D: true } });
 
-      tl.to(scene, { y: 0, duration: 1.1, ease: 'expo.out' });
-      tl.to(stats, { opacity: 1, y: 0, duration: .55, stagger: .12, ease: 'back.out(1.4)' }, '-=.3');
-      tl.to(backBtn, { opacity: 1, duration: .4, ease: 'power2.out' }, '-=.2');
+      // Rise + 360 spin together
+      tl.to(t.scene,  { y: 0, duration: 1.0, ease: 'expo.out' }, 0);
+      tl.to(t.ticket, { rotationY: 360, duration: 1.0, ease: 'expo.out' }, 0);
+
+      // Stats stagger in
+      tl.to(t.stats,  { y: 0, autoAlpha: 1, duration: .45, stagger: .1, ease: 'back.out(1.7)' }, .7);
+      tl.to(t.backBtn,   { y: 0, autoAlpha: 1, duration: .3, ease: 'power2.out' }, .85);
+      tl.to(t.discordBtn,{ y: 0, autoAlpha: 1, duration: .3, ease: 'power2.out' }, .95);
+
+      // Reset rotationY cleanly after spin
+      tl.set(t.ticket, { rotationY: 0 }, 1.05);
+
+      // Mousemove tilt — quickSetter + rAF for zero-jank
+      var _raf = null;
+      var _tx = 0, _ty = 0;
+      t.wrapper._onMove = function(e) {
+        var r  = t.ticket.getBoundingClientRect();
+        _tx = ((e.clientX - r.left) / r.width  - .5) * 24;
+        _ty = ((e.clientY - r.top)  / r.height - .5) * -16;
+        if (!_raf) _raf = requestAnimationFrame(function() {
+          t.setRY(_tx); t.setRX(_ty);
+          gsap.to(t.ticket, { scale: 1.02, duration: .3, ease: 'power2.out', overwrite: 'auto' });
+          _raf = null;
+        });
+      };
+      t.wrapper._onLeave = function() {
+        if (_raf) { cancelAnimationFrame(_raf); _raf = null; }
+        gsap.to(t.ticket, { rotationY: 0, rotationX: 0, scale: 1, duration: .6, ease: 'expo.out', force3D: true });
+      };
+      t.wrapper.addEventListener('mousemove',  t.wrapper._onMove);
+      t.wrapper.addEventListener('mouseleave', t.wrapper._onLeave);
 
       var toastContainer = document.querySelector('.toast-container');
       if (toastContainer) toastContainer.style.zIndex = '9999';
@@ -1756,17 +1705,18 @@
 
     function closeTicket() {
       if (!_ticketOpen) return;
-      var overlay = document.getElementById('ticket-overlay');
-      var scene   = document.getElementById('ticket-scene');
+      var t = _tk;
 
-      gsap.to(scene, {
-        y: '100vh',
-        duration: .7,
-        ease: 'expo.in',
+      t.wrapper.removeEventListener('mousemove',  t.wrapper._onMove);
+      t.wrapper.removeEventListener('mouseleave', t.wrapper._onLeave);
+
+      gsap.to(t.scene, {
+        y: '110vh', duration: .6, ease: 'expo.in', force3D: true,
         onComplete: function() {
-          overlay.classList.remove('active');
+          t.overlay.classList.remove('active');
           _ticketOpen = false;
           document.body.style.overflow = '';
+          gsap.set(t.ticket, { rotationY: 0, rotationX: 0, scale: 1 });
         }
       });
     }
