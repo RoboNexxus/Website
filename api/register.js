@@ -222,7 +222,7 @@ function buildEmailHTML(data) {
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
                 <tr>
                   <td style="background:#47a0b8;border-radius:6px;">
-                    <a href="https://discord.gg/dbSfP4mXej"
+                    <a href="https://discord.gg/HfzJZHJNxK"
                        style="display:inline-block;padding:12px 30px;font-size:13px;font-weight:700;color:#000000;text-decoration:none;letter-spacing:0.5px;text-transform:uppercase;">
                       Join Discord Server
                     </a>
