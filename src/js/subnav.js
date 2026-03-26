@@ -3,8 +3,8 @@
  * Injects a proper pill navbar immediately after .navbar on every page.
  *
  * Add to every HTML page:
- *   <link rel="stylesheet" href="/src/css/subnav.css?v=32" />
- *   <script src="/src/js/subnav.js?v=32" defer></script>
+ *   <link rel="stylesheet" href="/src/css/subnav.css?v=42" />
+ *   <script src="/src/js/subnav.js?v=42" defer></script>
  */
 (function () {
 

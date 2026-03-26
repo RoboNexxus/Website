@@ -297,6 +297,12 @@ async function sendConfirmationEmail(data) {
             name: data.name,
           },
         ],
+        bcc: [
+          {
+            email: senderEmail,
+            name: senderName,
+          },
+        ],
         subject: `RoboNexus '26 Registration Confirmed — ${data.regId}`,
         htmlContent: buildEmailHTML(data),
       }),
