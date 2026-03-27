@@ -330,22 +330,22 @@
       }
     }, 'top 90%');
 
-    /* Calendar: Expand from top-left to bottom-right + 3D drop + wobble */
+    /* Calendar: Expand from top-left to bottom-right + Rubber Band Bounce */
     whenIn('.calendar-container', function (el) {
       el.style.willChange = 'clip-path, transform, opacity';
       var calTl = gsap.timeline();
       
-      /* Start: zero size at top-left, pushed back in 3D, and slightly rotated */
+      /* Start: heavily clipped, pushed back in 3D, rotated, and scaled small */
       gsap.set(el, { 
         clipPath: 'inset(0% 100% 100% 0% round 24px)',
         opacity: 0, 
-        y: -30, 
-        scale: 0.9,
-        rotationX: -10,
+        y: -40, 
+        scale: 0.4, // Starts very small
+        rotationX: -15,
         transformPerspective: 1000
       });
 
-      /* Phase 1: fade in and drop down while expanding diagonally towards bottom-right */
+      /* Phase 1: fade in and drop down while expanding diagonally */
       calTl.to(el, {
         opacity: 1,
         y: 10, // overshoot Y
@@ -354,25 +354,37 @@
         ease: 'expo.out'
       });
 
-      /* Phase 2: Full expansion to bottom-right + snap to 3D rest */
+      /* Phase 2: Full clip expansion + scale stretch rubber band */
       calTl.to(el, {
         clipPath: 'inset(0% 0% 0% 0% round 24px)',
         rotationX: 0,
-        scale: 1,
         y: 0,
         duration: 1.6,
         ease: 'expo.inOut'
       }, '-=0.8');
 
-      /* Phase 3: Tiny breath/wobble at the end */
+      /* Phase 3: THE RUBBER BAND STRETCH (just like navbar)
+         Stretches past 100% size (both axes since it's a 2D expansion) */
       calTl.to(el, {
-        scale: 1.01,
+        scale: 1.06,
         duration: 0.4,
         ease: 'sine.out'
-      }, '-=0.4');
+      }, '-=1.4'); /* happens during the clip phase */
+      
+      /* Bounce back / Recoil */
+      calTl.to(el, {
+        scale: 0.98,
+        duration: 0.25,
+        ease: 'sine.in'
+      });
+      calTl.to(el, {
+        scale: 1.01,
+        duration: 0.2,
+        ease: 'sine.out'
+      });
       calTl.to(el, {
         scale: 1,
-        duration: 0.6,
+        duration: 0.4,
         ease: 'sine.inOut',
         onComplete: function() { 
           el.style.willChange = 'auto'; 
