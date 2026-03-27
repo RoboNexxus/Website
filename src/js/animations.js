@@ -330,22 +330,23 @@
       }
     }, 'top 90%');
 
-    /* Calendar: Expand from top-left to bottom-right + Rubber Band Bounce */
+    /* Calendar: Expand from top-left to bottom-right + 3D drop + rubber band bounce */
     whenIn('.calendar-container', function (el) {
       el.style.willChange = 'clip-path, transform, opacity';
       var calTl = gsap.timeline();
       
-      /* Start: heavily clipped, pushed back in 3D, rotated, and scaled small */
+      /* Start: zero size at top-left, pushed back in 3D, and slightly rotated */
       gsap.set(el, { 
         clipPath: 'inset(0% 100% 100% 0% round 24px)',
         opacity: 0, 
-        y: -40, 
-        scale: 0.4, // Starts very small
-        rotationX: -15,
+        y: -30, 
+        scale: 0.9,
+        rotationX: -10,
+        transformOrigin: 'top left',
         transformPerspective: 1000
       });
 
-      /* Phase 1: fade in and drop down while expanding diagonally */
+      /* Phase 1: fade in and drop down while expanding diagonally towards bottom-right */
       calTl.to(el, {
         opacity: 1,
         y: 10, // overshoot Y
@@ -354,7 +355,7 @@
         ease: 'expo.out'
       });
 
-      /* Phase 2: Full clip expansion + scale stretch rubber band */
+      /* Phase 2: Full expansion to bottom-right + snap to 3D rest */
       calTl.to(el, {
         clipPath: 'inset(0% 0% 0% 0% round 24px)',
         rotationX: 0,
@@ -363,15 +364,14 @@
         ease: 'expo.inOut'
       }, '-=0.8');
 
-      /* Phase 3: THE RUBBER BAND STRETCH (just like navbar)
-         Stretches past 100% size (both axes since it's a 2D expansion) */
+      /* Phase 3: STRETCH past 100% — rubber band effect anchored at top-left */
       calTl.to(el, {
-        scale: 1.06,
-        duration: 0.4,
+        scale: 1.04,
+        duration: 0.35,
         ease: 'sine.out'
-      }, '-=1.4'); /* happens during the clip phase */
+      }, '-=0.4');
       
-      /* Bounce back / Recoil */
+      /* BOUNCE BACK — snaps back */
       calTl.to(el, {
         scale: 0.98,
         duration: 0.25,
@@ -389,6 +389,7 @@
         onComplete: function() { 
           el.style.willChange = 'auto'; 
           el.style.clipPath = '';
+          el.style.transformOrigin = '';
         }
       });
     }, 'top 85%');
