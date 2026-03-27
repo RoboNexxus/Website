@@ -151,15 +151,26 @@
         ease: 'expo.out'
       }, '-=1.2');
 
-      /* pill "settles" — tiny scale overshoot after expansion */
+      /* pill STRETCHES past its width — rubber band effect */
       tl.to(pill, {
-        scaleX: 1.01,
-        duration: 0.3,
+        scaleX: 1.07,
+        duration: 0.35,
         ease: 'sine.out'
       }, '-=0.4');
+      /* BOUNCE BACK — snaps to rest like a rubber band */
+      tl.to(pill, {
+        scaleX: 0.99,
+        duration: 0.25,
+        ease: 'sine.in'
+      });
+      tl.to(pill, {
+        scaleX: 1.02,
+        duration: 0.2,
+        ease: 'sine.out'
+      });
       tl.to(pill, {
         scaleX: 1,
-        duration: 0.5,
+        duration: 0.4,
         ease: 'sine.inOut'
       });
 
