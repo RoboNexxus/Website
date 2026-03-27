@@ -335,20 +335,19 @@
       el.style.willChange = 'transform, opacity, clip-path';
       var calTl = gsap.timeline();
       
-      /* Start: ABSOLUTE ZERO size anchored at top-left */
+      /* Start: ABSOLUTE ZERO size anchored at top-left using polygon */
       gsap.set(el, { 
-        clipPath: 'inset(0% 100% 100% 0% round 24px)',
+        clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)',
         opacity: 0, 
-        scale: 0,
         y: -30, 
         rotationX: -10,
         transformOrigin: 'top left',
         transformPerspective: 1000
       });
 
-      /* Phase 1: One continuous sweep straight to the 1.05 stretch */
+      /* Phase 1: One continuous polygon sweep straight to the stretch */
       calTl.to(el, {
-        clipPath: 'inset(0% 0% 0% 0% round 24px)',
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
         opacity: 1,
         scale: 1.05,
         y: 0,
