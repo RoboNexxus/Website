@@ -51,15 +51,10 @@
 
 
   /* ═══════════════════════════════════════════════════════════════════
-     1 · NAVBAR — LEFT-TO-RIGHT EXPANSION + CUT EFFECT
+     1 · NAVBAR — ORGANIC, LIVING ANIMATION
      ─────────────────────────────────────────────────────────────────
-     Phase 1: Logo fades in softly
-     Phase 2: Main pill expands LEFT → RIGHT via clip-path
-              (pill is initially wider, covering the RN26 area too)
-     Phase 3: Nav links fade in, staggered
-     Phase 4: Pill "cuts" — shrinks from right to its real width,
-              and simultaneously the RN26 pill appears at the cut point
-     Phase 5: Logo gets a subtle breathing glow
+     Nothing moves in a straight line. Everything wobbles, overshoots,
+     breathes, and settles — like the landing intro logo.
      ═══════════════════════════════════════════════════════════════════ */
   function navbarCinematic(baseDelay) {
     var pill = document.querySelector('.spotlight-nav');
@@ -75,97 +70,175 @@
 
     var tl = gsap.timeline({ delay: baseDelay });
 
-    /* ── Phase 1: Logo fades in ── */
+    /* ── LOGO: bounces up from below with overshoot ── */
     if (navLogo) {
-      gsap.set(navLogo, { opacity: 0, scale: 0.7 });
+      gsap.set(navLogo, { opacity: 0, y: 25, scale: 0.5, rotation: -8 });
       tl.to(navLogo, {
         opacity: 1,
+        y: 0,
         scale: 1,
-        duration: 1,
+        rotation: 0,
+        duration: 1.4,
         ease: 'expo.out'
+      });
+      /* overshoot settle — logo drifts up past rest, then floats back */
+      tl.to(navLogo, {
+        y: -4,
+        scale: 1.08,
+        duration: 0.5,
+        ease: 'sine.out'
+      }, '-=0.3');
+      tl.to(navLogo, {
+        y: 0,
+        scale: 1,
+        duration: 0.8,
+        ease: 'sine.inOut'
       });
     }
 
-    /* ── Phase 2: Pill expands LEFT → RIGHT ── */
+    /* ── PILL: left-to-right clip expansion WITH y-wobble ── */
     if (pill) {
-      pill.style.willChange = 'clip-path';
+      pill.style.willChange = 'clip-path, transform';
 
-      /* hide links initially */
-      gsap.set(navLinks, { opacity: 0 });
-      /* ensure pill is visible but clipped from the right */
-      gsap.set(pill, { opacity: 1 });
+      /* hide links initially — they'll slide in later */
+      gsap.set(navLinks, { opacity: 0, y: 8 });
+      gsap.set(pill, { opacity: 1, y: -15 });
 
-      /* If RN26 exists, temporarily hide it — it will appear from the "cut" */
       if (rn26) {
-        gsap.set(rn26, { opacity: 0, scaleX: 0, transformOrigin: 'left center' });
+        gsap.set(rn26, { opacity: 0, x: -15, scaleX: 0, transformOrigin: 'left center' });
       }
 
-      /*
-       * THE EXPANSION:
-       * Start: only leftmost 2% visible (a tiny sliver)
-       * End: expands rightward to 100%
-       *
-       * If an RN26 pill exists, the main pill briefly overshoots
-       * to cover the RN26 area (we handle this with margin-right
-       * manipulation), then retracts = the "cut".
-       */
       gsap.set(pill, { clipPath: 'inset(0 100% 0 0 round 22px)' });
 
+      /* pill drops down to position while expanding */
+      tl.to(pill, {
+        y: 0,
+        duration: 1,
+        ease: 'expo.out'
+      }, '-=1.8');
+
+      /* THE EXPANSION: left → right, long and cinematic */
       tl.to(pill, {
         clipPath: 'inset(0 0% 0 0 round 22px)',
-        duration: 1.6,
+        duration: 2,
         ease: 'expo.inOut'
-      }, '-=0.5');
-
-      /* ── Phase 3: Nav links stagger in during expansion ── */
-      tl.to(navLinks, {
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.05,
-        ease: 'power2.out'
       }, '-=0.8');
 
-      /* Clean up will-change after expansion completes */
+      /* WOBBLE during expansion — pill breathes on Y axis
+         (small drift up, then back, like it's floating into place) */
+      tl.to(pill, {
+        y: -3,
+        duration: 0.6,
+        ease: 'sine.inOut'
+      }, '-=1.6');
+      tl.to(pill, {
+        y: 2,
+        duration: 0.5,
+        ease: 'sine.inOut'
+      }, '-=1.0');
+      tl.to(pill, {
+        y: 0,
+        duration: 0.7,
+        ease: 'sine.inOut'
+      }, '-=0.5');
+
+      /* ── NAV LINKS: slide up from below + fade, staggered ── */
+      tl.to(navLinks, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.06,
+        ease: 'expo.out'
+      }, '-=1.2');
+
+      /* pill "settles" — tiny scale overshoot after expansion */
+      tl.to(pill, {
+        scaleX: 1.01,
+        duration: 0.3,
+        ease: 'sine.out'
+      }, '-=0.4');
+      tl.to(pill, {
+        scaleX: 1,
+        duration: 0.5,
+        ease: 'sine.inOut'
+      });
+
+      /* clean up */
       tl.add(function () {
         pill.style.willChange = 'auto';
         pill.style.clipPath = '';
       });
     }
 
-    /* ── Phase 4: THE CUT — RN26 pill separates out ── */
+    /* ── THE CUT: RN26 separates out with recoil ── */
     if (rn26) {
+      /* slides out from the pill's right edge */
       tl.to(rn26, {
         opacity: 1,
+        x: 0,
         scaleX: 1,
-        duration: 0.9,
+        duration: 1.2,
         ease: 'expo.out'
-      }, '-=0.3');
+      }, '-=0.8');
 
-      /* Tiny glow flash on appearance */
+      /* RECOIL: overshoots to the right, then settles back */
+      tl.to(rn26, {
+        x: 6,
+        duration: 0.35,
+        ease: 'sine.out'
+      }, '-=0.3');
+      tl.to(rn26, {
+        x: 0,
+        duration: 0.6,
+        ease: 'sine.inOut'
+      });
+
+      /* RN26 dot glow pulse — breathes twice */
       var rn26Dot = rn26.querySelector('.rn26-dot');
       if (rn26Dot) {
         tl.fromTo(rn26Dot, {
           boxShadow: '0 0 0px rgba(71, 160, 184, 0)'
         }, {
-          boxShadow: '0 0 16px rgba(71, 160, 184, 0.9)',
-          duration: 0.6,
+          boxShadow: '0 0 18px rgba(71, 160, 184, 0.9)',
+          duration: 0.7,
           yoyo: true,
           repeat: 1,
           ease: 'sine.inOut'
-        }, '-=0.6');
+        }, '-=1');
       }
+
+      /* whole RN26 pill does a tiny breathe after settling */
+      tl.to(rn26, {
+        scale: 1.02,
+        duration: 0.3,
+        ease: 'sine.out'
+      }, '-=0.3');
+      tl.to(rn26, {
+        scale: 1,
+        duration: 0.5,
+        ease: 'sine.inOut'
+      });
     }
 
-    /* ── Phase 5: Logo breathes with glow ── */
+    /* ── LOGO: breathing glow just like landing-intro ── */
     if (navLogo) {
       tl.to(navLogo, {
-        filter: 'drop-shadow(0 0 20px rgba(71, 160, 184, 0.7))',
-        scale: 1.04,
-        duration: 0.8,
+        filter: 'drop-shadow(0 0 25px rgba(71, 160, 184, 0.8))',
+        scale: 1.06,
+        duration: 1,
         yoyo: true,
         repeat: 1,
         ease: 'sine.inOut'
-      }, '-=1.2');
+      }, '-=1.8');
+
+      /* final settle — logo drifts to perfect rest */
+      tl.to(navLogo, {
+        filter: 'drop-shadow(0 0 0px rgba(71, 160, 184, 0))',
+        scale: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'sine.inOut'
+      });
     }
   }
 
