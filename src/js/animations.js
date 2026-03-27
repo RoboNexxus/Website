@@ -656,39 +656,52 @@
 
   function animateProjects(c) {
     c.querySelectorAll('.project-card').forEach(function (el, i) {
-      el.style.willChange = 'clip-path, transform, opacity';
+      el.style.willChange = 'transform, opacity, clip-path';
       
-      /* Start: diagonally clipped from top-left, rotated down */
+      /* Start: ABSOLUTE ZERO at top-left, pushed down + rotated back */
       gsap.set(el, { 
+        clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)',
         opacity: 0, 
         y: 40, 
-        rotationX: 10,
-        clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)', // zero area top-left
+        rotationX: -10,
+        transformOrigin: 'top left',
         transformPerspective: 1000
       });
       
       whenIn(el, function () {
         var pTl = gsap.timeline({ delay: (i % 3) * 0.12 });
         
+        /* 1. ONE CONTINUOUS SWOOP to 1.05 stretch */
         pTl.to(el, {
+          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
           opacity: 1, 
-          y: -8, 
+          scale: 1.04,
+          y: 0, 
           rotationX: 0,
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)', // full expand
           duration: 1.4, 
-          ease: 'expo.inOut'
+          ease: 'expo.out'
         });
         
+        /* 2. RUBBER BAND BOUNCE */
         pTl.to(el, {
-          y: 0,
-          scale: 1.02,
-          duration: 0.4,
+          scale: 0.98,
+          duration: 0.25,
+          ease: 'sine.in'
+        });
+        pTl.to(el, {
+          scale: 1.01,
+          duration: 0.2,
           ease: 'sine.out'
-        }, '-=0.4');
+        });
         pTl.to(el, {
           scale: 1,
-          duration: 0.6,
-          ease: 'sine.inOut'
+          duration: 0.4,
+          ease: 'sine.inOut',
+          onComplete: function() {
+            el.style.willChange = 'auto';
+            el.style.clipPath = '';
+            el.style.transformOrigin = '';
+          }
         });
       }, 'top 88%');
       tilt(el, 5);
