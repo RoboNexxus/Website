@@ -32,13 +32,20 @@
       });
     }
 
-    /* navbar cinematic sequence */
+    /* navbar cinematic sequence ONLY on landing page */
     if (hasIntro) {
-      window.addEventListener('introComplete', function () {
-        navbarCinematic(0.1);
+      /* start animation the exact moment the landing logo begins gliding */
+      window.addEventListener('introGlideStart', function () {
+        navbarCinematic(0);
       }, { once: true });
     } else {
-      navbarCinematic(0);
+      /* inner pages: no animation, just make sure navbar is visible immediately */
+      gsap.set('.spotlight-nav', { opacity: 1 });
+      gsap.set('.nav-links', { opacity: 1, y: 0 });
+      gsap.set('.nav-logo img', { opacity: 1, y: 0, scale: 1 });
+      if (document.getElementById('rn26-pill')) {
+        gsap.set('#rn26-pill', { opacity: 1, scaleX: 1, x: 0 });
+      }
     }
 
     pageTransitions();
@@ -70,30 +77,16 @@
 
     var tl = gsap.timeline({ delay: baseDelay });
 
-    /* ── LOGO: bounces in from below, starts at same time as pill ── */
+    /* ── LOGO: on landing page, logo is handled mostly by landing-intro.js 
+       but we add the final breathing effect here ── */
     if (navLogo) {
-      gsap.set(navLogo, { opacity: 0, y: 20, scale: 0.55, rotation: -6 });
-      tl.to(navLogo, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        rotation: 0,
-        duration: 0.9,
-        ease: 'expo.out'
-      }, 0);
-      /* overshoot settle */
-      tl.to(navLogo, {
-        y: -4,
-        scale: 1.07,
-        duration: 0.4,
-        ease: 'sine.out'
-      }, '+=0');
-      tl.to(navLogo, {
+      /* overshoot settle to catch the logo right as landing-intro finishes */
+      tl.fromTo(navLogo, { y: -4, scale: 1.07 }, {
         y: 0,
         scale: 1,
         duration: 0.6,
         ease: 'sine.inOut'
-      });
+      }, 1.2); /* starts near the end of the glide */
     }
 
     /* ── PILL: left-to-right clip expansion WITH y-wobble ── */

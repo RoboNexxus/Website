@@ -105,6 +105,9 @@
           duration: 1.8,
           ease: "expo.inOut",
           onStart: () => {
+            // Signal animations.js that the logo is on its way, so navbar can expand NOW
+            window.dispatchEvent(new CustomEvent('introGlideStart'));
+            
             // Reveal page content as logo glides
             gsap.to(mainContent, {
               opacity: 1,
