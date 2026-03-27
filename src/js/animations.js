@@ -1,11 +1,8 @@
 /**
  * Robo Nexus — Animation System v3  (Cinematic Edition)
  *
- * Same style as landing-intro.js:
- *   - Multi-phase GSAP timelines with overlapping phases
- *   - Long expo.out / expo.inOut durations for that cinematic weight
- *   - Breathing glow pulses (sine.inOut + yoyo)
- *   - Everything GPU-only: transform + opacity + filter (no clip-path)
+ * Navbar: clip-path LEFT-TO-RIGHT expansion → cuts itself → RN26 pill appears.
+ * Everything else: GPU-friendly transforms + long cinematic durations.
  *
  * Requires GSAP + ScrollTrigger (already loaded on every page).
  * Load this as the LAST deferred script.
@@ -26,7 +23,7 @@
 
     /* inner pages: soft page reveal */
     if (!hasIntro) {
-      gsap.set('.page-content', { opacity: 0, y: 16 });
+      gsap.set('.page-content', { opacity: 0, y: 12 });
       gsap.to('.page-content', {
         opacity: 1,
         y: 0,
@@ -35,7 +32,7 @@
       });
     }
 
-    /* navbar: cinematic sequence */
+    /* navbar cinematic sequence */
     if (hasIntro) {
       window.addEventListener('introComplete', function () {
         navbarCinematic(0.1);
@@ -54,118 +51,121 @@
 
 
   /* ═══════════════════════════════════════════════════════════════════
-     1 · NAVBAR — CINEMATIC MULTI-PHASE TIMELINE
+     1 · NAVBAR — LEFT-TO-RIGHT EXPANSION + CUT EFFECT
      ─────────────────────────────────────────────────────────────────
-     Phase 1: Tiny pill drops from above          (expo.out, 1.2s)
-     Phase 2: Pill expands left+right to full     (expo.inOut, 1.4s)
-     Phase 3: Logo fades in + breathes glow       (sine.inOut, yoyo)
-     Phase 4: Nav links stagger in                (power2.out, 0.8s)
-     Phase 5: RN26 pill "cuts" out from right     (expo.out, 0.9s)
+     Phase 1: Logo fades in softly
+     Phase 2: Main pill expands LEFT → RIGHT via clip-path
+              (pill is initially wider, covering the RN26 area too)
+     Phase 3: Nav links fade in, staggered
+     Phase 4: Pill "cuts" — shrinks from right to its real width,
+              and simultaneously the RN26 pill appears at the cut point
+     Phase 5: Logo gets a subtle breathing glow
      ═══════════════════════════════════════════════════════════════════ */
   function navbarCinematic(baseDelay) {
     var pill = document.querySelector('.spotlight-nav');
+    var navContainer = document.querySelector('.spotlight-nav-container');
     var navLogo = document.querySelector('.nav-logo img');
     var navLinks = document.querySelectorAll('.nav-links');
     var rn26 = document.getElementById('rn26-pill');
 
-    /* kill any earlier script.js tweens on these */
+    /* kill earlier script.js tweens */
     if (pill) gsap.killTweensOf(pill);
     if (navLogo) gsap.killTweensOf(navLogo);
     if (navLinks.length) gsap.killTweensOf(navLinks);
 
     var tl = gsap.timeline({ delay: baseDelay });
 
-    /* ── Phase 1: pill drops in as a tiny dot from above ── */
-    if (pill) {
-      gsap.set(pill, {
-        opacity: 0,
-        y: -60,
-        scaleX: 0.08,
-        scaleY: 0.7,
-        transformOrigin: 'center center'
-      });
-      /* hide nav link text during pill expansion */
-      gsap.set(navLinks, { opacity: 0 });
-
-      tl.to(pill, {
-        opacity: 1,
-        y: 0,
-        scaleY: 1,
-        duration: 1.2,
-        ease: 'expo.out'
-      });
-
-      /* ── Phase 2: expand horizontally () → (          ) ── */
-      tl.to(pill, {
-        scaleX: 1,
-        duration: 1.4,
-        ease: 'expo.inOut'
-      }, '-=0.3');
-    }
-
-    /* ── Phase 3: logo drops in + breathes with glow ── */
+    /* ── Phase 1: Logo fades in ── */
     if (navLogo) {
-      gsap.set(navLogo, { opacity: 0, y: -30, scale: 0.6 });
-
+      gsap.set(navLogo, { opacity: 0, scale: 0.7 });
       tl.to(navLogo, {
         opacity: 1,
-        y: 0,
         scale: 1,
-        duration: 1.2,
+        duration: 1,
         ease: 'expo.out'
-      }, '-=0.9');
-
-      /* breathing glow pulse — same style as intro logo */
-      tl.to(navLogo, {
-        filter: 'drop-shadow(0 0 25px rgba(71, 160, 184, 0.8))',
-        scale: 1.06,
-        duration: 0.8,
-        yoyo: true,
-        repeat: 1,
-        ease: 'sine.inOut'
-      }, '-=0.4');
+      });
     }
 
-    /* ── Phase 4: nav links stagger in ── */
-    if (navLinks.length) {
+    /* ── Phase 2: Pill expands LEFT → RIGHT ── */
+    if (pill) {
+      pill.style.willChange = 'clip-path';
+
+      /* hide links initially */
+      gsap.set(navLinks, { opacity: 0 });
+      /* ensure pill is visible but clipped from the right */
+      gsap.set(pill, { opacity: 1 });
+
+      /* If RN26 exists, temporarily hide it — it will appear from the "cut" */
+      if (rn26) {
+        gsap.set(rn26, { opacity: 0, scaleX: 0, transformOrigin: 'left center' });
+      }
+
+      /*
+       * THE EXPANSION:
+       * Start: only leftmost 2% visible (a tiny sliver)
+       * End: expands rightward to 100%
+       *
+       * If an RN26 pill exists, the main pill briefly overshoots
+       * to cover the RN26 area (we handle this with margin-right
+       * manipulation), then retracts = the "cut".
+       */
+      gsap.set(pill, { clipPath: 'inset(0 100% 0 0 round 22px)' });
+
+      tl.to(pill, {
+        clipPath: 'inset(0 0% 0 0 round 22px)',
+        duration: 1.6,
+        ease: 'expo.inOut'
+      }, '-=0.5');
+
+      /* ── Phase 3: Nav links stagger in during expansion ── */
       tl.to(navLinks, {
         opacity: 1,
         duration: 0.8,
-        stagger: 0.06,
+        stagger: 0.05,
         ease: 'power2.out'
-      }, '-=1.2');
+      }, '-=0.8');
+
+      /* Clean up will-change after expansion completes */
+      tl.add(function () {
+        pill.style.willChange = 'auto';
+        pill.style.clipPath = '';
+      });
     }
 
-    /* ── Phase 5: RN26 pill cuts itself out from the right edge ── */
+    /* ── Phase 4: THE CUT — RN26 pill separates out ── */
     if (rn26) {
-      gsap.set(rn26, {
-        opacity: 0,
-        x: -20,
-        scaleX: 0,
-        transformOrigin: 'left center'
-      });
-
       tl.to(rn26, {
         opacity: 1,
-        x: 0,
         scaleX: 1,
         duration: 0.9,
         ease: 'expo.out'
-      }, '-=0.6');
+      }, '-=0.3');
 
-      /* tiny glow flash on the RN26 dot */
+      /* Tiny glow flash on appearance */
       var rn26Dot = rn26.querySelector('.rn26-dot');
       if (rn26Dot) {
         tl.fromTo(rn26Dot, {
           boxShadow: '0 0 0px rgba(71, 160, 184, 0)'
         }, {
-          boxShadow: '0 0 14px rgba(71, 160, 184, 0.9)',
-          duration: 0.5,
+          boxShadow: '0 0 16px rgba(71, 160, 184, 0.9)',
+          duration: 0.6,
           yoyo: true,
           repeat: 1,
           ease: 'sine.inOut'
-        }, '-=0.5');
+        }, '-=0.6');
       }
+    }
+
+    /* ── Phase 5: Logo breathes with glow ── */
+    if (navLogo) {
+      tl.to(navLogo, {
+        filter: 'drop-shadow(0 0 20px rgba(71, 160, 184, 0.7))',
+        scale: 1.04,
+        duration: 0.8,
+        yoyo: true,
+        repeat: 1,
+        ease: 'sine.inOut'
+      }, '-=1.2');
     }
   }
 
@@ -186,23 +186,34 @@
           onComplete: function () { window.location.href = dest; }
         });
 
-        /* navbar shrinks back */
+        /* pill clips back to the left */
         var pill = document.querySelector('.spotlight-nav');
         if (pill) {
+          pill.style.willChange = 'clip-path';
           exitTl.to(pill, {
-            scaleX: 0.08,
-            opacity: 0,
-            y: -30,
-            duration: 0.5,
+            clipPath: 'inset(0 100% 0 0 round 22px)',
+            duration: 0.4,
             ease: 'power2.in'
           }, 0);
         }
 
-        /* page content fades + lifts */
+        /* RN26 shrinks back */
+        var rn26 = document.getElementById('rn26-pill');
+        if (rn26) {
+          exitTl.to(rn26, {
+            scaleX: 0,
+            opacity: 0,
+            transformOrigin: 'left center',
+            duration: 0.3,
+            ease: 'power2.in'
+          }, 0);
+        }
+
+        /* page content fades */
         exitTl.to('.page-content', {
           opacity: 0,
-          y: -20,
-          duration: 0.5,
+          y: -15,
+          duration: 0.45,
           ease: 'power2.in'
         }, 0);
       });
@@ -211,19 +222,18 @@
 
 
   /* ═══════════════════════════════════════════════════════════════════
-     3 · STATIC REVEALS — cinematic scroll entrance animations
-         Each section type gets its own multi-part reveal
+     3 · STATIC REVEALS — cinematic scroll entrances
      ═══════════════════════════════════════════════════════════════════ */
   function staticReveals() {
 
-    /* ── Page hero title: rises + scales with glow pulse ── */
+    /* Page hero title + subtitle */
     whenIn('.page-hero', function (el) {
       var title = el.querySelector('.glitch-text, .page-title');
       var subtitle = el.querySelector('.hero-subtitle');
       var heroTl = gsap.timeline();
 
       if (title) {
-        gsap.set(title, { opacity: 0, y: 40, scale: 0.9 });
+        gsap.set(title, { opacity: 0, y: 40, scale: 0.92 });
         heroTl.to(title, {
           opacity: 1,
           y: 0,
@@ -243,9 +253,9 @@
       }
     }, 'top 90%');
 
-    /* ── Calendar: rises with gentle rotation ── */
+    /* Calendar */
     whenIn('.calendar-container', function (el) {
-      gsap.set(el, { opacity: 0, y: 60, rotationX: 8 });
+      gsap.set(el, { opacity: 0, y: 50, rotationX: 6 });
       gsap.to(el, {
         opacity: 1,
         y: 0,
@@ -256,31 +266,20 @@
       });
     }, 'top 80%');
 
-    /* ── Contact: form sweeps from left, card from right ── */
+    /* Contact: form from left, card from right */
     whenIn('.contact-form-div', function (el) {
       gsap.set(el, { opacity: 0, x: -60 });
-      gsap.to(el, {
-        opacity: 1,
-        x: 0,
-        duration: 1.4,
-        ease: 'expo.out'
-      });
+      gsap.to(el, { opacity: 1, x: 0, duration: 1.4, ease: 'expo.out' });
     });
     whenIn('.contact-right-card', function (el) {
       gsap.set(el, { opacity: 0, x: 60 });
-      gsap.to(el, {
-        opacity: 1,
-        x: 0,
-        duration: 1.4,
-        delay: 0.15,
-        ease: 'expo.out'
-      });
+      gsap.to(el, { opacity: 1, x: 0, duration: 1.4, delay: 0.15, ease: 'expo.out' });
     });
 
-    /* ── Register cards: rise up with stagger ── */
+    /* Register cards */
     document.querySelectorAll('.reg-card').forEach(function (el, i) {
       whenIn(el, function () {
-        gsap.set(el, { opacity: 0, y: 60, rotationX: 5 });
+        gsap.set(el, { opacity: 0, y: 60, rotationX: 4 });
         gsap.to(el, {
           opacity: 1,
           y: 0,
@@ -293,36 +292,25 @@
       }, 'top 88%');
     });
 
-    /* Register info sidebar cards ── */
+    /* Register info sidebar cards */
     document.querySelectorAll('.reg-info-card').forEach(function (el, i) {
       whenIn(el, function () {
         gsap.set(el, { opacity: 0, x: 40 });
-        gsap.to(el, {
-          opacity: 1,
-          x: 0,
-          duration: 1,
-          delay: i * 0.1,
-          ease: 'expo.out'
-        });
+        gsap.to(el, { opacity: 1, x: 0, duration: 1, delay: i * 0.1, ease: 'expo.out' });
       }, 'top 90%');
     });
 
-    /* Grade & event chips — scale up with spring feel */
+    /* Chips */
     batchReveal('.grade-chip label', 0.06);
     batchReveal('.event-chip label', 0.07);
 
     /* Submit button */
     whenIn('.reg-submit-btn', function (el) {
       gsap.set(el, { opacity: 0, scale: 0.85 });
-      gsap.to(el, {
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        ease: 'expo.out'
-      });
+      gsap.to(el, { opacity: 1, scale: 1, duration: 1, ease: 'expo.out' });
     }, 'top 96%');
 
-    /* Filter buttons (projects page) */
+    /* Filter buttons */
     var filterBtns = document.querySelectorAll('.filter-btn');
     if (filterBtns.length) {
       gsap.set(filterBtns, { y: 30, opacity: 0 });
@@ -336,7 +324,7 @@
       });
     }
 
-    /* Events page titles */
+    /* Event page titles */
     whenIn('.events-upcoming-col h2', function (el) {
       gsap.set(el, { opacity: 0, x: -30 });
       gsap.to(el, { opacity: 1, x: 0, duration: 1.2, ease: 'expo.out' });
@@ -346,88 +334,60 @@
       gsap.to(el, { opacity: 1, x: 0, duration: 1.2, ease: 'expo.out' });
     });
 
-    /* Member blocks on register page */
+    /* Member blocks */
     document.querySelectorAll('.member-block').forEach(function (el, i) {
       whenIn(el, function () {
         gsap.set(el, { opacity: 0, y: 30 });
-        gsap.to(el, {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          delay: i * 0.12,
-          ease: 'expo.out'
-        });
+        gsap.to(el, { opacity: 1, y: 0, duration: 1, delay: i * 0.12, ease: 'expo.out' });
       }, 'top 90%');
     });
 
-    /* About section heading */
+    /* About heading */
     whenIn('.about-details', function (el) {
       var heading = el.querySelector('.about-heading');
       if (heading) {
         gsap.set(heading, { opacity: 0, x: -30 });
-        gsap.to(heading, {
-          opacity: 1,
-          x: 0,
-          duration: 1.4,
-          ease: 'expo.out'
-        });
+        gsap.to(heading, { opacity: 1, x: 0, duration: 1.4, ease: 'expo.out' });
       }
     });
 
-    /* Stats cards with glow flash */
+    /* Stats with glow pulse */
     document.querySelectorAll('.stat-card').forEach(function (el, i) {
       whenIn(el, function () {
-        var statTl = gsap.timeline();
+        var stTl = gsap.timeline();
         gsap.set(el, { opacity: 0, y: 40, scale: 0.95 });
-        statTl.to(el, {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1,
-          delay: i * 0.1,
-          ease: 'expo.out'
+        stTl.to(el, {
+          opacity: 1, y: 0, scale: 1,
+          duration: 1, delay: i * 0.1, ease: 'expo.out'
         });
-        /* brief glow pulse after landing */
-        statTl.to(el, {
+        stTl.to(el, {
           boxShadow: '0 0 30px rgba(71, 160, 184, 0.4)',
-          duration: 0.6,
-          yoyo: true,
-          repeat: 1,
-          ease: 'sine.inOut'
+          duration: 0.6, yoyo: true, repeat: 1, ease: 'sine.inOut'
         }, '-=0.2');
       }, 'top 85%');
     });
 
-    /* Footer — gentle rise */
+    /* Footer */
     whenIn('.footer', function (el) {
       gsap.set(el, { opacity: 0, y: 20 });
-      gsap.to(el, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'expo.out'
-      });
+      gsap.to(el, { opacity: 1, y: 0, duration: 1, ease: 'expo.out' });
     }, 'top 97%');
 
-    /* Register hero text */
+    /* Register hero */
     var regHero = document.querySelector('.reg-hero');
     if (regHero) {
       var regEls = regHero.querySelectorAll('.event-year, .page-title, .hero-subtitle');
       gsap.set(regEls, { opacity: 0, y: 30 });
       gsap.to(regEls, {
-        opacity: 1,
-        y: 0,
-        duration: 1.2,
-        stagger: 0.15,
-        delay: 0.2,
-        ease: 'expo.out'
+        opacity: 1, y: 0,
+        duration: 1.2, stagger: 0.15, delay: 0.2, ease: 'expo.out'
       });
     }
   }
 
 
   /* ═══════════════════════════════════════════════════════════════════
-     4 · DYNAMIC CONTENT — cinematic entrances for injected content
+     4 · DYNAMIC CONTENT
      ═══════════════════════════════════════════════════════════════════ */
   function dynamicWatchers() {
     watch('#team-container', animateTeam);
@@ -437,49 +397,35 @@
     watch('#past-events', animatePast);
   }
 
-  /* Team cards — alternate left / right slide with slow-mo feel */
   function animateTeam(c) {
     c.querySelectorAll('.team-card').forEach(function (el, i) {
       var fromX = i % 2 === 0 ? -50 : 50;
-      gsap.set(el, { opacity: 0, x: fromX, rotationY: fromX > 0 ? -8 : 8 });
+      gsap.set(el, { opacity: 0, x: fromX, rotationY: fromX > 0 ? -6 : 6 });
       whenIn(el, function () {
         gsap.to(el, {
-          opacity: 1,
-          x: 0,
-          rotationY: 0,
+          opacity: 1, x: 0, rotationY: 0,
           transformPerspective: 800,
-          duration: 1.4,
-          delay: (i % 4) * 0.08,
-          ease: 'expo.out'
+          duration: 1.4, delay: (i % 4) * 0.08, ease: 'expo.out'
         });
       }, 'top 90%');
       tilt(el, 5);
     });
   }
 
-  /* Alumni cards — rise with subtle 3D rotation */
   function animateAlumni(c) {
     c.querySelectorAll('.alumni-card').forEach(function (el, i) {
       gsap.set(el, { opacity: 0, y: 50, scale: 0.95 });
       whenIn(el, function () {
         var alTl = gsap.timeline();
         alTl.to(el, {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1.2,
-          delay: i * 0.1,
-          ease: 'expo.out'
+          opacity: 1, y: 0, scale: 1,
+          duration: 1.2, delay: i * 0.1, ease: 'expo.out'
         });
-        /* subtle medal glow after card lands */
         var badge = el.querySelector('.alumni-badge');
         if (badge) {
           alTl.to(badge, {
             filter: 'drop-shadow(0 0 12px rgba(71, 160, 184, 0.8))',
-            duration: 0.6,
-            yoyo: true,
-            repeat: 1,
-            ease: 'sine.inOut'
+            duration: 0.6, yoyo: true, repeat: 1, ease: 'sine.inOut'
           }, '-=0.3');
         }
       }, 'top 90%');
@@ -487,53 +433,39 @@
     });
   }
 
-  /* Project cards — slide up with 3D perspective tilt */
   function animateProjects(c) {
     c.querySelectorAll('.project-card').forEach(function (el, i) {
-      gsap.set(el, { opacity: 0, y: 60, rotationX: 6 });
+      gsap.set(el, { opacity: 0, y: 60, rotationX: 5 });
       whenIn(el, function () {
         gsap.to(el, {
-          opacity: 1,
-          y: 0,
-          rotationX: 0,
+          opacity: 1, y: 0, rotationX: 0,
           transformPerspective: 800,
-          duration: 1.4,
-          delay: (i % 3) * 0.1,
-          ease: 'expo.out'
+          duration: 1.4, delay: (i % 3) * 0.1, ease: 'expo.out'
         });
       }, 'top 88%');
       tilt(el, 5);
     });
   }
 
-  /* Upcoming event cards — cinematic slide from left */
   function animateUpcoming(c) {
     c.querySelectorAll('.event-list-card').forEach(function (el, i) {
       gsap.set(el, { opacity: 0, x: -50 });
       whenIn(el, function () {
         gsap.to(el, {
-          opacity: 1,
-          x: 0,
-          duration: 1.2,
-          delay: i * 0.12,
-          ease: 'expo.out'
+          opacity: 1, x: 0,
+          duration: 1.2, delay: i * 0.12, ease: 'expo.out'
         });
       }, 'top 88%');
     });
   }
 
-  /* Past event cards — pop up with glow */
   function animatePast(c) {
     c.querySelectorAll('.past-event-grid-card').forEach(function (el, i) {
       gsap.set(el, { opacity: 0, y: 40, scale: 0.96 });
       whenIn(el, function () {
         gsap.to(el, {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1,
-          delay: (i % 3) * 0.1,
-          ease: 'expo.out'
+          opacity: 1, y: 0, scale: 1,
+          duration: 1, delay: (i % 3) * 0.1, ease: 'expo.out'
         });
       }, 'top 90%');
     });
@@ -541,7 +473,7 @@
 
 
   /* ═══════════════════════════════════════════════════════════════════
-     5 · 3-D HOVER TILT — rAF-throttled, silky smooth
+     5 · 3-D HOVER TILT — rAF-throttled
      ═══════════════════════════════════════════════════════════════════ */
   function cardHovers() {
     ['.reg-info-card', '.stat-card'].forEach(function (sel) {
@@ -618,11 +550,8 @@
       once: true,
       onEnter: function () {
         gsap.to(els, {
-          scale: 1,
-          opacity: 1,
-          duration: 0.9,
-          stagger: stagger,
-          ease: 'expo.out'
+          scale: 1, opacity: 1,
+          duration: 0.9, stagger: stagger, ease: 'expo.out'
         });
       }
     });
