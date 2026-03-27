@@ -16,19 +16,69 @@
   "tutorials": [
     {
       "id": 1,
-      "title": "Line Follower Robot",
+      "title": "Robo Soccer Car",
       "category": "robots",
-      "image": "/src/assets/images/Robo_Nexus_Logo.webp",
-      "description": "An autonomous robot that follows a black line using IR sensors and PID control.",
+      "image": "/src/assets/images/2f4u_v1.webp",
+      "description": "The first version of a Robo Soccer Car developed by the 2f4u team. It features an ESP32 controller, an L298N motor driver, and high-torque DC BO motors.",
       "tech": [
-        "Arduino",
-        "IR Sensors",
-        "Motor Driver"
+        "ESP32",
+        "L298N",
+        "DC BO Motors"
       ],
       "status": "Completed",
       "year": "2024",
-      "creator": "RoboNexus",
-      "team": "RoboNexus"
+      "creator": "2fast4u",
+      "team": "2fast4u"
+    },
+    {
+      "id": 2,
+      "title": "Robo Soccer Car (Unit 2)",
+      "category": "robots",
+      "image": "/src/assets/images/2f4u_v1.webp",
+      "description": "The second unit of the first-version Robo Soccer Car developed by the 2f4u team, identical in specs and performance to Unit 1.",
+      "tech": [
+        "ESP32",
+        "L298N",
+        "DC BO Motors"
+      ],
+      "status": "Completed",
+      "year": "2024",
+      "creator": "2fast4u",
+      "team": "2fast4u"
+    },
+    {
+      "id": 3,
+      "title": "Robo Soccer Car V2 (Attacker)",
+      "category": "robots",
+      "image": "/src/assets/images/2f4u_v2.webp",
+      "description": "The 2025 version of the 2f4u soccer car, optimized for offense with high-speed 500 RPM Johnson motors, dual BTS7960 drivers, and a durable metal chassis.",
+      "tech": [
+        "ESP32",
+        "BTS7960 x2",
+        "Johnson Motors (500 RPM)",
+        "Metal Chassis"
+      ],
+      "status": "Completed",
+      "year": "2025",
+      "creator": "2fast4u",
+      "team": "2fast4u"
+    },
+    {
+      "id": 4,
+      "title": "Robo Soccer Car V2 (Defender)",
+      "category": "robots",
+      "image": "/src/assets/images/2f4u_v2.webp",
+      "description": "The 2025 version of the 2f4u soccer car, optimized for defense with high-torque 300 RPM Johnson motors, dual BTS7960 drivers, and a durable metal chassis.",
+      "tech": [
+        "ESP32",
+        "BTS7960 x2",
+        "Johnson Motors (300 RPM)",
+        "Metal Chassis"
+      ],
+      "status": "Completed",
+      "year": "2025",
+      "creator": "2fast4u",
+      "team": "2fast4u"
     }
   ]
 }
