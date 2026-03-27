@@ -38,7 +38,7 @@
         navbarCinematic(0.1);
       }, { once: true });
     } else {
-      navbarCinematic(0.3);
+      navbarCinematic(0);
     }
 
     pageTransitions();
@@ -70,28 +70,28 @@
 
     var tl = gsap.timeline({ delay: baseDelay });
 
-    /* ── LOGO: bounces up from below with overshoot ── */
+    /* ── LOGO: bounces in from below, starts at same time as pill ── */
     if (navLogo) {
-      gsap.set(navLogo, { opacity: 0, y: 25, scale: 0.5, rotation: -8 });
+      gsap.set(navLogo, { opacity: 0, y: 20, scale: 0.55, rotation: -6 });
       tl.to(navLogo, {
         opacity: 1,
         y: 0,
         scale: 1,
         rotation: 0,
-        duration: 1.4,
+        duration: 0.9,
         ease: 'expo.out'
-      });
-      /* overshoot settle — logo drifts up past rest, then floats back */
+      }, 0);
+      /* overshoot settle */
       tl.to(navLogo, {
         y: -4,
-        scale: 1.08,
-        duration: 0.5,
+        scale: 1.07,
+        duration: 0.4,
         ease: 'sine.out'
-      }, '-=0.3');
+      }, '+=0');
       tl.to(navLogo, {
         y: 0,
         scale: 1,
-        duration: 0.8,
+        duration: 0.6,
         ease: 'sine.inOut'
       });
     }
@@ -110,12 +110,12 @@
 
       gsap.set(pill, { clipPath: 'inset(0 100% 0 0 round 22px)' });
 
-      /* pill drops down to position while expanding */
+      /* pill drops down to position while expanding — starts immediately */
       tl.to(pill, {
         y: 0,
-        duration: 1,
+        duration: 0.8,
         ease: 'expo.out'
-      }, '-=1.8');
+      }, 0);
 
       /* THE EXPANSION: left → right, long and cinematic */
       tl.to(pill, {
