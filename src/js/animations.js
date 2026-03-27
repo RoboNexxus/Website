@@ -330,41 +330,112 @@
       }
     }, 'top 90%');
 
-    /* Calendar */
+    /* Calendar: Expand from center + 3D drop + wobble */
     whenIn('.calendar-container', function (el) {
-      gsap.set(el, { opacity: 0, y: 50, rotationX: 6 });
-      gsap.to(el, {
+      el.style.willChange = 'clip-path, transform, opacity';
+      var calTl = gsap.timeline();
+      
+      /* Start: small clip in center, pushed back in 3D, and slightly rotated */
+      gsap.set(el, { 
+        clipPath: 'inset(40% 40% 40% 40% round 24px)',
+        opacity: 0, 
+        y: -30, 
+        scale: 0.9,
+        rotationX: -10,
+        transformPerspective: 1000
+      });
+
+      /* Phase 1: fade in and drop down while clipping expands slightly */
+      calTl.to(el, {
         opacity: 1,
-        y: 0,
-        rotationX: 0,
-        transformPerspective: 800,
-        duration: 1.6,
+        y: 10, // overshoot Y
+        clipPath: 'inset(20% 5% 20% 5% round 24px)',
+        duration: 1.2,
         ease: 'expo.out'
       });
-    }, 'top 80%');
 
-    /* Contact: form from left, card from right */
+      /* Phase 2: Full expansion (left/right then up/down) + snap to 3D rest */
+      calTl.to(el, {
+        clipPath: 'inset(0% 0% 0% 0% round 24px)',
+        rotationX: 0,
+        scale: 1,
+        y: 0,
+        duration: 1.6,
+        ease: 'expo.inOut'
+      }, '-=0.8');
+
+      /* Phase 3: Tiny breath/wobble at the end */
+      calTl.to(el, {
+        scale: 1.01,
+        duration: 0.4,
+        ease: 'sine.out'
+      }, '-=0.4');
+      calTl.to(el, {
+        scale: 1,
+        duration: 0.6,
+        ease: 'sine.inOut',
+        onComplete: function() { 
+          el.style.willChange = 'auto'; 
+          el.style.clipPath = '';
+        }
+      });
+    }, 'top 85%');
+
+    /* Contact: form from left (clip expand), card from right (clip expand) */
     whenIn('.contact-form-div', function (el) {
-      gsap.set(el, { opacity: 0, x: -60 });
-      gsap.to(el, { opacity: 1, x: 0, duration: 1.4, ease: 'expo.out' });
-    });
-    whenIn('.contact-right-card', function (el) {
-      gsap.set(el, { opacity: 0, x: 60 });
-      gsap.to(el, { opacity: 1, x: 0, duration: 1.4, delay: 0.15, ease: 'expo.out' });
-    });
+      el.style.willChange = 'clip-path, transform';
+      gsap.set(el, { opacity: 0, x: -40, clipPath: 'inset(0% 100% 0% 0%)' });
+      var tl = gsap.timeline();
+      tl.to(el, { opacity: 1, x: 5, duration: 1, ease: 'expo.out' });
+      tl.to(el, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'expo.inOut' }, '-=0.8');
+      tl.to(el, { x: 0, duration: 0.6, ease: 'sine.inOut' }, '-=0.6');
+    }, 'top 85%');
 
-    /* Register cards */
+    whenIn('.contact-right-card', function (el) {
+      el.style.willChange = 'clip-path, transform';
+      gsap.set(el, { opacity: 0, x: 40, clipPath: 'inset(0% 0% 0% 100%)' });
+      var tl = gsap.timeline({ delay: 0.2 });
+      tl.to(el, { opacity: 1, x: -5, duration: 1, ease: 'expo.out' });
+      tl.to(el, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'expo.inOut' }, '-=0.8');
+      tl.to(el, { x: 0, duration: 0.6, ease: 'sine.inOut' }, '-=0.6');
+    }, 'top 85%');
+
+    /* Register cards: 3D drop + vertical peel reveal */
     document.querySelectorAll('.reg-card').forEach(function (el, i) {
       whenIn(el, function () {
-        gsap.set(el, { opacity: 0, y: 60, rotationX: 4 });
-        gsap.to(el, {
+        el.style.willChange = 'clip-path, transform';
+        var tl = gsap.timeline({ delay: i * 0.15 });
+        gsap.set(el, { 
+          opacity: 0, 
+          y: -40, 
+          rotationX: -15, 
+          transformPerspective: 1000,
+          clipPath: 'inset(0% 50% 100% 50% round 16px)'
+        });
+        
+        tl.to(el, {
           opacity: 1,
-          y: 0,
+          y: 10,
           rotationX: 0,
-          transformPerspective: 800,
+          clipPath: 'inset(0% 5% 5% 5% round 16px)',
           duration: 1.2,
-          delay: i * 0.1,
           ease: 'expo.out'
+        });
+        tl.to(el, {
+          y: 0,
+          clipPath: 'inset(0% 0% 0% 0% round 16px)',
+          duration: 1.4,
+          ease: 'expo.inOut'
+        }, '-=0.6');
+        tl.to(el, {
+          scale: 1.02,
+          duration: 0.3,
+          ease: 'sine.out'
+        }, '-=0.3');
+        tl.to(el, {
+          scale: 1,
+          duration: 0.6,
+          ease: 'sine.inOut'
         });
       }, 'top 88%');
     });
@@ -428,19 +499,34 @@
       }
     });
 
-    /* Stats with glow pulse */
+    /* Stats with glow pulse + clip reveal */
     document.querySelectorAll('.stat-card').forEach(function (el, i) {
       whenIn(el, function () {
-        var stTl = gsap.timeline();
-        gsap.set(el, { opacity: 0, y: 40, scale: 0.95 });
+        el.style.willChange = 'clip-path, transform, box-shadow';
+        var stTl = gsap.timeline({ delay: i * 0.15 });
+        gsap.set(el, { opacity: 0, y: 20, scale: 0.8, clipPath: 'circle(0% at center)' });
+        
         stTl.to(el, {
-          opacity: 1, y: 0, scale: 1,
-          duration: 1, delay: i * 0.1, ease: 'expo.out'
+          opacity: 1, 
+          y: -5, 
+          scale: 1.05,
+          clipPath: 'circle(100% at center)',
+          duration: 1.4, 
+          ease: 'expo.out'
         });
         stTl.to(el, {
-          boxShadow: '0 0 30px rgba(71, 160, 184, 0.4)',
-          duration: 0.6, yoyo: true, repeat: 1, ease: 'sine.inOut'
-        }, '-=0.2');
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          ease: 'sine.inOut'
+        }, '-=0.6');
+        stTl.to(el, {
+          boxShadow: '0 0 35px rgba(71, 160, 184, 0.5)',
+          duration: 0.8, 
+          yoyo: true, 
+          repeat: 1, 
+          ease: 'sine.inOut'
+        }, '-=0.4');
       }, 'top 85%');
     });
 
@@ -476,13 +562,42 @@
 
   function animateTeam(c) {
     c.querySelectorAll('.team-card').forEach(function (el, i) {
-      var fromX = i % 2 === 0 ? -50 : 50;
-      gsap.set(el, { opacity: 0, x: fromX, rotationY: fromX > 0 ? -6 : 6 });
+      el.style.willChange = 'clip-path, transform, opacity';
+      var fromLeft = i % 2 === 0;
+      
+      /* Start: heavily clipped to the incoming side, pushed back out of focus */
+      gsap.set(el, { 
+        opacity: 0, 
+        x: fromLeft ? -40 : 40, 
+        rotationY: fromLeft ? -10 : 10,
+        clipPath: fromLeft ? 'inset(0% 100% 0% 0% round 16px)' : 'inset(0% 0% 0% 100% round 16px)',
+        transformPerspective: 1000
+      });
+
       whenIn(el, function () {
-        gsap.to(el, {
-          opacity: 1, x: 0, rotationY: 0,
-          transformPerspective: 800,
-          duration: 1.4, delay: (i % 4) * 0.08, ease: 'expo.out'
+        var tl = gsap.timeline({ delay: (i % 4) * 0.1 });
+        
+        /* Phase 1: Slide in + fade while clip path expands across */
+        tl.to(el, {
+          opacity: 1, 
+          x: fromLeft ? 5 : -5, // overshoot
+          clipPath: 'inset(0% 0% 0% 0% round 16px)',
+          rotationY: 0,
+          duration: 1.4, 
+          ease: 'expo.inOut'
+        });
+        
+        /* Phase 2: Settle X and add a tiny scale bounce */
+        tl.to(el, {
+          x: 0,
+          scale: 1.02,
+          duration: 0.3,
+          ease: 'sine.out'
+        }, '-=0.4');
+        tl.to(el, {
+          scale: 1,
+          duration: 0.6,
+          ease: 'sine.inOut'
         });
       }, 'top 90%');
       tilt(el, 5);
@@ -491,19 +606,50 @@
 
   function animateAlumni(c) {
     c.querySelectorAll('.alumni-card').forEach(function (el, i) {
-      gsap.set(el, { opacity: 0, y: 50, scale: 0.95 });
+      el.style.willChange = 'clip-path, transform, opacity';
+      
+      /* Start: small circle clip in center, pushed down */
+      gsap.set(el, { 
+        opacity: 0, 
+        y: 40, 
+        scale: 0.9,
+        clipPath: 'circle(10% at 50% 50%)'
+      });
+      
       whenIn(el, function () {
-        var alTl = gsap.timeline();
+        var alTl = gsap.timeline({ delay: i * 0.1 });
+        
+        /* Expand circle clip while floating up */
         alTl.to(el, {
-          opacity: 1, y: 0, scale: 1,
-          duration: 1.2, delay: i * 0.1, ease: 'expo.out'
+          opacity: 1, 
+          y: -5, 
+          scale: 1.03,
+          clipPath: 'circle(100% at 50% 50%)',
+          duration: 1.4, 
+          ease: 'expo.inOut'
         });
+        
+        /* Settle and bounce */
+        alTl.to(el, {
+          y: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: 'sine.inOut'
+        }, '-=0.4');
+        
         var badge = el.querySelector('.alumni-badge');
         if (badge) {
+          alTl.fromTo(badge, { scale: 0.5, opacity: 0 }, {
+            scale: 1.1, opacity: 1, duration: 0.6, ease: 'back.out(2)'
+          }, '-=1');
           alTl.to(badge, {
-            filter: 'drop-shadow(0 0 12px rgba(71, 160, 184, 0.8))',
-            duration: 0.6, yoyo: true, repeat: 1, ease: 'sine.inOut'
-          }, '-=0.3');
+            filter: 'drop-shadow(0 0 15px rgba(71, 160, 184, 0.9))',
+            scale: 1,
+            duration: 0.8, 
+            yoyo: true, 
+            repeat: 1, 
+            ease: 'sine.inOut'
+          }, '-=0.4');
         }
       }, 'top 90%');
       tilt(el, 4);
@@ -512,12 +658,39 @@
 
   function animateProjects(c) {
     c.querySelectorAll('.project-card').forEach(function (el, i) {
-      gsap.set(el, { opacity: 0, y: 60, rotationX: 5 });
+      el.style.willChange = 'clip-path, transform, opacity';
+      
+      /* Start: diagonally clipped from top-left, rotated down */
+      gsap.set(el, { 
+        opacity: 0, 
+        y: 40, 
+        rotationX: 10,
+        clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)', // zero area top-left
+        transformPerspective: 1000
+      });
+      
       whenIn(el, function () {
-        gsap.to(el, {
-          opacity: 1, y: 0, rotationX: 0,
-          transformPerspective: 800,
-          duration: 1.4, delay: (i % 3) * 0.1, ease: 'expo.out'
+        var pTl = gsap.timeline({ delay: (i % 3) * 0.12 });
+        
+        pTl.to(el, {
+          opacity: 1, 
+          y: -8, 
+          rotationX: 0,
+          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)', // full expand
+          duration: 1.4, 
+          ease: 'expo.inOut'
+        });
+        
+        pTl.to(el, {
+          y: 0,
+          scale: 1.02,
+          duration: 0.4,
+          ease: 'sine.out'
+        }, '-=0.4');
+        pTl.to(el, {
+          scale: 1,
+          duration: 0.6,
+          ease: 'sine.inOut'
         });
       }, 'top 88%');
       tilt(el, 5);
@@ -526,24 +699,65 @@
 
   function animateUpcoming(c) {
     c.querySelectorAll('.event-list-card').forEach(function (el, i) {
-      gsap.set(el, { opacity: 0, x: -50 });
+      el.style.willChange = 'clip-path, transform, opacity';
+      
+      /* Start: heavily clipped from the left */
+      gsap.set(el, { 
+        opacity: 0, 
+        x: -40,
+        clipPath: 'inset(0% 100% 0% 0% round 12px)'
+      });
+      
       whenIn(el, function () {
-        gsap.to(el, {
-          opacity: 1, x: 0,
-          duration: 1.2, delay: i * 0.12, ease: 'expo.out'
+        var uTl = gsap.timeline({ delay: i * 0.1 });
+        
+        uTl.to(el, {
+          opacity: 1, 
+          x: 5,
+          clipPath: 'inset(0% 0% 0% 0% round 12px)',
+          duration: 1.4, 
+          ease: 'expo.inOut'
         });
+        
+        uTl.to(el, {
+          x: 0,
+          duration: 0.6,
+          ease: 'sine.inOut'
+        }, '-=0.4');
       }, 'top 88%');
     });
   }
 
   function animatePast(c) {
     c.querySelectorAll('.past-event-grid-card').forEach(function (el, i) {
-      gsap.set(el, { opacity: 0, y: 40, scale: 0.96 });
+      el.style.willChange = 'clip-path, transform, opacity';
+      
+      /* Start: clipped from bottom up */
+      gsap.set(el, { 
+        opacity: 0, 
+        y: 30, 
+        scale: 0.96,
+        clipPath: 'inset(100% 0% 0% 0% round 12px)'
+      });
+      
       whenIn(el, function () {
-        gsap.to(el, {
-          opacity: 1, y: 0, scale: 1,
-          duration: 1, delay: (i % 3) * 0.1, ease: 'expo.out'
+        var pTl = gsap.timeline({ delay: (i % 3) * 0.1 });
+        
+        pTl.to(el, {
+          opacity: 1, 
+          y: -4, 
+          scale: 1.02,
+          clipPath: 'inset(0% 0% 0% 0% round 12px)',
+          duration: 1.2, 
+          ease: 'expo.inOut'
         });
+        
+        pTl.to(el, {
+          y: 0,
+          scale: 1,
+          duration: 0.5,
+          ease: 'sine.inOut'
+        }, '-=0.3');
       }, 'top 90%');
     });
   }
