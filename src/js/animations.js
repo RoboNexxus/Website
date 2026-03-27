@@ -330,14 +330,14 @@
       }
     }, 'top 90%');
 
-    /* Calendar: Expand from center + 3D drop + wobble */
+    /* Calendar: Expand from top-left to bottom-right + 3D drop + wobble */
     whenIn('.calendar-container', function (el) {
       el.style.willChange = 'clip-path, transform, opacity';
       var calTl = gsap.timeline();
       
-      /* Start: small clip in center, pushed back in 3D, and slightly rotated */
+      /* Start: zero size at top-left, pushed back in 3D, and slightly rotated */
       gsap.set(el, { 
-        clipPath: 'inset(40% 40% 40% 40% round 24px)',
+        clipPath: 'inset(0% 100% 100% 0% round 24px)',
         opacity: 0, 
         y: -30, 
         scale: 0.9,
@@ -345,16 +345,16 @@
         transformPerspective: 1000
       });
 
-      /* Phase 1: fade in and drop down while clipping expands slightly */
+      /* Phase 1: fade in and drop down while expanding diagonally towards bottom-right */
       calTl.to(el, {
         opacity: 1,
         y: 10, // overshoot Y
-        clipPath: 'inset(20% 5% 20% 5% round 24px)',
+        clipPath: 'inset(0% 40% 40% 0% round 24px)',
         duration: 1.2,
         ease: 'expo.out'
       });
 
-      /* Phase 2: Full expansion (left/right then up/down) + snap to 3D rest */
+      /* Phase 2: Full expansion to bottom-right + snap to 3D rest */
       calTl.to(el, {
         clipPath: 'inset(0% 0% 0% 0% round 24px)',
         rotationX: 0,
