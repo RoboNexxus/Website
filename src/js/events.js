@@ -5,7 +5,7 @@ let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
 function initEvents() {
-  fetch(`/src/js/events.json?v=55&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`)
+  fetch(`/src/js/events.json?v=56&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`)
     .then(res => {
       if (!res.ok) throw new Error('Failed to fetch events');
       return res.json();

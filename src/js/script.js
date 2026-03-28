@@ -1,4 +1,4 @@
-// MASTER CACHE CONTROL - v55
+// MASTER CACHE CONTROL - v56
 // This is the global master control to reset all cache. 
 // Changing this ID will force ALL users to re-download all JSON and Dynamic data.
 const GLOBAL_CACHE_MASTER = Date.now(); 
@@ -106,7 +106,7 @@ if (hamburger && navLinks) {
 ================================ */
 (async function() {
   try {
-    const res = await fetch(`/src/js/events.json?v=55&t=${GLOBAL_CACHE_MASTER}`);
+    const res = await fetch(`/src/js/events.json?v=56&t=${GLOBAL_CACHE_MASTER}`);
     if (!res.ok) return;
     const data = await res.json();
     if (data.upcomingEvents && data.upcomingEvents.length > 0) {
@@ -267,7 +267,7 @@ function loadTeamMembers() {
   const teamContainer = document.getElementById("team-container");
 
   if (teamContainer) {
-    fetch(`/src/js/team.json?v=55&t=${GLOBAL_CACHE_MASTER}`)
+    fetch(`/src/js/team.json?v=56&t=${GLOBAL_CACHE_MASTER}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load team data');
         return res.json();
@@ -456,7 +456,7 @@ function loadAlumni() {
   const alumniContainer = document.getElementById("alumni-container");
 
   if (alumniContainer) {
-    fetch(`/src/js/alumni.json?v=55&t=${GLOBAL_CACHE_MASTER}`)
+    fetch(`/src/js/alumni.json?v=56&t=${GLOBAL_CACHE_MASTER}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load alumni data');
         return res.json();
