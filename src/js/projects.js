@@ -60,7 +60,7 @@ function renderTutorials() {
   }
 
   grid.innerHTML = tutorials.map(t => `
-    <div class="project-card" data-id="${t.id}">
+    <div class="project-card ${t.isWide ? 'project-wide' : ''}" data-id="${t.id}">
       <div class="project-image">
         <img src="${t.image}" alt="${t.title}" width="400" height="300" loading="lazy"
              onerror="this.src='/src/assets/images/Robo_Nexus_Logo.webp'">

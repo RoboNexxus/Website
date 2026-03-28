@@ -11,7 +11,8 @@
     "status": "Completed / In Progress",
     "year": "Year (2024, 2025, etc.)",
     "creator": "Full name of the student who made it",
-    "team": "Team name (optional — leave empty string if no team)"
+    "team": "Team name (optional — leave empty string if no team)",
+    "isWide": "Set to true for horizontal projects (optional)"
   },
   "tutorials": [
     {
@@ -19,66 +20,70 @@
       "title": "The Legacy Collection",
       "category": "drones",
       "image": "/src/assets/images/legacy.webp",
-      "description": "A comprehensive fleet of high-performance aerial systems, including custom-built RC planes and FPV racing drones, representing the peak of our aeronautics division.",
+      "description": "A massive fleet of high-performance aerial systems, including custom-built RC planes and FPV racing drones. This comprehensive collection represents years of aeronautical engineering and precision flight testing.",
       "tech": [
         "FPV",
         "Betaflight",
         "ELRS",
-        "Carbon Fiber"
+        "Carbon Fiber",
+        "RC Planes"
       ],
       "status": "Completed",
       "year": "2025",
-      "creator": "President & Vice President",
-      "team": "Leadership"
+      "creator": "Aryaman Yadav & Akshar Yadav",
+      "team": "Yadav Enterprise",
+      "isWide": true
     },
     {
       "id": 102,
       "title": "Combat Bot: 'Yadav' Heavyweight",
       "category": "robots",
       "image": "/src/assets/images/yadavE.webp",
-      "description": "A professional-grade combat robot built for maximum destruction and durability. Features a custom-engraved steel chassis and high-torque drivetrain.",
+      "description": "A professional-grade combat robot built for maximum destruction and durability. Features a custom-engraved steel chassis and high-torque drivetrain designed for heavy combat scenarios.",
       "tech": [
         "Steel Chassis",
         "High-Torque Motors",
-        "Custom ESCs"
+        "Custom ESCs",
+        "Precision Machining"
       ],
       "status": "Completed",
       "year": "2025",
-      "creator": "President",
-      "team": "Core Team"
+      "creator": "Aryaman Yadav",
+      "team": "Yadav Enterprise"
     },
     {
       "id": 103,
       "title": "Twin Combat Interceptors",
       "category": "robots",
       "image": "/src/assets/images/yadavE0.webp",
-      "description": "A pair of agile combat robots used for tactical scrimmages and training. These bots are the primary testers for our new flight control and radio protocols.",
+      "description": "A pair of agile combat robots used for tactical scrimmages. These units are primary testbeds for new radio protocols and flight controller stabilization.",
       "tech": [
         "FlySky FS-i6",
         "Precision Machining",
-        "LiPo 4S"
+        "LiPo 4S",
+        "Carbon Fiber"
       ],
       "status": "Completed",
       "year": "2025",
-      "creator": "Vice President",
-      "team": "Core Team"
+      "creator": "Akshar Yadav",
+      "team": "Yadav Enterprise"
     },
     {
       "id": 104,
       "title": "Robo Nexus Fleet v2025",
       "category": "robots",
       "image": "/src/assets/images/yadavE07.webp",
-      "description": "A grand lineup of our current operational robots, showcasing the evolution from simple soccer bots to heavy-duty combat machines.",
+      "description": "The complete operational fleet of Robo Nexus for the 2025 season. Showcasing the full spectrum of our engineering from lightweight soccer bots to industrial-grade combat machines.",
       "tech": [
         "Full Arsenal",
         "Robo Soccer",
         "Combat",
-        "IoT"
+        "IoT Systems"
       ],
       "status": "Completed",
       "year": "2025",
-      "creator": "Robo Nexus Team",
-      "team": "Official"
+      "creator": "Aryaman & Akshar Yadav",
+      "team": "Yadav Enterprise"
     },
     {
       "id": 1,

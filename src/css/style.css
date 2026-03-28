@@ -757,6 +757,11 @@ body {
   width: 100%;
 }
 
+.project-card.project-wide {
+  column-span: all;
+  margin-bottom: 40px;
+}
+
 .project-card:hover {
   transform: translateY(-10px);
   border-color: #47a0b8;
