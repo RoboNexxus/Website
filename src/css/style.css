@@ -760,6 +760,27 @@ body {
 .project-card.project-wide {
   column-span: all;
   margin-bottom: 40px;
+  border: 1px solid rgba(71, 160, 184, 0.4);
+  box-shadow: 0 0 40px rgba(71, 160, 184, 0.1);
+}
+
+.project-card.project-wide .project-info {
+  padding: 40px;
+}
+
+.project-card.project-wide h3 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.project-card.project-wide p {
+  font-size: 1.1rem;
+  max-width: 900px;
+}
+
+.project-card.project-wide .tech-tag {
+  padding: 8px 18px;
+  font-size: 0.9rem;
 }
 
 .project-card:hover {
