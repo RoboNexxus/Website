@@ -764,6 +764,7 @@ body {
   box-shadow: 0 0 40px rgba(71, 160, 184, 0.1);
   display: flex;
   flex-direction: row;
+  overflow: visible;
 }
 
 .project-card.project-wide .project-image {
@@ -808,6 +809,10 @@ body {
     max-width: 100%;
     height: 260px;
   }
+}
+
+.project-card.project-wide:hover {
+  transform: none;
 }
 
 .project-card:hover {
