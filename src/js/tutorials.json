@@ -20,19 +20,37 @@
       "title": "The Legacy Collection",
       "category": "drones",
       "image": "/src/assets/images/legacy.webp",
-      "description": "A massive fleet of high-performance aerial systems, including custom-built RC planes and FPV racing drones. This comprehensive collection represents years of aeronautical engineering and precision flight testing.",
+      "description": "A monumental showcase of our aeronautical history. This massive collection features everything from custom-built carbon fiber racing drones to high-end RC fixed-wing aircraft. Each piece represents a milestone in flight control, telemetry, and aerodynamic efficiency.",
       "tech": [
-        "FPV",
+        "FPV Racing",
         "Betaflight",
         "ELRS",
         "Carbon Fiber",
-        "RC Planes"
+        "Fixed-Wing Planes",
+        "Telemetry"
       ],
       "status": "Completed",
       "year": "2025",
       "creator": "Aryaman Yadav & Akshar Yadav",
       "team": "Yadav Enterprise",
       "isWide": true
+    },
+    {
+      "id": 103,
+      "title": "Twin Combat Interceptors",
+      "category": "robots",
+      "image": "/src/assets/images/yadavE0.webp",
+      "description": "A pair of agile combat robots used for tactical scrimmages. These units serve as primary testbeds for advanced radio protocols and flight controller stabilization algorithms.",
+      "tech": [
+        "FlySky FS-i6",
+        "Precision Machining",
+        "LiPo 4S",
+        "Carbon Fiber"
+      ],
+      "status": "Completed",
+      "year": "2025",
+      "creator": "Aryaman Yadav & Akshar Yadav",
+      "team": "Yadav Enterprise"
     },
     {
       "id": 102,
@@ -49,23 +67,6 @@
       "status": "Completed",
       "year": "2025",
       "creator": "Aryaman Yadav",
-      "team": "Yadav Enterprise"
-    },
-    {
-      "id": 103,
-      "title": "Twin Combat Interceptors",
-      "category": "robots",
-      "image": "/src/assets/images/yadavE0.webp",
-      "description": "A pair of agile combat robots used for tactical scrimmages. These units are primary testbeds for new radio protocols and flight controller stabilization.",
-      "tech": [
-        "FlySky FS-i6",
-        "Precision Machining",
-        "LiPo 4S",
-        "Carbon Fiber"
-      ],
-      "status": "Completed",
-      "year": "2025",
-      "creator": "Akshar Yadav",
       "team": "Yadav Enterprise"
     },
     {
