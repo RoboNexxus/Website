@@ -330,49 +330,36 @@
       }
     }, 'top 90%');
 
-    /* Calendar: Expand from true nothing (top-left) to full + rubber band bounce */
+    /* Calendar: left-to-right reveal + organic settle */
     whenIn('.calendar-container', function (el) {
       el.style.willChange = 'transform, opacity, clip-path';
-      var calTl = gsap.timeline();
-      
-      /* Start: ABSOLUTE ZERO size anchored at top-left using polygon */
-      gsap.set(el, { 
-        clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)',
-        opacity: 0, 
-        y: -30, 
-        rotationX: -10,
+      gsap.set(el, {
+        clipPath: 'inset(0% 100% 0% 0% round 20px)',
+        opacity: 0,
+        y: -20,
+        rotationX: -8,
         transformOrigin: 'top left',
-        transformPerspective: 1000
+        transformPerspective: 1200
       });
 
-      /* Phase 1: One continuous polygon sweep straight to the stretch */
+      var calTl = gsap.timeline();
+
+      /* expand left-to-right while dropping in — expo.inOut for cinematic feel */
       calTl.to(el, {
-        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+        clipPath: 'inset(0% 0% 0% 0% round 20px)',
         opacity: 1,
-        scale: 1.05,
-        y: 0,
+        y: -5,
         rotationX: 0,
-        duration: 1.4,
-        ease: 'expo.out'
+        duration: 1.6,
+        ease: 'expo.inOut'
       });
 
-      /* Phase 2: BOUNCE BACK (Rubber band snap) */
-      calTl.to(el, {
-        scale: 0.98,
-        duration: 0.25,
-        ease: 'sine.in'
-      });
-      calTl.to(el, {
-        scale: 1.01,
-        duration: 0.2,
-        ease: 'sine.out'
-      });
-      calTl.to(el, {
-        scale: 1,
-        duration: 0.4,
-        ease: 'sine.inOut',
-        onComplete: function() { 
-          el.style.willChange = 'auto'; 
+      /* overshoot up then wobble settle */
+      calTl.to(el, { y: 4, duration: 0.3, ease: 'sine.in' }, '-=0.4');
+      calTl.to(el, { y: -3, scale: 1.012, duration: 0.28, ease: 'sine.out' });
+      calTl.to(el, { y: 0, scale: 1, duration: 0.45, ease: 'sine.inOut',
+        onComplete: function () {
+          el.style.willChange = 'auto';
           el.style.clipPath = '';
           el.style.transformOrigin = '';
         }
@@ -658,43 +645,35 @@
     c.querySelectorAll('.project-card').forEach(function (el, i) {
       whenIn(el, function () {
         el.style.willChange = 'transform, opacity, clip-path';
-        gsap.set(el, { 
-          clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)',
-          opacity: 0, 
-          y: 40, 
-          rotationX: -10,
-          transformOrigin: 'top left',
-          transformPerspective: 1000
+        gsap.set(el, {
+          clipPath: 'inset(0% 100% 0% 0% round 20px)',
+          opacity: 0,
+          y: 30,
+          rotationX: -8,
+          transformOrigin: 'top center',
+          transformPerspective: 1200
         });
-        var pTl = gsap.timeline({ delay: (i % 3) * 0.12 });
-        
-        /* 1. ONE CONTINUOUS SWOOP to 1.05 stretch */
+
+        var d = (i % 3) * 0.1;
+        var pTl = gsap.timeline({ delay: d });
+
+        /* drop into place while clip expands — expo.inOut like navbar */
         pTl.to(el, {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          opacity: 1, 
-          scale: 1.04,
-          y: 0, 
+          clipPath: 'inset(0% 0% 0% 0% round 20px)',
+          opacity: 1,
+          y: -6,
           rotationX: 0,
-          duration: 1.4, 
-          ease: 'expo.out'
+          duration: 1.6,
+          ease: 'expo.inOut'
         });
-        
-        /* 2. RUBBER BAND BOUNCE */
-        pTl.to(el, {
-          scale: 0.98,
-          duration: 0.25,
-          ease: 'sine.in'
-        });
-        pTl.to(el, {
-          scale: 1.01,
-          duration: 0.2,
-          ease: 'sine.out'
-        });
-        pTl.to(el, {
-          scale: 1,
-          duration: 0.4,
-          ease: 'sine.inOut',
-          onComplete: function() {
+
+        /* slight overshoot up */
+        pTl.to(el, { y: 4, duration: 0.35, ease: 'sine.in' }, '-=0.5');
+
+        /* wobble settle — slow-fast-slow like navbar breathing */
+        pTl.to(el, { y: -3, scale: 1.015, duration: 0.3, ease: 'sine.out' });
+        pTl.to(el, { y: 0, scale: 1, duration: 0.5, ease: 'sine.inOut',
+          onComplete: function () {
             el.style.willChange = 'auto';
             el.style.clipPath = '';
             el.style.transformOrigin = '';
