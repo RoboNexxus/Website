@@ -656,19 +656,16 @@
 
   function animateProjects(c) {
     c.querySelectorAll('.project-card').forEach(function (el, i) {
-      el.style.willChange = 'transform, opacity, clip-path';
-      
-      /* Start: ABSOLUTE ZERO at top-left, pushed down + rotated back */
-      gsap.set(el, { 
-        clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)',
-        opacity: 0, 
-        y: 40, 
-        rotationX: -10,
-        transformOrigin: 'top left',
-        transformPerspective: 1000
-      });
-      
       whenIn(el, function () {
+        el.style.willChange = 'transform, opacity, clip-path';
+        gsap.set(el, { 
+          clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)',
+          opacity: 0, 
+          y: 40, 
+          rotationX: -10,
+          transformOrigin: 'top left',
+          transformPerspective: 1000
+        });
         var pTl = gsap.timeline({ delay: (i % 3) * 0.12 });
         
         /* 1. ONE CONTINUOUS SWOOP to 1.05 stretch */
@@ -704,7 +701,7 @@
           }
         });
       }, 'top 88%');
-      tilt(el, 5);
+      tilt(el, 10);
     });
   }
 
@@ -804,7 +801,7 @@
             rotationY: lastX,
             rotationX: lastY,
             transformPerspective: 900,
-            duration: 0.8,
+            duration: 0.3,
             ease: 'power2.out'
           });
           ticking = false;
@@ -816,7 +813,7 @@
       gsap.to(el, {
         rotationY: 0,
         rotationX: 0,
-        duration: 1.2,
+        duration: 0.6,
         ease: 'expo.out'
       });
     });
