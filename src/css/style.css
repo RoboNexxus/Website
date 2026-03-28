@@ -3517,6 +3517,10 @@ input, textarea {
   }
 
   /* Strip desktop pill styling */
+  .spotlight-nav-container {
+    pointer-events: none;
+  }
+
   .spotlight-nav {
     background: transparent !important;
     border: none !important;

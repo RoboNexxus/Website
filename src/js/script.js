@@ -1,4 +1,4 @@
-// MASTER CACHE CONTROL - v56
+// MASTER CACHE CONTROL - v57
 // This is the global master control to reset all cache. 
 // Changing this ID will force ALL users to re-download all JSON and Dynamic data.
 const GLOBAL_CACHE_MASTER = Date.now(); 
