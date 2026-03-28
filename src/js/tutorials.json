@@ -15,6 +15,72 @@
   },
   "tutorials": [
     {
+      "id": 101,
+      "title": "The Legacy Collection",
+      "category": "drones",
+      "image": "/src/assets/images/legacy.webp",
+      "description": "A comprehensive fleet of high-performance aerial systems, including custom-built RC planes and FPV racing drones, representing the peak of our aeronautics division.",
+      "tech": [
+        "FPV",
+        "Betaflight",
+        "ELRS",
+        "Carbon Fiber"
+      ],
+      "status": "Completed",
+      "year": "2025",
+      "creator": "President & Vice President",
+      "team": "Leadership"
+    },
+    {
+      "id": 102,
+      "title": "Combat Bot: 'Yadav' Heavyweight",
+      "category": "robots",
+      "image": "/src/assets/images/yadavE.webp",
+      "description": "A professional-grade combat robot built for maximum destruction and durability. Features a custom-engraved steel chassis and high-torque drivetrain.",
+      "tech": [
+        "Steel Chassis",
+        "High-Torque Motors",
+        "Custom ESCs"
+      ],
+      "status": "Completed",
+      "year": "2025",
+      "creator": "President",
+      "team": "Core Team"
+    },
+    {
+      "id": 103,
+      "title": "Twin Combat Interceptors",
+      "category": "robots",
+      "image": "/src/assets/images/yadavE0.webp",
+      "description": "A pair of agile combat robots used for tactical scrimmages and training. These bots are the primary testers for our new flight control and radio protocols.",
+      "tech": [
+        "FlySky FS-i6",
+        "Precision Machining",
+        "LiPo 4S"
+      ],
+      "status": "Completed",
+      "year": "2025",
+      "creator": "Vice President",
+      "team": "Core Team"
+    },
+    {
+      "id": 104,
+      "title": "Robo Nexus Fleet v2025",
+      "category": "robots",
+      "image": "/src/assets/images/yadavE07.webp",
+      "description": "A grand lineup of our current operational robots, showcasing the evolution from simple soccer bots to heavy-duty combat machines.",
+      "tech": [
+        "Full Arsenal",
+        "Robo Soccer",
+        "Combat",
+        "IoT"
+      ],
+      "status": "Completed",
+      "year": "2025",
+      "creator": "Robo Nexus Team",
+      "team": "Official"
+    },
+    {
       "id": 1,
       "title": "Robo Soccer Car",
       "category": "robots",
