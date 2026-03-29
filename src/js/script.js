@@ -50,8 +50,37 @@ const backdrop = document.createElement('div');
 backdrop.className = 'mobile-nav-backdrop';
 document.body.appendChild(backdrop);
 
-// Move nav tray to body so it escapes .page-content stacking context
-if (navLinks) document.body.appendChild(navLinks);
+// Move nav tray to body ONLY on mobile so it escapes .page-content stacking context
+// On desktop, it stays in navbar for proper layout
+function updateNavLinksPosition() {
+  if (!navLinks) return;
+  
+  const isMobile = window.innerWidth <= 992;
+  const isInBody = navLinks.parentElement === document.body;
+  
+  if (isMobile && !isInBody) {
+    // Move to body for mobile
+    document.body.appendChild(navLinks);
+  } else if (!isMobile && isInBody) {
+    // Move back to navbar for desktop
+    const navbar = document.querySelector('.navbar-content');
+    if (navbar) {
+      // Insert before spotlight overlay
+      const spotlight = navbar.querySelector('.navbar-spotlight-overlay');
+      if (spotlight) {
+        navbar.insertBefore(navLinks, spotlight);
+      } else {
+        navbar.appendChild(navLinks);
+      }
+    }
+  }
+}
+
+// Update on load
+updateNavLinksPosition();
+
+// Update on resize
+window.addEventListener('resize', updateNavLinksPosition);
 
 function openMobileNav() {
   if (!hamburger || !navLinks) return;
