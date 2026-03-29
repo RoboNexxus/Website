@@ -3522,6 +3522,11 @@ input, textarea {
     pointer-events: none;
   }
 
+  /* Let navbar not trap fixed children in its stacking context */
+  .navbar {
+    z-index: auto;
+  }
+
   .spotlight-nav {
     background: transparent !important;
     border: none !important;
