@@ -3495,15 +3495,17 @@ input, textarea {
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  z-index: 40;
+  z-index: 35;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.4s ease, visibility 0.4s ease;
+  pointer-events: none;
 }
 
 .mobile-nav-backdrop.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .nav-new-badge {
@@ -3531,9 +3533,10 @@ input, textarea {
     pointer-events: none;
   }
 
-  /* Let navbar not trap fixed children in its stacking context */
+  /* Let navbar stay above backdrop */
   .navbar {
-    z-index: auto;
+    z-index: 1000;
+    position: fixed;
   }
 
   .spotlight-nav {
