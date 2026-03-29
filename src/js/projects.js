@@ -37,7 +37,7 @@ async function initProjects() {
 
   try {
     await loadSupabaseConfig();
-    const tutData = await fetch(`/src/js/tutorials.json?v=60&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`).then(r => r.json());
+    const tutData = await fetch(`/src/js/tutorials.json?v=61&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`).then(r => r.json());
     tutorials = tutData.tutorials || [];
   } catch (err) {
     console.error('Init error:', err);
