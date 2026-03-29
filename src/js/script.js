@@ -47,9 +47,11 @@ function initMobileNav() {
   const navLinks = document.querySelector('.nav-links-ul');
 
   if (!hamburger || !navLinks) {
-    console.warn('Mobile nav elements not found');
+    console.error('❌ Mobile nav elements not found', { hamburger, navLinks });
     return;
   }
+
+  console.log('✅ Mobile nav initialized', { hamburger, navLinks });
 
   // Create and append backdrop dynamically
   let backdrop = document.querySelector('.mobile-nav-backdrop');
@@ -60,6 +62,7 @@ function initMobileNav() {
   }
 
   function openMobileNav() {
+    console.log('📂 Opening mobile nav');
     hamburger.classList.add('active');
     navLinks.classList.add('active');
     backdrop.classList.add('active');
@@ -67,14 +70,28 @@ function initMobileNav() {
   }
 
   function closeMobileNav() {
+    console.log('📁 Closing mobile nav');
     hamburger.classList.remove('active');
     navLinks.classList.remove('active');
     backdrop.classList.remove('active');
     document.body.style.overflow = '';
   }
 
-  // Hamburger toggle click
-  hamburger.addEventListener('click', (e) => {
+  // Hamburger toggle click - MULTIPLE listeners for safety
+  hamburger.addEventListener('click', function(e) {
+    console.log('🔥 Hamburger clicked!', e);
+    e.preventDefault();
+    e.stopPropagation();
+    if (hamburger.classList.contains('active')) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  });
+
+  // Also listen on mousedown as fallback
+  hamburger.addEventListener('touchstart', function(e) {
+    console.log('👆 Hamburger touched!', e);
     e.preventDefault();
     e.stopPropagation();
     if (hamburger.classList.contains('active')) {
@@ -106,6 +123,9 @@ if (document.readyState === 'loading') {
 } else {
   initMobileNav();
 }
+
+// Also try initializing immediately as backup
+setTimeout(initMobileNav, 100);
 
 /* ===============================
    EVENTS BADGE (MOBILE)

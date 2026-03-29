@@ -219,6 +219,12 @@ body {
   position: relative;
   padding: 10px;
   margin-right: -10px;
+  pointer-events: auto;
+  background: transparent;
+  border: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .hamburger span {
