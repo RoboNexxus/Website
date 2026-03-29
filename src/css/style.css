@@ -3533,6 +3533,11 @@ input, textarea {
     pointer-events: none;
   }
 
+  /* But allow hamburger to receive clicks! */
+  .hamburger {
+    pointer-events: auto !important;
+  }
+
   /* Let navbar stay above backdrop */
   .navbar {
     z-index: 1000;
