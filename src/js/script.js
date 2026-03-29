@@ -50,9 +50,6 @@ const backdrop = document.createElement('div');
 backdrop.className = 'mobile-nav-backdrop';
 document.body.appendChild(backdrop);
 
-// Move nav tray to body so it escapes .page-content stacking context
-if (navLinks) document.body.appendChild(navLinks);
-
 function openMobileNav() {
   if (!hamburger || !navLinks) return;
   hamburger.classList.add('active');
