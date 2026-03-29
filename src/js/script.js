@@ -48,14 +48,10 @@ const navLinks = document.querySelector('.nav-links-ul');
 // Create and append backdrop dynamically
 const backdrop = document.createElement('div');
 backdrop.className = 'mobile-nav-backdrop';
+document.body.appendChild(backdrop);
 
-// Append to page content if it exists, otherwise fallback to body
-const pageContent = document.querySelector('.page-content');
-if (pageContent) {
-  pageContent.appendChild(backdrop);
-} else {
-  document.body.appendChild(backdrop);
-}
+// Move nav tray to body so it escapes .page-content stacking context
+if (navLinks) document.body.appendChild(navLinks);
 
 function openMobileNav() {
   if (!hamburger || !navLinks) return;
