@@ -42,31 +42,38 @@ initPageTransition();
 /* ===============================
    HAMBURGER MENU (GLASS SIDE TRAY)
 ================================ */
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links-ul');
+function initMobileNav() {
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links-ul');
 
-// Create and append backdrop dynamically
-const backdrop = document.createElement('div');
-backdrop.className = 'mobile-nav-backdrop';
-document.body.appendChild(backdrop);
+  if (!hamburger || !navLinks) {
+    console.warn('Mobile nav elements not found');
+    return;
+  }
 
-function openMobileNav() {
-  if (!hamburger || !navLinks) return;
-  hamburger.classList.add('active');
-  navLinks.classList.add('active');
-  backdrop.classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
+  // Create and append backdrop dynamically
+  let backdrop = document.querySelector('.mobile-nav-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'mobile-nav-backdrop';
+    document.body.appendChild(backdrop);
+  }
 
-function closeMobileNav() {
-  if (!hamburger || !navLinks) return;
-  hamburger.classList.remove('active');
-  navLinks.classList.remove('active');
-  backdrop.classList.remove('active');
-  document.body.style.overflow = '';
-}
+  function openMobileNav() {
+    hamburger.classList.add('active');
+    navLinks.classList.add('active');
+    backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
 
-if (hamburger && navLinks) {
+  function closeMobileNav() {
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('active');
+    backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Hamburger toggle click
   hamburger.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -80,12 +87,11 @@ if (hamburger && navLinks) {
   // Close when clicking backdrop
   backdrop.addEventListener('click', closeMobileNav);
 
-  // Close menu when clicking a link
-  document.querySelectorAll('.nav-links').forEach(link => {
-    link.addEventListener('click', () => {
-      // Small delay to let the click through before closing animation
+  // Close menu when clicking a nav link
+  navLinks.addEventListener('click', (e) => {
+    if (e.target.classList.contains('nav-links')) {
       setTimeout(closeMobileNav, 100);
-    });
+    }
   });
 
   // Close on Escape key
@@ -94,12 +100,19 @@ if (hamburger && navLinks) {
   });
 }
 
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMobileNav);
+} else {
+  initMobileNav();
+}
+
 /* ===============================
    EVENTS BADGE (MOBILE)
 ================================ */
 (async function() {
   try {
-    const res = await fetch(`/src/js/events.json?v=56&t=${GLOBAL_CACHE_MASTER}`);
+    const res = await fetch(`/src/js/events.json?v=60&t=${GLOBAL_CACHE_MASTER}`);
     if (!res.ok) return;
     const data = await res.json();
     if (data.upcomingEvents && data.upcomingEvents.length > 0) {
@@ -260,7 +273,7 @@ function loadTeamMembers() {
   const teamContainer = document.getElementById("team-container");
 
   if (teamContainer) {
-    fetch(`/src/js/team.json?v=56&t=${GLOBAL_CACHE_MASTER}`)
+    fetch(`/src/js/team.json?v=60&t=${GLOBAL_CACHE_MASTER}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load team data');
         return res.json();
@@ -449,7 +462,7 @@ function loadAlumni() {
   const alumniContainer = document.getElementById("alumni-container");
 
   if (alumniContainer) {
-    fetch(`/src/js/alumni.json?v=56&t=${GLOBAL_CACHE_MASTER}`)
+    fetch(`/src/js/alumni.json?v=60&t=${GLOBAL_CACHE_MASTER}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load alumni data');
         return res.json();

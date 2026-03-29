@@ -52,6 +52,12 @@
     staticReveals();
     dynamicWatchers();
     cardHovers();
+    
+    // Refresh ScrollTrigger after all animations are set up
+    // This ensures all triggers are calculated correctly
+    requestAnimationFrame(function () {
+      ScrollTrigger.refresh();
+    });
   }
 
   boot();
@@ -644,43 +650,36 @@
   function animateProjects(c) {
     c.querySelectorAll('.project-card').forEach(function (el, i) {
       whenIn(el, function () {
-        el.style.willChange = 'transform, opacity, clip-path';
+        el.style.willChange = 'transform, opacity';
         gsap.set(el, {
-          clipPath: 'inset(0% 100% 0% 0% round 20px)',
           opacity: 0,
           y: 30,
-          rotationX: -8,
-          transformOrigin: 'top center',
-          transformPerspective: 1200
+          rotationX: -6,
+          transformOrigin: 'center center',
+          transformPerspective: 1000,
+          force3D: true
         });
 
-        var d = (i % 3) * 0.1;
+        var d = (i % 3) * 0.08;
         var pTl = gsap.timeline({ delay: d });
 
-        /* drop into place while clip expands — expo.inOut like navbar */
         pTl.to(el, {
-          clipPath: 'inset(0% 0% 0% 0% round 20px)',
           opacity: 1,
-          y: -6,
+          y: -4,
           rotationX: 0,
-          duration: 1.6,
+          duration: 1.2,
           ease: 'expo.inOut'
         });
 
-        /* slight overshoot up */
-        pTl.to(el, { y: 4, duration: 0.35, ease: 'sine.in' }, '-=0.5');
-
-        /* wobble settle — slow-fast-slow like navbar breathing */
-        pTl.to(el, { y: -3, scale: 1.015, duration: 0.3, ease: 'sine.out' });
-        pTl.to(el, { y: 0, scale: 1, duration: 0.5, ease: 'sine.inOut',
+        pTl.to(el, { y: 2, duration: 0.28, ease: 'sine.in' }, '-=0.4');
+        pTl.to(el, { y: -2, scale: 1.01, duration: 0.24, ease: 'sine.out' });
+        pTl.to(el, { y: 0, scale: 1, duration: 0.4, ease: 'sine.inOut',
           onComplete: function () {
             el.style.willChange = 'auto';
-            el.style.clipPath = '';
-            el.style.transformOrigin = '';
           }
         });
-      }, 'top 88%');
-      tilt(el, 10);
+      }, 'top 85%');
+      tilt(el, 8);
     });
   }
 
@@ -809,11 +808,23 @@
       ? document.querySelector(target)
       : target;
     if (!el) return;
+    
+    var triggered = false;
     ScrollTrigger.create({
       trigger: el,
       start: start,
-      once: true,
-      onEnter: function () { cb(el); }
+      onEnter: function () {
+        if (!triggered) {
+          triggered = true;
+          cb(el);
+        }
+      },
+      onEnterBack: function () {
+        if (!triggered) {
+          triggered = true;
+          cb(el);
+        }
+      }
     });
   }
 
@@ -822,15 +833,28 @@
     var els = document.querySelectorAll(selector);
     if (!els.length) return;
     gsap.set(els, { scale: 0.7, opacity: 0 });
+    
+    var triggered = false;
     ScrollTrigger.create({
       trigger: els[0],
       start: start,
-      once: true,
       onEnter: function () {
-        gsap.to(els, {
-          scale: 1, opacity: 1,
-          duration: 0.9, stagger: stagger, ease: 'expo.out'
-        });
+        if (!triggered) {
+          triggered = true;
+          gsap.to(els, {
+            scale: 1, opacity: 1,
+            duration: 0.9, stagger: stagger, ease: 'expo.out'
+          });
+        }
+      },
+      onEnterBack: function () {
+        if (!triggered) {
+          triggered = true;
+          gsap.to(els, {
+            scale: 1, opacity: 1,
+            duration: 0.9, stagger: stagger, ease: 'expo.out'
+          });
+        }
       }
     });
   }
@@ -838,13 +862,36 @@
   function watch(selector, fn) {
     var el = document.querySelector(selector);
     if (!el) return;
+    
+    var hasChildren = el.children.length > 0;
+    
+    if (hasChildren) {
+      requestAnimationFrame(function () { fn(el); });
+      return;
+    }
+    
     var obs = new MutationObserver(function (mutations) {
       if (mutations.some(function (m) { return m.addedNodes.length > 0; })) {
         obs.disconnect();
-        requestAnimationFrame(function () { fn(el); });
+        requestAnimationFrame(function () { 
+          fn(el);
+          // Refresh triggers after DOM changes
+          requestAnimationFrame(function () {
+            ScrollTrigger.refresh();
+          });
+        });
       }
     });
-    obs.observe(el, { childList: true });
+    obs.observe(el, { childList: true, subtree: false });
   }
+
+  // Refresh ScrollTrigger on window resize (with debounce)
+  var resizeTimeout;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function () {
+      ScrollTrigger.refresh();
+    }, 250);
+  }, false);
 
 })();
