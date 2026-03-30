@@ -90,13 +90,15 @@ body {
    NAVBAR - Spotlight Style
 ================================ */
 .navbar {
+  width: 100%;
   min-height: 80px;
   padding: 12px 60px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   background: transparent;
   z-index: 1000;
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -392,7 +394,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
+  padding: 140px 20px 60px;
   text-align: center;
 }
 
