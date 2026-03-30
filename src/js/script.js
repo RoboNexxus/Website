@@ -593,10 +593,19 @@ scrollToTopBtn.addEventListener('click', () => {
 window.addEventListener('scroll', () => {
   const scrollTop = window.scrollY;
   const scrollHeight = document.body.scrollHeight - window.innerHeight;
-  
+
+  // Navbar background change on scroll
+  const navbar = document.querySelector('.navbar');
+  if (navbar) {
+    if (scrollTop > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+
   // Show scroll to bottom when near top
-  if (scrollTop < scrollHeight - 100) {
-    scrollToBottomBtn.classList.add('visible');
+  if (scrollTop < scrollHeight - 100) {    scrollToBottomBtn.classList.add('visible');
   } else {
     scrollToBottomBtn.classList.remove('visible');
   }
