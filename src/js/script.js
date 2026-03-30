@@ -597,7 +597,7 @@ window.addEventListener('scroll', () => {
   // Navbar background change on scroll
   const navbar = document.querySelector('.navbar');
   if (navbar) {
-    if (scrollTop > 50) {
+    if (scrollTop > 60) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
