@@ -180,4 +180,16 @@ function initSpotlightNavbar() {
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', initSpotlightNavbar);
 
+// ── Navbar scroll: fixed pill + logo swap ──
+(function () {
+  function onScroll() {
+    const navbar = document.querySelector('.navbar');
+    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 60);
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  });
+})();
+
 console.log('✨ Spotlight navbar module loaded');
