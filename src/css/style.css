@@ -95,19 +95,31 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  width: 100%; /* Ensure full width */
+  width: 100%;
   background: transparent;
   z-index: 1000;
+  transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Sticky behavior for specific pages */
+/* Scrolled state — compact pill row */
+.navbar.scrolled {
+  padding: 10px 60px;
+  align-items: center;
+}
+
+/* Sticky behavior for specific pages (legacy, kept for compat) */
 body.sticky-nav .navbar {
-  position: sticky;
-  top: 0; /* Critical for sticky */
+  position: fixed;
+  top: 0;
+}
+
+/* Push page content below fixed navbar */
+.page-content {
+  padding-top: 80px;
 }
 
 .navbar-content {
@@ -139,14 +151,65 @@ body.sticky-nav .navbar {
 .spotlight-nav {
   position: relative;
   height: 44px;
-  background: rgba(255, 255, 255, 0.05); /* Liquid glass: lower opacity */
-  backdrop-filter: blur(16px) saturate(180%); /* Liquid glass: more blur and saturation */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Liquid glass: subtle white border */
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 22px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Liquid glass: deeper shadow */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scrolled: enhanced liquid glass */
+.navbar.scrolled .spotlight-nav {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(200%) brightness(1.1);
+  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+/* ── Inline logo inside pill (shown on scroll) ── */
+.nav-logo-inline {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border-right: 1px solid transparent;
+  margin-right: 0;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease,
+              padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              margin 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease;
+}
+
+.nav-logo-inline img {
+  height: 28px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.navbar.scrolled .nav-logo-inline {
+  max-width: 48px;
+  opacity: 1;
+  padding: 0 8px 0 10px;
+  margin-right: 4px;
+  border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Original logo: hide on scroll ── */
+.nav-logo {
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar.scrolled .nav-logo {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
 }
 
 /* Dark mode support */

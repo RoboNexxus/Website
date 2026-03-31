@@ -151,6 +151,19 @@ if (hamburger && navLinks) {
 
 
 
+
+/* ===============================
+   NAVBAR SCROLL BEHAVIOR
+================================ */
+(function() {
+  const navbar = document.querySelector('.navbar');
+  if (!navbar) return;
+  function onNavScroll() {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  }
+  window.addEventListener('scroll', onNavScroll, { passive: true });
+  onNavScroll();
+})();
 /* ===============================
    NAVBAR ANIMATION
 ================================ */
