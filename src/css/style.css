@@ -248,25 +248,13 @@ body.sticky-nav .navbar {
   padding: 8px 16px;
   border-radius: 16px;
   transition: color 0.2s ease;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   position: relative;
   z-index: 10;
 }
 
-@media (prefers-color-scheme: dark) {
-  .nav-links {
-    color: rgba(255, 255, 255, 0.6);
-  }
-}
-
 .nav-links:hover {
-  color: rgba(0, 0, 0, 0.9);
-}
-
-@media (prefers-color-scheme: dark) {
-  .nav-links:hover {
-    color: rgba(255, 255, 255, 0.9);
-  }
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-links.active {
