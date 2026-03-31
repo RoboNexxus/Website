@@ -95,10 +95,19 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  position: sticky;
+  position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%; /* Ensure full width */
   background: transparent;
   z-index: 1000;
+}
+
+/* Sticky behavior for specific pages */
+body.sticky-nav .navbar {
+  position: sticky;
+  top: 0; /* Critical for sticky */
 }
 
 .navbar-content {
@@ -116,7 +125,7 @@ body {
 }
 
 .nav-logo img:hover {
-  filter: drop-shadow(0 0 20px rgba(71, 160, 184, 0.8));
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
 }
 
 /* Spotlight Navigation Container */
@@ -130,11 +139,12 @@ body {
 .spotlight-nav {
   position: relative;
   height: 44px;
-  background: rgba(250, 250, 250, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.05); /* Liquid glass: lower opacity */
+  backdrop-filter: blur(16px) saturate(180%); /* Liquid glass: more blur and saturation */
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Liquid glass: subtle white border */
   border-radius: 22px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Liquid glass: deeper shadow */
   overflow: hidden;
   transition: all 0.3s ease;
 }
@@ -142,9 +152,9 @@ body {
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .spotlight-nav {
-    background: rgba(10, 10, 10, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
   }
 }
 
@@ -3253,7 +3263,7 @@ input, textarea {
   z-index: 1;
   background: radial-gradient(
     120px circle at var(--spotlight-x, 50%) 100%,
-    rgba(0, 0, 0, 0.08) 0%,
+    rgba(255, 255, 255, 0.08) 0%,
     transparent 50%
   );
 }
@@ -3262,41 +3272,15 @@ input, textarea {
   .navbar-spotlight-overlay {
     background: radial-gradient(
       120px circle at var(--spotlight-x, 50%) 100%,
-      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.12) 0%,
       transparent 50%
-    );
-  }
-}
-
-.navbar-ambience-line {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  pointer-events: none;
-  z-index: 2;
-  background: radial-gradient(
-    60px circle at var(--ambience-x, 50%) 0%,
-    rgba(0, 0, 0, 0.8) 0%,
-    transparent 100%
-  );
-}
-
-@media (prefers-color-scheme: dark) {
-  .navbar-ambience-line {
-    background: radial-gradient(
-      60px circle at var(--ambience-x, 50%) 0%,
-      rgba(255, 255, 255, 1) 0%,
-      transparent 100%
     );
   }
 }
 
 /* Mobile: disable spotlight effects */
 @media (max-width: 992px) {
-  .navbar-spotlight-overlay,
-  .navbar-ambience-line {
+  .navbar-spotlight-overlay {
     display: none;
   }
 }

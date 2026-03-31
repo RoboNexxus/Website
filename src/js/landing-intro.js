@@ -74,7 +74,7 @@
     }, "-=1");
 
     tl.to(introLogo, {
-      filter: 'drop-shadow(0 0 60px rgba(71, 160, 184, 0.9))',
+      filter: 'drop-shadow(0 0 60px rgba(255, 255, 255, 0.4))',
       scale: 1.05,
       duration: 1.2,
       yoyo: true,

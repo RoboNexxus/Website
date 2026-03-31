@@ -1,10 +1,6 @@
 /**
  * RoboNexus '26 — Second Navbar
  * Injects a proper pill navbar immediately after .navbar on every page.
- *
- * Add to every HTML page:
- *   <link rel="stylesheet" href="/src/css/subnav.css?v=60" />
- *   <script src="/src/js/subnav.js?v=60" defer></script>
  */
 (function () {
 
@@ -23,7 +19,6 @@
         </li>
       </ul>
       <div class="rn26-spotlight" id="rn26-spotlight"></div>
-      <div class="rn26-ambience"  id="rn26-ambience"></div>
     </div>
   `;
 
@@ -50,37 +45,26 @@
       registerLink.classList.add('rn26-active');
       document.body.classList.add('page-register');
 
-      // Kill main navbar spotlight using MutationObserver —
-      // watches the overlay/ambience elements and immediately resets
-      // any inline opacity/display that spotlight-navbar.js tries to set.
-      const targets = [
-        document.querySelector('.navbar-spotlight-overlay'),
-        document.querySelector('.navbar-ambience-line'),
-      ].filter(Boolean);
+      // Kill main navbar spotlight using MutationObserver
+      const overlay = document.querySelector('.navbar-spotlight-overlay');
+      if (overlay) {
+        overlay.style.setProperty('opacity', '0', 'important');
+        overlay.style.setProperty('display', 'none', 'important');
 
-      targets.forEach(function (el) {
-        // Hard-reset immediately
-        el.style.setProperty('opacity', '0', 'important');
-        el.style.setProperty('display', 'none', 'important');
-
-        // Watch for any JS trying to change these inline styles
         const observer = new MutationObserver(function () {
-          el.style.setProperty('opacity', '0', 'important');
-          el.style.setProperty('display', 'none', 'important');
+          overlay.style.setProperty('opacity', '0', 'important');
+          overlay.style.setProperty('display', 'none', 'important');
         });
-        observer.observe(el, { attributes: true, attributeFilter: ['style'] });
-      });
+        observer.observe(overlay, { attributes: true, attributeFilter: ['style'] });
+      }
     }
-
-    positionAmbienceOn(registerLink);
   }
 
-  /* ── Spotlight / ambience on the RN26 pill ── */
+  /* ── Spotlight on the RN26 pill ── */
   function initSpotlight() {
     const pill = document.getElementById('rn26-pill');
     const spotlight = document.getElementById('rn26-spotlight');
-    const ambience = document.getElementById('rn26-ambience');
-    if (!pill || !spotlight || !ambience) return;
+    if (!pill || !spotlight) return;
 
     pill.addEventListener('mousemove', function (e) {
       const rect = pill.getBoundingClientRect();
@@ -90,17 +74,6 @@
 
     pill.addEventListener('mouseleave', function () {
       spotlight.style.opacity = '0';
-    });
-  }
-
-  function positionAmbienceOn(linkEl) {
-    const ambience = document.getElementById('rn26-ambience');
-    const pill = document.getElementById('rn26-pill');
-    if (!ambience || !pill || !linkEl) return;
-    requestAnimationFrame(function () {
-      const pillRect = pill.getBoundingClientRect();
-      const linkRect = linkEl.getBoundingClientRect();
-      ambience.style.setProperty('--rn26-amb-x', (linkRect.left - pillRect.left + linkRect.width / 2) + 'px');
     });
   }
 

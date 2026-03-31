@@ -69,10 +69,9 @@ function initSpotlightNavbar() {
   
   // Get overlays
   const spotlightOverlay = spotlightNav.querySelector('.navbar-spotlight-overlay');
-  const ambienceLine = spotlightNav.querySelector('.navbar-ambience-line');
   
-  if (!spotlightOverlay || !ambienceLine) {
-    console.warn('Spotlight navbar: Overlay elements not found');
+  if (!spotlightOverlay) {
+    console.warn('Spotlight navbar: Spotlight overlay element not found');
     return;
   }
   
@@ -80,9 +79,7 @@ function initSpotlightNavbar() {
   let activeIndex = 0;
   let hoverX = null;
   let spotlightX = 0;
-  let ambienceX = 0;
   let currentSpotlightAnimation = null;
-  let currentAmbienceAnimation = null;
   
   // Determine active link based on current page
   const currentPath = window.location.pathname;
@@ -109,14 +106,14 @@ function initSpotlightNavbar() {
     }
   });
   
-  // Initialize ambience position immediately (no animation on page load)
+  // Initialize position immediately (no animation on page load)
   const activeLink = navLinks[activeIndex];
   if (activeLink) {
     const navRect = spotlightNav.getBoundingClientRect();
     const linkRect = activeLink.getBoundingClientRect();
-    ambienceX = linkRect.left - navRect.left + linkRect.width / 2;
-    ambienceLine.style.setProperty('--ambience-x', `${ambienceX}px`);
-    spotlightX = ambienceX;
+    const targetX = linkRect.left - navRect.left + linkRect.width / 2;
+    spotlightX = targetX;
+    spotlightOverlay.style.setProperty('--spotlight-x', `${targetX}px`);
   }
   
   // Mouse move handler
@@ -159,36 +156,6 @@ function initSpotlightNavbar() {
     }
   }
   
-  // Update ambience position
-  function updateAmbiencePosition(index, immediate = false) {
-    const activeLink = navLinks[index];
-    if (!activeLink) return;
-    
-    const navRect = spotlightNav.getBoundingClientRect();
-    const linkRect = activeLink.getBoundingClientRect();
-    const targetX = linkRect.left - navRect.left + linkRect.width / 2;
-    
-    if (immediate) {
-      // Set immediately without animation
-      ambienceX = targetX;
-      ambienceLine.style.setProperty('--ambience-x', `${targetX}px`);
-    } else {
-      // Animate with spring
-      if (currentAmbienceAnimation) {
-        currentAmbienceAnimation.stop();
-      }
-      
-      currentAmbienceAnimation = animateSpring(ambienceX, targetX, {
-        stiffness: 200,
-        damping: 20,
-        onUpdate: (v) => {
-          ambienceX = v;
-          ambienceLine.style.setProperty('--ambience-x', `${v}px`);
-        }
-      });
-    }
-  }
-  
   // Click handlers for nav links
   navLinks.forEach((link, index) => {
     link.addEventListener('click', (e) => {
@@ -200,9 +167,6 @@ function initSpotlightNavbar() {
       // Add active class to clicked link
       link.classList.add('active');
       activeIndex = index;
-      
-      // Update ambience position with animation
-      updateAmbiencePosition(index, false);
     });
   });
   

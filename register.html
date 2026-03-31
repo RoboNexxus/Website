@@ -131,15 +131,9 @@
       color: #ffffff !important;
     }
 
-    .navbar-ambience-line {
-      background: radial-gradient(60px circle at var(--ambience-x, 50%) 0%,
-          rgba(255, 255, 255, 1) 0%,
-          transparent 100%) !important;
-    }
-
     .navbar-spotlight-overlay {
       background: radial-gradient(120px circle at var(--spotlight-x, 50%) 100%,
-          rgba(255, 255, 255, 0.15) 0%,
+          rgba(255, 255, 255, 0.1) 0%,
           transparent 50%) !important;
     }
   </style>
@@ -977,7 +971,7 @@
   </style>
 </head>
 
-<body>
+<body class="sticky-nav">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-53TPG7NL" height="0" width="0"
       style="display:none;visibility:hidden"></iframe></noscript>
@@ -1097,7 +1091,6 @@
               <li><a class="nav-links" href="/contact" data-index="5">Contact</a></li>
             </ul>
             <div class="navbar-spotlight-overlay"></div>
-            <div class="navbar-ambience-line"></div>
           </div>
         </div>
 
