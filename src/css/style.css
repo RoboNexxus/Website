@@ -123,20 +123,33 @@ body.sticky-nav .navbar {
   align-items: center;
 }
 
-/* ── Logo pill (left side, same style as rn26-pill) ── */
-.nav-logo {
-  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+/* ── Logo wrapper: holds both the big logo and the pill, same flex slot ── */
+.nav-logo-wrap {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  min-width: 48px;
 }
 
-/* On scroll: hide the standalone logo, show logo-pill */
+/* ── Big standalone logo ── */
+.nav-logo {
+  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+}
+
 .navbar.scrolled .nav-logo {
   opacity: 0;
   pointer-events: none;
   transform: translateY(-6px);
 }
 
-/* ── Logo pill — mirrors .spotlight-nav / .rn26-pill ── */
+/* ── Logo pill — same glass style as rn26-pill ── */
 .nav-logo-pill {
+  position: absolute;
+  left: 0;
   display: flex;
   align-items: center;
   height: 44px;
@@ -152,8 +165,7 @@ body.sticky-nav .navbar {
   transform: translateY(-6px);
   transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
               background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-  position: absolute; /* sits in same spot as .nav-logo */
-  left: 60px;
+  white-space: nowrap;
 }
 
 .nav-logo-pill img {
