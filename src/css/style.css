@@ -93,7 +93,7 @@ body {
   min-height: 80px;
   padding: 12px 60px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   position: fixed;
   top: 0;
@@ -105,13 +105,7 @@ body {
   transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Scrolled state — compact pill row */
-.navbar.scrolled {
-  padding: 10px 60px;
-  align-items: center;
-}
-
-/* Sticky behavior for specific pages (legacy, kept for compat) */
+/* Sticky behavior for specific pages (legacy) */
 body.sticky-nav .navbar {
   position: fixed;
   top: 0;
@@ -127,6 +121,50 @@ body.sticky-nav .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+/* ── Logo pill (left side, same style as rn26-pill) ── */
+.nav-logo {
+  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* On scroll: hide the standalone logo, show logo-pill */
+.navbar.scrolled .nav-logo {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+}
+
+/* ── Logo pill — mirrors .spotlight-nav / .rn26-pill ── */
+.nav-logo-pill {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  position: absolute; /* sits in same spot as .nav-logo */
+  left: 60px;
+}
+
+.nav-logo-pill img {
+  height: 28px;
+  width: auto;
+}
+
+.navbar.scrolled .nav-logo-pill {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
 }
 
 .nav-logo img {
@@ -161,64 +199,15 @@ body.sticky-nav .navbar {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Scrolled: enhanced liquid glass */
-.navbar.scrolled .spotlight-nav {
+/* Scrolled: enhanced liquid glass on all pills */
+.navbar.scrolled .spotlight-nav,
+.navbar.scrolled .nav-logo-pill,
+.navbar.scrolled .rn26-pill {
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(24px) saturate(200%) brightness(1.1);
-  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.1);
+  backdrop-filter: blur(24px) saturate(200%) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.05);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.15);
-}
-
-/* ── Inline logo inside pill (shown on scroll) ── */
-.nav-logo-inline {
-  display: flex;
-  align-items: center;
-  padding: 0;
-  border-right: 1px solid transparent;
-  margin-right: 0;
-  overflow: hidden;
-  max-width: 0;
-  opacity: 0;
-  transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.3s ease,
-              padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              margin 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.3s ease;
-}
-
-.nav-logo-inline img {
-  height: 28px;
-  width: auto;
-  flex-shrink: 0;
-}
-
-.navbar.scrolled .nav-logo-inline {
-  max-width: 48px;
-  opacity: 1;
-  padding: 0 8px 0 10px;
-  margin-right: 4px;
-  border-right-color: rgba(255, 255, 255, 0.1);
-}
-
-/* ── Original logo: hide on scroll ── */
-.nav-logo {
-  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.navbar.scrolled .nav-logo {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-8px);
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .spotlight-nav {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-  }
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.12);
 }
 
 .nav-links-ul {

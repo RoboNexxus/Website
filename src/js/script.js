@@ -169,12 +169,6 @@ if (hamburger && navLinks) {
 ================================ */
 gsap.set(".navbar, .nav-links, .nav-logo img", { opacity: 1 });
 
-gsap.from(".navbar", {
-  y: -50,
-  opacity: 0,
-  duration: 0.8,
-  ease: "power3.out"
-});
 
 // Navbar links stagger animation
 gsap.from(".nav-links", {
