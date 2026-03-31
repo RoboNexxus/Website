@@ -184,11 +184,14 @@ document.addEventListener('DOMContentLoaded', initSpotlightNavbar);
 (function () {
   function onScroll() {
     const navbar = document.querySelector('.navbar');
-    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 60);
+    if (!navbar) return;
+    const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+    navbar.classList.toggle('scrolled', scrollY > 60);
   }
   document.addEventListener('DOMContentLoaded', function () {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('scroll', onScroll, { passive: true });
   });
 })();
 
