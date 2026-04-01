@@ -649,17 +649,18 @@
 
   function animateProjects(c) {
     c.querySelectorAll('.project-card').forEach(function (el, i) {
-      whenIn(el, function () {
-        el.style.willChange = 'transform, opacity';
-        gsap.set(el, {
-          opacity: 0,
-          y: 30,
-          rotationX: -6,
-          transformOrigin: 'center center',
-          transformPerspective: 1000,
-          force3D: true
-        });
+      // Set initial state immediately, not inside the scroll trigger
+      el.style.willChange = 'transform, opacity';
+      gsap.set(el, {
+        opacity: 0,
+        y: 30,
+        rotationX: -6,
+        transformOrigin: 'center center',
+        transformPerspective: 1000,
+        force3D: true
+      });
 
+      whenIn(el, function () {
         var d = (i % 3) * 0.08;
         var pTl = gsap.timeline({ delay: d });
 
