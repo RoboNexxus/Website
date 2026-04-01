@@ -188,11 +188,20 @@ document.addEventListener('DOMContentLoaded', initSpotlightNavbar);
     const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
     navbar.classList.toggle('scrolled', scrollY > 60);
   }
-  document.addEventListener('DOMContentLoaded', function () {
+  
+  function initScroll() {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     document.addEventListener('scroll', onScroll, { passive: true });
-  });
+  }
+  
+  // Handle both cases: DOM ready or already loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScroll);
+  } else {
+    // DOM is already ready, execute immediately
+    initScroll();
+  }
 })();
 
 console.log('✨ Spotlight navbar module loaded');
