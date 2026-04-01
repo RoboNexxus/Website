@@ -182,6 +182,18 @@ document.addEventListener('DOMContentLoaded', initSpotlightNavbar);
 
 // ── Navbar scroll: fixed pill + logo swap ──
 (function () {
+  // Only enable on specific pages (not index/home or about)
+  const currentPath = window.location.pathname;
+  const currentPage = currentPath.split('/').pop() || 'index.html';
+  
+  // Skip navbar scroll on home/index and about pages
+  if (currentPage === '' || currentPage === '/' || 
+      currentPage === 'index.html' || currentPage === 'index' ||
+      currentPage === 'about.html' || currentPage === 'about') {
+    console.log('Navbar scroll disabled for:', currentPage);
+    return;
+  }
+  
   function onScroll() {
     const navbar = document.querySelector('.navbar');
     if (!navbar) return;
@@ -193,6 +205,7 @@ document.addEventListener('DOMContentLoaded', initSpotlightNavbar);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     document.addEventListener('scroll', onScroll, { passive: true });
+    console.log('✅ Navbar scroll behavior enabled for:', currentPage);
   }
   
   // Handle both cases: DOM ready or already loaded
