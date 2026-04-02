@@ -287,7 +287,7 @@ function loadTeamMembers() {
   const teamContainer = document.getElementById("team-container");
 
   if (teamContainer) {
-    fetch(`/src/js/team.json?v=77&t=${GLOBAL_CACHE_MASTER}`)
+    fetch(`/src/js/team.json?v=78&t=${GLOBAL_CACHE_MASTER}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load team data');
         return res.json();
