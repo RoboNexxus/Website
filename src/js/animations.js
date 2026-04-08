@@ -391,63 +391,97 @@
       tl.to(el, { x: 0, duration: 0.6, ease: 'sine.inOut' }, '-=0.6');
     }, 'top 85%');
 
-    /* Register cards: 3D drop + vertical peel reveal */
+    /* Register cards: elegant staggered fade-in with glow */
     document.querySelectorAll('.reg-card').forEach(function (el, i) {
       whenIn(el, function () {
-        el.style.willChange = 'clip-path, transform';
-        var tl = gsap.timeline({ delay: i * 0.15 });
+        el.style.willChange = 'transform, opacity, box-shadow';
+        
         gsap.set(el, { 
           opacity: 0, 
-          y: -40, 
-          rotationX: -15, 
-          transformPerspective: 1000,
-          clipPath: 'inset(0% 50% 100% 50% round 16px)'
+          y: 60,
+          scale: 0.97
         });
         
+        var tl = gsap.timeline({ delay: i * 0.2 });
+        
+        /* Main entrance: smooth rise */
         tl.to(el, {
           opacity: 1,
-          y: 10,
-          rotationX: 0,
-          clipPath: 'inset(0% 5% 5% 5% round 16px)',
-          duration: 1.2,
-          ease: 'expo.out'
-        });
-        tl.to(el, {
           y: 0,
-          clipPath: 'inset(0% 0% 0% 0% round 16px)',
-          duration: 1.4,
-          ease: 'expo.inOut'
-        }, '-=0.6');
-        tl.to(el, {
-          scale: 1.02,
-          duration: 0.3,
-          ease: 'sine.out'
-        }, '-=0.3');
-        tl.to(el, {
           scale: 1,
-          duration: 0.6,
-          ease: 'sine.inOut'
+          duration: 1,
+          ease: 'power3.out'
         });
-      }, 'top 88%');
+        
+        /* Subtle glow pulse on arrival */
+        tl.to(el, {
+          boxShadow: '0 0 40px rgba(71, 160, 184, 0.25), 0 8px 32px rgba(0, 0, 0, 0.4)',
+          duration: 0.5,
+          ease: 'power2.out'
+        }, '-=0.3');
+        
+        tl.to(el, {
+          boxShadow: '0 0 0px rgba(71, 160, 184, 0), 0 4px 20px rgba(0, 0, 0, 0.3)',
+          duration: 0.8,
+          ease: 'power2.inOut',
+          onComplete: function () {
+            el.style.willChange = 'auto';
+            el.style.boxShadow = '';
+          }
+        });
+      }, 'top 85%');
     });
 
-    /* Register info sidebar cards */
+    /* Register info sidebar cards: slide in from right with stagger */
     document.querySelectorAll('.reg-info-card').forEach(function (el, i) {
       whenIn(el, function () {
-        gsap.set(el, { opacity: 0, x: 40 });
-        gsap.to(el, { opacity: 1, x: 0, duration: 1, delay: i * 0.1, ease: 'expo.out' });
-      }, 'top 90%');
+        el.style.willChange = 'transform, opacity';
+        gsap.set(el, { opacity: 0, x: 50, scale: 0.98 });
+        gsap.to(el, { 
+          opacity: 1, 
+          x: 0, 
+          scale: 1,
+          duration: 0.9, 
+          delay: 0.3 + i * 0.15, 
+          ease: 'power3.out',
+          onComplete: function() {
+            el.style.willChange = 'auto';
+          }
+        });
+      }, 'top 85%');
     });
 
-    /* Chips */
-    batchReveal('.grade-chip label', 0.06);
-    batchReveal('.event-chip label', 0.07);
+    /* Chips: staggered pop-in */
+    batchReveal('.grade-chip label', 0.08);
+    batchReveal('.event-chip label', 0.06);
 
-    /* Submit button */
+    /* Submit button: smooth scale-up with glow */
     whenIn('.reg-submit-btn', function (el) {
-      gsap.set(el, { opacity: 0, scale: 0.85 });
-      gsap.to(el, { opacity: 1, scale: 1, duration: 1, ease: 'expo.out' });
-    }, 'top 96%');
+      el.style.willChange = 'transform, opacity, box-shadow';
+      gsap.set(el, { opacity: 0, scale: 0.9, y: 10 });
+      var tl = gsap.timeline();
+      tl.to(el, { 
+        opacity: 1, 
+        scale: 1, 
+        y: 0,
+        duration: 0.8, 
+        ease: 'power3.out' 
+      });
+      tl.to(el, {
+        boxShadow: '0 0 30px rgba(71, 160, 184, 0.4)',
+        duration: 0.4,
+        ease: 'power2.out'
+      }, '-=0.2');
+      tl.to(el, {
+        boxShadow: '0 0 0px rgba(71, 160, 184, 0)',
+        duration: 0.6,
+        ease: 'power2.inOut',
+        onComplete: function() {
+          el.style.willChange = 'auto';
+          el.style.boxShadow = '';
+        }
+      });
+    }, 'top 92%');
 
     /* Filter buttons */
     var filterBtns = document.querySelectorAll('.filter-btn');
@@ -473,12 +507,23 @@
       gsap.to(el, { opacity: 1, x: 0, duration: 1.2, ease: 'expo.out' });
     });
 
-    /* Member blocks */
+    /* Member blocks: smooth staggered entrance */
     document.querySelectorAll('.member-block').forEach(function (el, i) {
       whenIn(el, function () {
-        gsap.set(el, { opacity: 0, y: 30 });
-        gsap.to(el, { opacity: 1, y: 0, duration: 1, delay: i * 0.12, ease: 'expo.out' });
-      }, 'top 90%');
+        el.style.willChange = 'transform, opacity';
+        gsap.set(el, { opacity: 0, y: 40, scale: 0.98 });
+        gsap.to(el, { 
+          opacity: 1, 
+          y: 0, 
+          scale: 1,
+          duration: 0.8, 
+          delay: i * 0.15, 
+          ease: 'power3.out',
+          onComplete: function() {
+            el.style.willChange = 'auto';
+          }
+        });
+      }, 'top 88%');
     });
 
     /* About heading */
