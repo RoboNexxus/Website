@@ -79,12 +79,12 @@
 
   <!-- Preload Critical Resources -->
   <link rel="preload" as="image" href="/src/assets/images/Robo_Nexus_Logo.webp" />
-  <link rel="preload" href="/src/css/style.css?v=77" as="style" />
+  <link rel="preload" href="/src/css/style.css?v=79" as="style" />
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" as="script" />
 
-  <link rel="stylesheet" href="/src/css/style.css?v=77" />
-  <link rel="stylesheet" href="/src/css/subnav.css?v=77" />
-  <link rel="stylesheet" href="/src/css/toast.css?v=77" />
+  <link rel="stylesheet" href="/src/css/style.css?v=79" />
+  <link rel="stylesheet" href="/src/css/subnav.css?v=79" />
+  <link rel="stylesheet" href="/src/css/toast.css?v=79" />
 
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print"
@@ -273,6 +273,19 @@
 
     .reg-field input::placeholder {
       color: rgba(255, 255, 255, .22);
+    }
+
+    .reg-field .field-hint {
+      margin-top: 8px;
+      font-size: .75rem;
+      color: rgba(71, 160, 184, 0.8);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reg-field .field-hint i {
+      font-size: .7rem;
     }
 
     .reg-field input:focus,
@@ -1150,8 +1163,11 @@
           <p class="reg-section-label"><i class="fas fa-school"></i> School Details</p>
 
           <div class="reg-field">
-            <label><i class="fas fa-building"></i> School Name <span class="req">*</span></label>
+            <label><i class="fas fa-building"></i> School Name <span class="req" id="school-req">*</span></label>
             <input type="text" id="reg-school" placeholder="e.g. Amity International School, Sec 46" />
+            <p class="field-hint" id="school-hint" style="display:none;">
+              <i class="fas fa-info-circle"></i> Leave empty if participating as Individual without a school
+            </p>
           </div>
 
           <div class="reg-divider"></div>
@@ -1203,7 +1219,7 @@
               </div>
             </div>
             <div class="reg-field" id="team-name-wrapper" style="display:none;">
-              <label><i class="fas fa-flag"></i> Team Name <span class="req">*</span></label>
+              <label><i class="fas fa-flag"></i> Team Name <span class="req" id="team-req">*</span></label>
               <input type="text" id="reg-team" placeholder="e.g. Circuit Breakers" />
             </div>
           </div>
@@ -1413,25 +1429,41 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 
   <!-- SCRIPTS — subnav before spotlight so observers are set up first -->
-  <script src="/src/js/toast.js?v=77" defer></script>
-  <script src="/src/js/subnav.js?v=77" defer></script>
-  <script src="/src/js/spotlight-navbar.js?v=77" defer></script>
-  <script src="/src/js/particles.js?v=77" defer></script>
-  <script src="/src/js/script.js?v=77" defer></script>
-  <script src="/src/js/prefetch.js?v=77" defer></script>
-  <script src="/src/js/protection.js?v=77" defer></script>
+  <script src="/src/js/toast.js?v=79" defer></script>
+  <script src="/src/js/subnav.js?v=79" defer></script>
+  <script src="/src/js/spotlight-navbar.js?v=79" defer></script>
+  <script src="/src/js/particles.js?v=79" defer></script>
+  <script src="/src/js/script.js?v=79" defer></script>
+  <script src="/src/js/prefetch.js?v=79" defer></script>
+  <script src="/src/js/protection.js?v=79" defer></script>
 
   <script>
     /* ── Participation type toggle ── */
     function onParticipationChange(val) {
       const wrap = document.getElementById('team-name-wrapper');
       const fields = document.getElementById('team-fields');
+      const schoolHint = document.getElementById('school-hint');
+      const schoolReq = document.getElementById('school-req');
+      const teamReq = document.getElementById('team-req');
+      
       if (val === 'School Team') {
         wrap.style.display = 'flex';
         fields.classList.add('visible');
+        schoolHint.style.display = 'none';
+        schoolReq.style.display = 'inline';
+        teamReq.style.display = 'inline';
+      } else if (val === 'Individual') {
+        wrap.style.display = 'flex';
+        fields.classList.add('visible');
+        schoolHint.style.display = 'block';
+        schoolReq.style.display = 'none';
+        teamReq.style.display = 'none';
       } else {
         wrap.style.display = 'none';
         fields.classList.remove('visible');
+        schoolHint.style.display = 'none';
+        schoolReq.style.display = 'inline';
+        teamReq.style.display = 'inline';
         ['m2-name', 'm2-discord', 'm2-email', 'm3-name', 'm3-discord', 'm3-email', 'reg-team']
           .forEach(function (id) { var el = document.getElementById(id); if (el) el.value = ''; });
         updateTeamSize();
@@ -1493,7 +1525,9 @@
       var teamName = document.getElementById('reg-team').value.trim();
       var event = getSelectedEvent();
       var members = [];
-      if (participationType === 'School Team') {
+      
+      /* Collect team members for both Individual and School Team */
+      if (participationType === 'Individual' || participationType === 'School Team') {
         members = [
           {
             name:    document.getElementById('m2-name').value.trim(),
@@ -1520,7 +1554,8 @@
       }
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('reg-email'); hasError = true; }
       if (!phone) { setError('reg-phone'); hasError = true; }
-      if (!school) { setError('reg-school'); hasError = true; }
+      /* School is required only for School Team */
+      if (participationType === 'School Team' && !school) { setError('reg-school'); hasError = true; }
       if (!gradeCategory) {
         var gc = document.getElementById('grade-chips');
         gc.style.outline = '2px solid #e74c3c';
@@ -1723,7 +1758,7 @@
     }
   </script>
 
-  <script src="/src/js/animations.js?v=77" defer></script>
+  <script src="/src/js/animations.js?v=79" defer></script></script>
 </body>
 
 </html>
