@@ -405,9 +405,13 @@ export default async function handler(req, res) {
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const PHONE_RE = /^\+?[\d\s\-()\\.]{7,20}$/;
 
+    /* School is required only for School Team */
+    const schoolRequired = participationType === 'School Team';
+    
     if (
-      !name || !discord || !email || !phone || !school ||
-      !gradeCategory || !participationType || !event
+      !name || !discord || !email || !phone ||
+      !gradeCategory || !participationType || !event ||
+      (schoolRequired && !school)
     ) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
@@ -526,7 +530,7 @@ export default async function handler(req, res) {
         'Discord ID': { rich_text: [{ text: { content: discord } }] },
         Email: { email },
         Phone: { phone_number: phone },
-        School: { rich_text: [{ text: { content: school } }] },
+        School: { rich_text: [{ text: { content: school || '' } }] },
         'Grade Category': { select: { name: gradeCategory } },
         'Participation Type': { select: { name: participationType } },
         'Team Name': { rich_text: [{ text: { content: teamName || '' } }] },
