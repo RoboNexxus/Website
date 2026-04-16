@@ -32,6 +32,63 @@ function isValidHttpUrl(value) {
   }
 }
 
+function truncateText(value, maxLength) {
+  const text = String(value || '');
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength - 3)}...`;
+}
+
+async function sendDiscordNotification(webhookUrl, {
+  name,
+  email,
+  github,
+  website,
+  links,
+  skills,
+  eventsInterested,
+  experience,
+}) {
+  if (!webhookUrl) return false;
+
+  const skillsText = skills.length > 0 ? skills.join(', ') : 'Not selected';
+  const eventsText = eventsInterested.length > 0 ? eventsInterested.join(', ') : 'Not selected';
+  const linksText = links || 'Not provided';
+  const experienceText = experience || 'Not provided';
+
+  const payload = {
+    embeds: [{
+      title: 'New Induction Application',
+      color: 0x47a0b8,
+      description: `A new induction form has been submitted by **${truncateText(name, 120)}**.`,
+      fields: [
+        { name: 'Name', value: truncateText(name, 1024), inline: true },
+        { name: 'Email', value: truncateText(email, 1024), inline: true },
+        { name: 'GitHub', value: truncateText(github || 'Not provided', 1024), inline: false },
+        { name: 'Website', value: truncateText(website || 'Not provided', 1024), inline: false },
+        { name: 'Skills', value: truncateText(skillsText, 1024), inline: false },
+        { name: 'Events Interested', value: truncateText(eventsText, 1024), inline: false },
+        { name: 'Other Links', value: truncateText(linksText, 1024), inline: false },
+        { name: 'Experience', value: truncateText(experienceText, 1024), inline: false },
+      ],
+      footer: { text: 'Robo Nexus Inductions' },
+      timestamp: new Date().toISOString(),
+    }],
+  };
+
+  const discordRes = await fetch(webhookUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!discordRes.ok) {
+    const errorBody = await discordRes.text();
+    throw new Error(`Discord webhook failed [${discordRes.status}]: ${errorBody}`);
+  }
+
+  return true;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -159,7 +216,25 @@ export default async function handler(req, res) {
       return res.status(500).json({ message: 'Failed to save application' });
     }
 
-    return res.status(200).json({ message: 'Application submitted successfully' });
+    const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_INDUCTIONS || process.env.DISCORD_WEBHOOK_URL;
+    let discord = false;
+
+    try {
+      discord = await sendDiscordNotification(DISCORD_WEBHOOK_URL, {
+        name: cleanName,
+        email: cleanEmail,
+        github: cleanGithub,
+        website: cleanWebsite,
+        links: cleanLinks,
+        skills: safeSkills,
+        eventsInterested: safeEvents,
+        experience: cleanExperience,
+      });
+    } catch (notifyError) {
+      console.error('Discord notify error:', notifyError.message);
+    }
+
+    return res.status(200).json({ message: 'Application submitted successfully', discord });
 
   } catch (error) {
     console.error('Apply error:', error.message);
