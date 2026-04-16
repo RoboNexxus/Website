@@ -1,7 +1,8 @@
-// MASTER CACHE CONTROL - v57
+// MASTER CACHE CONTROL - v58
 // This is the global master control to reset all cache. 
 // Changing this ID will force ALL users to re-download all JSON and Dynamic data.
-const GLOBAL_CACHE_MASTER = Date.now(); 
+const GLOBAL_CACHE_MASTER = 58;
+window.GLOBAL_CACHE_MASTER = GLOBAL_CACHE_MASTER;
 
 // Wait for GSAP to be available
 if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
@@ -131,7 +132,7 @@ if (hamburger && navLinks) {
 ================================ */
 (async function() {
   try {
-    const res = await fetch(`/src/js/events.json?v=77&t=${GLOBAL_CACHE_MASTER}`);
+    const res = await fetch(`/src/js/events.json?v=82&t=${GLOBAL_CACHE_MASTER}`);
     if (!res.ok) return;
     const data = await res.json();
     if (data.upcomingEvents && data.upcomingEvents.length > 0) {
@@ -287,7 +288,7 @@ function loadTeamMembers() {
   const teamContainer = document.getElementById("team-container");
 
   if (teamContainer) {
-    fetch(`/src/js/team.json?v=78&t=${GLOBAL_CACHE_MASTER}`)
+    fetch(`/src/js/team.json?v=82&t=${GLOBAL_CACHE_MASTER}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load team data');
         return res.json();
@@ -476,7 +477,7 @@ function loadAlumni() {
   const alumniContainer = document.getElementById("alumni-container");
 
   if (alumniContainer) {
-    fetch(`/src/js/alumni.json?v=77&t=${GLOBAL_CACHE_MASTER}`)
+    fetch(`/src/js/alumni.json?v=82&t=${GLOBAL_CACHE_MASTER}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load alumni data');
         return res.json();

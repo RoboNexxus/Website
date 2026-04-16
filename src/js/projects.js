@@ -5,7 +5,7 @@ let SB_HEADERS = {};
 
 async function loadSupabaseConfig() {
   try {
-    const res = await fetch(`/api/config?v=60&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`);
+    const res = await fetch(`/api/config?v=82&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`);
     if (!res.ok) throw new Error('Config fetch failed');
     const cfg = await res.json();
     SUPABASE_URL = cfg.url;
@@ -37,7 +37,7 @@ async function initProjects() {
 
   try {
     await loadSupabaseConfig();
-    const tutData = await fetch(`/src/js/tutorials.json?v=61&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`).then(r => r.json());
+    const tutData = await fetch(`/src/js/tutorials.json?v=82&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`).then(r => r.json());
     tutorials = tutData.tutorials || [];
   } catch (err) {
     console.error('Init error:', err);
