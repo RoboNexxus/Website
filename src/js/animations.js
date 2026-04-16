@@ -1,7 +1,7 @@
 /**
  * Robo Nexus — Animation System v3  (Cinematic Edition)
  *
- * Navbar: clip-path LEFT-TO-RIGHT expansion → cuts itself → RN26 pill appears.
+ * Navbar: Inductions pill reveals first → main nav expands → Register pill settles in.
  * Everything else: GPU-friendly transforms + long cinematic durations.
  *
  * Requires GSAP + ScrollTrigger (already loaded on every page).
@@ -40,11 +40,14 @@
       }, { once: true });
     } else {
       /* inner pages: no animation, just make sure navbar is visible immediately */
-      gsap.set('.spotlight-nav', { opacity: 1 });
+      gsap.set('.spotlight-nav', { opacity: 1, y: 0, scaleX: 1, x: 0, clipPath: 'inset(0 0% 0 0 round 22px)' });
       gsap.set('.nav-links', { opacity: 1, y: 0 });
       gsap.set('.nav-logo img', { opacity: 1, y: 0, scale: 1 });
+      if (document.getElementById('rn-inductions-pill')) {
+        gsap.set('#rn-inductions-pill', { opacity: 1, scaleX: 1, x: 0, y: 0 });
+      }
       if (document.getElementById('rn26-pill')) {
-        gsap.set('#rn26-pill', { opacity: 1, scaleX: 1, x: 0 });
+        gsap.set('#rn26-pill', { opacity: 1, scaleX: 1, x: 0, y: 0 });
       }
     }
 
@@ -71,15 +74,17 @@
      ═══════════════════════════════════════════════════════════════════ */
   function navbarCinematic(baseDelay) {
     var pill = document.querySelector('.spotlight-nav');
-    var navContainer = document.querySelector('.spotlight-nav-container');
     var navLogo = document.querySelector('.nav-logo img');
     var navLinks = document.querySelectorAll('.nav-links');
+    var inductions = document.getElementById('rn-inductions-pill');
     var rn26 = document.getElementById('rn26-pill');
 
     /* kill earlier script.js tweens */
     if (pill) gsap.killTweensOf(pill);
     if (navLogo) gsap.killTweensOf(navLogo);
     if (navLinks.length) gsap.killTweensOf(navLinks);
+    if (inductions) gsap.killTweensOf(inductions);
+    if (rn26) gsap.killTweensOf(rn26);
 
     var tl = gsap.timeline({ delay: baseDelay });
 
@@ -95,140 +100,197 @@
       }, 1.2); /* starts near the end of the glide */
     }
 
-    /* ── PILL: left-to-right clip expansion WITH y-wobble ── */
+    /* ── STEP 1: INDUCTIONS PILL arrives first from the left ── */
+    if (inductions) {
+      inductions.style.willChange = 'transform, opacity';
+
+      gsap.set(inductions, {
+        opacity: 0,
+        x: -22,
+        y: -6,
+        scaleX: 0.84,
+        transformOrigin: 'right center'
+      });
+
+      tl.to(inductions, {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        duration: 0.85,
+        ease: 'expo.out'
+      }, 0);
+
+      tl.to(inductions, {
+        x: 2,
+        duration: 0.22,
+        ease: 'sine.out'
+      }, '-=0.15');
+
+      tl.to(inductions, {
+        x: 0,
+        duration: 0.38,
+        ease: 'sine.inOut'
+      });
+    }
+
+    /* ── STEP 2: MAIN NAV expands with clip-path + organic wobble ── */
     if (pill) {
+      var mainStart = inductions ? 0.35 : 0;
+
       pill.style.willChange = 'clip-path, transform';
 
       /* hide links initially — they'll slide in later */
       gsap.set(navLinks, { opacity: 0, y: 8 });
       gsap.set(pill, { opacity: 1, y: -15 });
 
-      if (rn26) {
-        gsap.set(rn26, { opacity: 0, x: -15, scaleX: 0, transformOrigin: 'left center' });
-      }
-
       gsap.set(pill, { clipPath: 'inset(0 100% 0 0 round 22px)' });
 
-      /* pill drops down to position while expanding — starts immediately */
+      /* pill drops down to position while expanding */
       tl.to(pill, {
         y: 0,
         duration: 0.8,
         ease: 'expo.out'
-      }, 0);
+      }, mainStart);
 
-      /* THE EXPANSION: left → right, long and cinematic */
+      /* expansion: left → right */
       tl.to(pill, {
         clipPath: 'inset(0 0% 0 0 round 22px)',
-        duration: 2,
+        duration: 1.8,
         ease: 'expo.inOut'
-      }, '-=0.8');
+      }, mainStart + 0.05);
 
-      /* WOBBLE during expansion — pill breathes on Y axis
-         (small drift up, then back, like it's floating into place) */
+      /* wobble during expansion */
       tl.to(pill, {
         y: -3,
-        duration: 0.6,
+        duration: 0.55,
         ease: 'sine.inOut'
-      }, '-=1.6');
+      }, mainStart + 0.25);
       tl.to(pill, {
         y: 2,
-        duration: 0.5,
+        duration: 0.45,
         ease: 'sine.inOut'
-      }, '-=1.0');
+      }, mainStart + 0.8);
       tl.to(pill, {
         y: 0,
-        duration: 0.7,
+        duration: 0.6,
         ease: 'sine.inOut'
-      }, '-=0.5');
+      }, mainStart + 1.2);
 
       /* ── NAV LINKS: slide up from below + fade, staggered ── */
       tl.to(navLinks, {
         opacity: 1,
         y: 0,
-        duration: 1,
+        duration: 0.9,
         stagger: 0.06,
         ease: 'expo.out'
-      }, '-=1.2');
+      }, mainStart + 0.95);
 
       /* pill STRETCHES past its width — rubber band effect */
       tl.to(pill, {
         scaleX: 1.07,
-        duration: 0.35,
+        duration: 0.32,
         ease: 'sine.out'
-      }, '-=0.4');
+      }, mainStart + 1.55);
       /* BOUNCE BACK — snaps to rest like a rubber band */
       tl.to(pill, {
         scaleX: 0.99,
-        duration: 0.25,
+        duration: 0.22,
         ease: 'sine.in'
-      });
+      }, mainStart + 1.87);
       tl.to(pill, {
         scaleX: 1.02,
-        duration: 0.2,
+        duration: 0.18,
         ease: 'sine.out'
-      });
+      }, mainStart + 2.09);
       tl.to(pill, {
         scaleX: 1,
-        duration: 0.4,
+        duration: 0.34,
         ease: 'sine.inOut'
-      });
-
-      /* clean up */
-      tl.add(function () {
-        pill.style.willChange = 'auto';
-        pill.style.clipPath = '';
-      });
+      }, mainStart + 2.27);
     }
 
-    /* ── THE CUT: RN26 separates out with recoil ── */
+    /* ── STEP 3: REGISTER PILL arrives last on the right ── */
     if (rn26) {
-      /* slides out from the pill's right edge */
+      var registerStart = pill ? (inductions ? 2.35 : 2.05) : (inductions ? 0.9 : 0);
+
+      rn26.style.willChange = 'transform, opacity';
+
+      gsap.set(rn26, {
+        opacity: 0,
+        x: 20,
+        y: -4,
+        scaleX: 0.86,
+        transformOrigin: 'left center'
+      });
+
+      if (pill) {
+        tl.to(pill, {
+          scaleX: 1,
+          duration: 0.2,
+          ease: 'sine.inOut'
+        }, registerStart - 0.25);
+      }
+
       tl.to(rn26, {
         opacity: 1,
         x: 0,
+        y: 0,
         scaleX: 1,
-        duration: 1.2,
+        duration: 0.95,
         ease: 'expo.out'
-      }, '-=0.8');
+      }, registerStart);
 
-      /* RECOIL: overshoots to the right, then settles back */
       tl.to(rn26, {
         x: 6,
-        duration: 0.35,
+        duration: 0.3,
         ease: 'sine.out'
-      }, '-=0.3');
+      }, registerStart + 0.7);
       tl.to(rn26, {
         x: 0,
-        duration: 0.6,
+        duration: 0.45,
         ease: 'sine.inOut'
-      });
+      }, registerStart + 1);
 
-      /* RN26 dot glow pulse — breathes twice */
+      /* quick glow pulse on settle */
       var rn26Dot = rn26.querySelector('.rn26-dot');
       if (rn26Dot) {
         tl.fromTo(rn26Dot, {
           boxShadow: '0 0 0px rgba(71, 160, 184, 0)'
         }, {
-          boxShadow: '0 0 18px rgba(71, 160, 184, 0.9)',
-          duration: 0.7,
+          boxShadow: '0 0 16px rgba(71, 160, 184, 0.85)',
+          duration: 0.55,
           yoyo: true,
           repeat: 1,
           ease: 'sine.inOut'
-        }, '-=1');
+        }, registerStart + 0.2);
       }
 
-      /* whole RN26 pill does a tiny breathe after settling */
       tl.to(rn26, {
         scale: 1.02,
-        duration: 0.3,
+        duration: 0.24,
         ease: 'sine.out'
-      }, '-=0.3');
+      }, registerStart + 0.95);
       tl.to(rn26, {
         scale: 1,
-        duration: 0.5,
+        duration: 0.38,
         ease: 'sine.inOut'
-      });
+      }, registerStart + 1.19);
     }
+
+    /* clean up */
+    tl.add(function () {
+      if (pill) {
+        pill.style.willChange = 'auto';
+        pill.style.clipPath = '';
+      }
+      if (inductions) {
+        inductions.style.willChange = 'auto';
+      }
+      if (rn26) {
+        rn26.style.willChange = 'auto';
+      }
+    });
 
     /* ── LOGO: breathing glow just like landing-intro ── */
     if (navLogo) {
@@ -287,6 +349,18 @@
             scaleX: 0,
             opacity: 0,
             transformOrigin: 'left center',
+            duration: 0.3,
+            ease: 'power2.in'
+          }, 0);
+        }
+
+        /* Inductions pill shrinks back */
+        var inductions = document.getElementById('rn-inductions-pill');
+        if (inductions) {
+          exitTl.to(inductions, {
+            scaleX: 0,
+            opacity: 0,
+            transformOrigin: 'right center',
             duration: 0.3,
             ease: 'power2.in'
           }, 0);
