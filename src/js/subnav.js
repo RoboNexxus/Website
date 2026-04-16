@@ -1,6 +1,6 @@
 /**
- * RoboNexus Right-Side Pills
- * Injects separate pill navbars (Inductions + RoboNexus '26) after main nav.
+ * RoboNexus Navbar Pills
+ * Injects Inductions on the left of main nav and RoboNexus '26 on the right.
  */
 (function () {
 
@@ -40,17 +40,27 @@
     </div>
   `;
 
-  /* ── Inject into .spotlight-nav-container, after the main nav ── */
+  /* ── Inject into .spotlight-nav-container around the main nav ── */
   function inject() {
     const navContainer = document.querySelector('.spotlight-nav-container');
     if (!navContainer) return;
 
+    const mainNav = navContainer.querySelector('.spotlight-nav');
+
     if (!document.getElementById('rn-inductions-pill')) {
-      navContainer.insertAdjacentHTML('beforeend', INDUCTIONS_PILL_HTML);
+      if (mainNav) {
+        mainNav.insertAdjacentHTML('beforebegin', INDUCTIONS_PILL_HTML);
+      } else {
+        navContainer.insertAdjacentHTML('afterbegin', INDUCTIONS_PILL_HTML);
+      }
     }
 
     if (!document.getElementById('rn26-pill')) {
-      navContainer.insertAdjacentHTML('beforeend', PILL_HTML);
+      if (mainNav) {
+        mainNav.insertAdjacentHTML('afterend', PILL_HTML);
+      } else {
+        navContainer.insertAdjacentHTML('beforeend', PILL_HTML);
+      }
     }
 
     initSpotlight('rn-inductions-pill', 'rn-inductions-spotlight', '--rn26-x');
