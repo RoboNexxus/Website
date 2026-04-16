@@ -656,6 +656,53 @@
         duration: 1.2, stagger: 0.15, delay: 0.2, ease: 'expo.out'
       });
     }
+
+    /* Inductions hero: slide in from left */
+    var applyHero = document.querySelector('.apply-hero');
+    if (applyHero) {
+      var applyHeroEls = applyHero.querySelectorAll('.event-year, .page-title, .hero-subtitle');
+      gsap.set(applyHeroEls, { opacity: 0, x: -34 });
+      gsap.to(applyHeroEls, {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        stagger: 0.12,
+        delay: 0.12,
+        ease: 'expo.out'
+      });
+    }
+
+    /* Induction cards: left-to-right reveal */
+    document.querySelectorAll('.apply-card').forEach(function (el, i) {
+      el.style.willChange = 'clip-path, transform, opacity';
+      gsap.set(el, {
+        opacity: 0,
+        x: -36,
+        clipPath: 'inset(0% 100% 0% 0% round 20px)'
+      });
+
+      whenIn(el, function () {
+        var aTl = gsap.timeline({ delay: i * 0.1 });
+
+        aTl.to(el, {
+          opacity: 1,
+          x: 6,
+          clipPath: 'inset(0% 0% 0% 0% round 20px)',
+          duration: 1.2,
+          ease: 'expo.inOut'
+        });
+
+        aTl.to(el, {
+          x: 0,
+          duration: 0.5,
+          ease: 'sine.inOut',
+          onComplete: function () {
+            el.style.willChange = 'auto';
+            el.style.clipPath = '';
+          }
+        }, '-=0.35');
+      }, 'top 88%');
+    });
   }
 
 
