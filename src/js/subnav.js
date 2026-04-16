@@ -1,8 +1,26 @@
 /**
- * RoboNexus '26 — Second Navbar
- * Injects a proper pill navbar immediately after .navbar on every page.
+ * RoboNexus Right-Side Pills
+ * Injects separate pill navbars (Inductions + RoboNexus '26) after main nav.
  */
 (function () {
+
+  const INDUCTIONS_PILL_HTML = `
+    <div class="rn26-pill" id="rn-inductions-pill">
+      <div class="rn26-pill-label">
+        <span class="rn26-dot"></span>
+        <span class="rn26-year">Inductions</span>
+      </div>
+      <ul class="rn26-pill-links" id="rn-inductions-links">
+        <li>
+          <a class="rn26-pill-link" href="/inductions" id="rn-inductions-link-apply">
+            <i class="fas fa-user-plus"></i>
+            Apply
+          </a>
+        </li>
+      </ul>
+      <div class="rn26-spotlight" id="rn-inductions-spotlight"></div>
+    </div>
+  `;
 
   const PILL_HTML = `
     <div class="rn26-pill" id="rn26-pill">
@@ -25,23 +43,35 @@
   /* ── Inject into .spotlight-nav-container, after the main nav ── */
   function inject() {
     const navContainer = document.querySelector('.spotlight-nav-container');
-    if (!navContainer || document.getElementById('rn26-pill')) return;
+    if (!navContainer) return;
 
-    navContainer.insertAdjacentHTML('beforeend', PILL_HTML);
-    
-    initSpotlight();
+    if (!document.getElementById('rn-inductions-pill')) {
+      navContainer.insertAdjacentHTML('beforeend', INDUCTIONS_PILL_HTML);
+    }
+
+    if (!document.getElementById('rn26-pill')) {
+      navContainer.insertAdjacentHTML('beforeend', PILL_HTML);
+    }
+
+    initSpotlight('rn-inductions-pill', 'rn-inductions-spotlight', '--rn26-x');
+    initSpotlight('rn26-pill', 'rn26-spotlight', '--rn26-x');
     setActiveLink();
   }
 
-  /* ── Mark active link + kill main nav glow on register page ── */
+  /* ── Mark active links + kill main nav glow on register page ── */
   function setActiveLink() {
     const path = window.location.pathname.replace(/\/$/, '') || '/';
     const registerLink = document.getElementById('rn26-link-register');
-    if (!registerLink) return;
+    const inductionsLink = document.getElementById('rn-inductions-link-apply');
 
     const isRegisterPage = (path === '/register' || path.endsWith('/register'));
+    const isInductionsPage = (path === '/inductions' || path.endsWith('/inductions'));
 
-    if (isRegisterPage) {
+    if (inductionsLink && isInductionsPage) {
+      inductionsLink.classList.add('rn26-active');
+    }
+
+    if (registerLink && isRegisterPage) {
       registerLink.classList.add('rn26-active');
       document.body.classList.add('page-register');
 
@@ -60,15 +90,15 @@
     }
   }
 
-  /* ── Spotlight on the RN26 pill ── */
-  function initSpotlight() {
-    const pill = document.getElementById('rn26-pill');
-    const spotlight = document.getElementById('rn26-spotlight');
+  /* ── Spotlight on pill navs ── */
+  function initSpotlight(pillId, spotlightId, cssVarName) {
+    const pill = document.getElementById(pillId);
+    const spotlight = document.getElementById(spotlightId);
     if (!pill || !spotlight) return;
 
     pill.addEventListener('mousemove', function (e) {
       const rect = pill.getBoundingClientRect();
-      spotlight.style.setProperty('--rn26-x', (e.clientX - rect.left) + 'px');
+      spotlight.style.setProperty(cssVarName, (e.clientX - rect.left) + 'px');
       spotlight.style.opacity = '1';
     });
 
