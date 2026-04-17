@@ -2,7 +2,7 @@ const NOTION_DB = '5a61b841eb8f4f1c9dab198fdae796b2';
 
 const SKILL_OPTIONS = new Set([
   'Robotics', 'Microcontrollers', 'Web Dev', 'Video Editing', '3D Modeling / CAD', '3D Printing',
-  'C / C++', 'Python', 'Arduino', 'Electronics', 'AI / ML', 'Drone Piloting',
+  'C / C++', 'Python', 'Arduino', 'Electronics', 'Drone Piloting',
 ]);
 
 const EVENT_OPTIONS = new Set([
