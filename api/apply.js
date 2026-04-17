@@ -1,12 +1,12 @@
 const NOTION_DB = '5a61b841eb8f4f1c9dab198fdae796b2';
 
 const SKILL_OPTIONS = new Set([
-  'Robotics', 'Arduino', 'Python', 'Electronics', 'CAD/3D Modelling',
-  'Drone Piloting', 'AI/ML', 'Web Dev', 'Discord Bots', 'Video Editing', 'Builder', '2D',
+  'Robotics', 'Microcontrollers', 'Web Dev', 'Video Editing', '3D Modeling / CAD', '3D Printing',
+  'C / C++', 'Python', 'Arduino', 'Electronics', 'AI / ML', 'Drone Piloting',
 ]);
 
 const EVENT_OPTIONS = new Set([
-  'Robo War', 'Robo Soccer', 'Drone', 'Line Follower', 'Race', 'Innovation', 'Web/Tech',
+  'Robo War', 'Robo Soccer', 'Drone', 'Line Follower', 'RC Racing', 'Maze Solver', 'Innovation',
 ]);
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
