@@ -66,6 +66,12 @@
     initSpotlight('rn-inductions-pill', 'rn-inductions-spotlight', '--rn26-x');
     initSpotlight('rn26-pill', 'rn26-spotlight', '--rn26-x');
     setActiveLink();
+
+    // Let the cinematic navbar sequence know that side pills are available.
+    if (document.getElementById('rn-inductions-pill') || document.getElementById('rn26-pill')) {
+      window.__rnSubnavReady = true;
+      window.dispatchEvent(new CustomEvent('subnavReady'));
+    }
   }
 
   /* ── Mark active links + kill main nav glow on register page ── */

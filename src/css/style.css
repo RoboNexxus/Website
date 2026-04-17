@@ -1046,6 +1046,7 @@ body.sticky-nav .navbar {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
+  align-items: stretch;
 }
 
 .modal-image {
@@ -1062,6 +1063,16 @@ body.sticky-nav .navbar {
 
 .modal-info {
   padding: 40px 40px 40px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
 }
 
 .modal-category {
@@ -1080,12 +1091,25 @@ body.sticky-nav .navbar {
 
 .modal-year {
   color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 20px;
+  margin: 0;
 }
 
 .modal-year i {
   color: #47a0b8;
   margin-right: 8px;
+}
+
+.modal-creator-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.87rem;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.modal-creator-info i {
+  color: #47a0b8;
 }
 
 .modal-desc {
@@ -1100,7 +1124,8 @@ body.sticky-nav .navbar {
 }
 
 .modal-status {
-  margin-top: 25px;
+  margin-top: auto;
+  padding-top: 25px;
 }
 
 .modal-status .completed {

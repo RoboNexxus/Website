@@ -34,10 +34,33 @@
 
     /* navbar cinematic sequence ONLY on landing page */
     if (hasIntro) {
-      /* start animation the exact moment the landing logo begins gliding */
-      window.addEventListener('introGlideStart', function () {
+      var navbarStarted = false;
+
+      function tryStartNavbarCinematic() {
+        if (navbarStarted) return;
+
+        var introReady = !!window.__rnIntroGlideStarted;
+        var subnavReady = !!window.__rnSubnavReady || !!document.getElementById('rn-inductions-pill');
+
+        if (!introReady || !subnavReady) return;
+
+        navbarStarted = true;
         navbarCinematic(0);
-      }, { once: true });
+      }
+
+      /* start animation when intro glide has begun and subnav pills exist */
+      window.addEventListener('introGlideStart', function () {
+        window.__rnIntroGlideStarted = true;
+        tryStartNavbarCinematic();
+      });
+
+      window.addEventListener('subnavReady', function () {
+        window.__rnSubnavReady = true;
+        tryStartNavbarCinematic();
+      });
+
+      // Handle the case where events fired before this script attached listeners.
+      tryStartNavbarCinematic();
     } else {
       /* inner pages: no animation, just make sure navbar is visible immediately */
       gsap.set('.spotlight-nav', { opacity: 1, y: 0, scaleX: 1, x: 0, clipPath: 'inset(0 0% 0 0 round 22px)' });
