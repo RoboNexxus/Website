@@ -81,16 +81,9 @@ function renderTutorials() {
           </span>
           ${t.team ? `<span class="project-team-badge"><i class="fas fa-users"></i> ${t.team}</span>` : ''}
         </div>
-        <button class="view-project-btn" data-id="${t.id}">
-          View Details <i class="fas fa-arrow-right"></i>
-        </button>
       </div>
     </div>
   `).join('');
-
-  document.querySelectorAll('.view-project-btn').forEach(btn => {
-    btn.addEventListener('click', () => openModal(btn.dataset.id));
-  });
 }
 
 // ── Modal ─────────────────────────────────────────────────────────
