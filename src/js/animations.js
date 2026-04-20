@@ -80,8 +80,7 @@
 
 
   /* ═══════════════════════════════════════════════════════════════════
-     1 · NAVBAR
-     Sequence: logo → inductions pill → main nav sweeps out from it → rn26 pill
+     1 · NAVBAR — Continuous sweep from inductions → main nav → rn26
      ═══════════════════════════════════════════════════════════════════ */
   function navbarCinematic(baseDelay) {
     var pill      = document.querySelector('.spotlight-nav');
@@ -103,48 +102,48 @@
       tl.to(navLogo, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: 'expo.out' }, 0);
     }
 
-    /* ── 1: Inductions pill slides in from left ── */
+    /* ── 1: Inductions pill sweeps in (clip-path left → right) ── */
     if (inductions) {
-      inductions.style.willChange = 'transform, opacity';
-      gsap.set(inductions, { opacity: 0, x: -28, scaleX: 0.8, transformOrigin: 'right center' });
-      tl.to(inductions, { opacity: 1, x: 0, scaleX: 1, duration: 0.7, ease: 'expo.out' }, 0.1);
-      /* subtle settle bounce */
-      tl.to(inductions, { x: 3, duration: 0.18, ease: 'sine.out' }, 0.72);
-      tl.to(inductions, { x: 0, duration: 0.3,  ease: 'expo.out' }, 0.9);
+      inductions.style.willChange = 'clip-path, opacity';
+      gsap.set(inductions, { opacity: 1, clipPath: 'inset(0 100% 0 0 round 20px)' });
+      tl.to(inductions, {
+        clipPath: 'inset(0 0% 0 0 round 20px)',
+        duration: 0.5,
+        ease: 'expo.out'
+      }, 0.1);
     }
 
-    /* ── 2: Main nav sweeps out from the inductions pill (left → right) ── */
+    /* ── 2: Main nav continues the sweep (starts as inductions finishes) ── */
     if (pill) {
       pill.style.willChange = 'clip-path, opacity';
       gsap.set(navLinks, { opacity: 0, y: 6 });
-      /* start fully clipped from the right so it reveals left-to-right,
-         appearing to grow out of the inductions pill */
       gsap.set(pill, { opacity: 1, clipPath: 'inset(0 100% 0 0 round 22px)' });
 
-      var sweepStart = inductions ? 0.55 : 0.1;
+      var sweepStart = inductions ? 0.45 : 0.1;
       tl.to(pill, {
         clipPath: 'inset(0 0% 0 0 round 22px)',
-        duration: 1.1,
-        ease: 'expo.inOut'
+        duration: 0.9,
+        ease: 'expo.out'
       }, sweepStart);
 
-      /* links fade in as the sweep passes over them */
       tl.to(navLinks, {
         opacity: 1, y: 0,
-        duration: 0.55,
+        duration: 0.5,
         ease: 'expo.out',
-        stagger: 0.055
-      }, sweepStart + 0.45);
+        stagger: 0.05
+      }, sweepStart + 0.3);
     }
 
-    /* ── 3: RoboNexus '26 pill slides in from right ── */
+    /* ── 3: RN26 pill continues the sweep (if present) ── */
     if (rn26) {
-      rn26.style.willChange = 'transform, opacity';
-      gsap.set(rn26, { opacity: 0, x: 28, scaleX: 0.8, transformOrigin: 'left center' });
-      var rn26Start = inductions ? 0.75 : 0.3;
-      tl.to(rn26, { opacity: 1, x: 0, scaleX: 1, duration: 0.7, ease: 'expo.out' }, rn26Start);
-      tl.to(rn26, { x: -3, duration: 0.18, ease: 'sine.out' }, rn26Start + 0.62);
-      tl.to(rn26, { x: 0,  duration: 0.3,  ease: 'expo.out' }, rn26Start + 0.8);
+      rn26.style.willChange = 'clip-path, opacity';
+      gsap.set(rn26, { opacity: 1, clipPath: 'inset(0 100% 0 0 round 20px)' });
+      var rn26Start = inductions ? 1.0 : 0.5;
+      tl.to(rn26, {
+        clipPath: 'inset(0 0% 0 0 round 20px)',
+        duration: 0.5,
+        ease: 'expo.out'
+      }, rn26Start);
     }
   }
 
