@@ -97,7 +97,11 @@ function renderUpcomingEvents() {
   const container = document.getElementById('upcoming-events');
   if (!container) return;
 
-  if (upcomingEvents.length === 0) {
+  const events = window.SITE_CONFIG?.SHOW_RN26
+    ? upcomingEvents
+    : upcomingEvents.filter(e => e.id !== 1);
+
+  if (events.length === 0) {
     container.innerHTML = `
       <div class="event-list-card">
         <p style="color:rgba(255,255,255,0.4); font-style:italic;">No upcoming events at the moment. Check back soon!</p>
@@ -106,7 +110,7 @@ function renderUpcomingEvents() {
     return;
   }
 
-  container.innerHTML = upcomingEvents.map(event => {
+  container.innerHTML = events.map(event => {
     const date = new Date(event.date);
     const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
@@ -114,10 +118,7 @@ function renderUpcomingEvents() {
       <div class="event-list-card">
         <div class="event-list-top">
           <span class="event-list-badge">${event.type}</span>
-          ${event.registrationOpen
-        ? `<a href="/register" class="event-list-register-btn">Register</a>`
-        : ''
-      }
+          ${event.registrationOpen ? `<a href="/register" class="event-list-register-btn">Register</a>` : ''}
         </div>
         <p class="event-list-title">${event.title}</p>
         <p class="event-list-desc">${event.description}</p>
@@ -130,8 +131,6 @@ function renderUpcomingEvents() {
       </div>
     `;
   }).join('');
-
-  // Note: Register links now lead directly to /register
 }
 
 // ── Past Events: 3-column grid card ──
