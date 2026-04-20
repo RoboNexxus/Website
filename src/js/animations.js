@@ -48,7 +48,6 @@
         navbarCinematic(0);
       }
 
-      /* start animation when intro glide has begun and subnav pills exist */
       window.addEventListener('introGlideStart', function () {
         window.__rnIntroGlideStarted = true;
         tryStartNavbarCinematic();
@@ -59,28 +58,19 @@
         tryStartNavbarCinematic();
       });
 
-      // Handle the case where events fired before this script attached listeners.
       tryStartNavbarCinematic();
     } else {
-      /* inner pages: no animation, just make sure navbar is visible immediately */
       gsap.set('.spotlight-nav', { opacity: 1, y: 0, scaleX: 1, x: 0, clipPath: 'inset(0 0% 0 0 round 22px)' });
       gsap.set('.nav-links', { opacity: 1, y: 0 });
       gsap.set('.nav-logo img', { opacity: 1, y: 0, scale: 1 });
-      if (document.getElementById('rn-inductions-pill')) {
-        gsap.set('#rn-inductions-pill', { opacity: 1, scaleX: 1, x: 0, y: 0 });
-      }
-      if (document.getElementById('rn26-pill')) {
-        gsap.set('#rn26-pill', { opacity: 1, scaleX: 1, x: 0, y: 0 });
-      }
+      gsap.set('.rn26-pill', { opacity: 1, x: 0, scaleX: 1 });
     }
 
     pageTransitions();
     staticReveals();
     dynamicWatchers();
     cardHovers();
-    
-    // Refresh ScrollTrigger after all animations are set up
-    // This ensures all triggers are calculated correctly
+
     requestAnimationFrame(function () {
       ScrollTrigger.refresh();
     });
@@ -90,105 +80,186 @@
 
 
   /* ═══════════════════════════════════════════════════════════════════
-     1 · NAVBAR — ORGANIC, LIVING ANIMATION
-     ─────────────────────────────────────────────────────────────────
-     Nothing moves in a straight line. Everything wobbles, overshoots,
-     breathes, and settles — like the landing intro logo.
+     1 · NAVBAR
+     Sequence: logo → inductions pill → main nav sweeps out from it → rn26 pill
      ═══════════════════════════════════════════════════════════════════ */
   function navbarCinematic(baseDelay) {
-    var pill = document.querySelector('.spotlight-nav');
-    var navLogo = document.querySelector('.nav-logo img');
-    var navLinks = document.querySelectorAll('.nav-links');
-    var apply = document.getElementById('rn-apply-pill');
+    var pill      = document.querySelector('.spotlight-nav');
+    var navLogo   = document.querySelector('.nav-logo img');
+    var navLinks  = document.querySelectorAll('.nav-links');
     var inductions = document.getElementById('rn-inductions-pill');
-    var rn26 = document.getElementById('rn26-pill');
+    var rn26      = document.getElementById('rn26-pill');
 
-    /* kill earlier script.js tweens */
-    if (pill) gsap.killTweensOf(pill);
-    if (navLogo) gsap.killTweensOf(navLogo);
+    [pill, navLogo, inductions, rn26].forEach(function(el) {
+      if (el) gsap.killTweensOf(el);
+    });
     if (navLinks.length) gsap.killTweensOf(navLinks);
-    if (apply) gsap.killTweensOf(apply);
-    if (inductions) gsap.killTweensOf(inductions);
-    if (rn26) gsap.killTweensOf(rn26);
 
     var tl = gsap.timeline({ delay: baseDelay });
 
-    /* ── LOGO ── */
+    /* ── 0: Logo drops in ── */
     if (navLogo) {
-      tl.fromTo(navLogo, { y: -4, scale: 1.07 }, {
-        y: 0,
-        scale: 1,
-        duration: 0.6,
-        ease: 'sine.inOut'
-      }, 1.2);
+      gsap.set(navLogo, { opacity: 0, y: -10, scale: 1.08 });
+      tl.to(navLogo, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: 'expo.out' }, 0);
     }
 
-    /* ── STEP 1: LEFT PILLS (Apply & Inductions) ── */
-    var leftPills = [apply, inductions].filter(Boolean);
-    if (leftPills.length > 0) {
-      leftPills.forEach(p => { p.style.willChange = 'transform, opacity'; });
-
-      gsap.set(leftPills, {
-        opacity: 0,
-        x: -22,
-        y: -6,
-        scaleX: 0.84,
-        transformOrigin: 'right center'
-      });
-
-      tl.to(leftPills, {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        scaleX: 1,
-        duration: 0.85,
-        ease: 'expo.out',
-        stagger: 0.15
-      }, 0);
-
-      tl.to(leftPills, {
-        x: 2,
-        duration: 0.22,
-        ease: 'sine.out',
-        stagger: 0.15
-      }, '-=0.15');
-
-      tl.to(leftPills, {
-        x: 0,
-        duration: 0.38,
-        ease: 'sine.inOut',
-        stagger: 0.15
-      });
+    /* ── 1: Inductions pill slides in from left ── */
+    if (inductions) {
+      inductions.style.willChange = 'transform, opacity';
+      gsap.set(inductions, { opacity: 0, x: -28, scaleX: 0.8, transformOrigin: 'right center' });
+      tl.to(inductions, { opacity: 1, x: 0, scaleX: 1, duration: 0.7, ease: 'expo.out' }, 0.1);
+      /* subtle settle bounce */
+      tl.to(inductions, { x: 3, duration: 0.18, ease: 'sine.out' }, 0.72);
+      tl.to(inductions, { x: 0, duration: 0.3,  ease: 'expo.out' }, 0.9);
     }
 
-    /* ── STEP 2: MAIN NAV ── */
+    /* ── 2: Main nav sweeps out from the inductions pill (left → right) ── */
     if (pill) {
-      var mainStart = leftPills.length > 0 ? 0.35 : 0;
-      pill.style.willChange = 'clip-path, transform';
-      gsap.set(navLinks, { opacity: 0, y: 8 });
-      gsap.set(pill, { opacity: 1, y: -15, clipPath: 'inset(0 100% 0 0 round 22px)' });
+      pill.style.willChange = 'clip-path, opacity';
+      gsap.set(navLinks, { opacity: 0, y: 6 });
+      /* start fully clipped from the right so it reveals left-to-right,
+         appearing to grow out of the inductions pill */
+      gsap.set(pill, { opacity: 1, clipPath: 'inset(0 100% 0 0 round 22px)' });
 
-      tl.to(pill, { y: 0, duration: 0.8, ease: 'expo.out' }, mainStart);
-      tl.to(pill, { clipPath: 'inset(0 0% 0 0 round 22px)', duration: 1.8, ease: 'expo.inOut' }, mainStart + 0.05);
-      
-      // Wobble
-      tl.to(pill, { y: -3, duration: 0.55, ease: 'sine.inOut' }, mainStart + 0.25);
-      tl.to(pill, { y: 2, duration: 0.45, ease: 'sine.inOut' }, mainStart + 0.8);
-      tl.to(pill, { y: 0, duration: 0.6, ease: 'sine.inOut' }, mainStart + 1.25);
+      var sweepStart = inductions ? 0.55 : 0.1;
+      tl.to(pill, {
+        clipPath: 'inset(0 0% 0 0 round 22px)',
+        duration: 1.1,
+        ease: 'expo.inOut'
+      }, sweepStart);
 
-      // Fade in links
-      tl.to(navLinks, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.06 }, mainStart + 0.6);
+      /* links fade in as the sweep passes over them */
+      tl.to(navLinks, {
+        opacity: 1, y: 0,
+        duration: 0.55,
+        ease: 'expo.out',
+        stagger: 0.055
+      }, sweepStart + 0.45);
     }
 
-    /* ── STEP 3: REGISTER PILL ── */
+    /* ── 3: RoboNexus '26 pill slides in from right ── */
     if (rn26) {
-      var registerStart = leftPills.length > 0 ? 0.55 : 0.2;
       rn26.style.willChange = 'transform, opacity';
-      gsap.set(rn26, { opacity: 0, x: 22, y: -6, scaleX: 0.84, transformOrigin: 'left center' });
-
-      tl.to(rn26, { opacity: 1, x: 0, y: 0, scaleX: 1, duration: 0.85, ease: 'expo.out' }, registerStart);
-      tl.to(rn26, { x: -2, duration: 0.22, ease: 'sine.out' }, registerStart + 0.7);
-      tl.to(rn26, { x: 0, duration: 0.38, ease: 'sine.inOut' });
+      gsap.set(rn26, { opacity: 0, x: 28, scaleX: 0.8, transformOrigin: 'left center' });
+      var rn26Start = inductions ? 0.75 : 0.3;
+      tl.to(rn26, { opacity: 1, x: 0, scaleX: 1, duration: 0.7, ease: 'expo.out' }, rn26Start);
+      tl.to(rn26, { x: -3, duration: 0.18, ease: 'sine.out' }, rn26Start + 0.62);
+      tl.to(rn26, { x: 0,  duration: 0.3,  ease: 'expo.out' }, rn26Start + 0.8);
     }
-}
-```
+  }
+
+
+  /* ═══════════════════════════════════════════════════════════════════
+     2 · PAGE TRANSITIONS
+     ═══════════════════════════════════════════════════════════════════ */
+  function pageTransitions() {
+    var overlay = document.querySelector('.page-transition');
+    if (!overlay) return;
+
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('mailto:') ||
+          href.startsWith('tel:') || link.target === '_blank' ||
+          href.startsWith('http') || href.startsWith('//')) return;
+
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        overlay.style.display = 'block';
+        gsap.to(overlay, {
+          opacity: 1, duration: 0.35, ease: 'power2.in',
+          onComplete: function () { window.location.href = href; }
+        });
+      });
+    });
+  }
+
+
+  /* ═══════════════════════════════════════════════════════════════════
+     3 · STATIC REVEALS  (elements already in DOM on load)
+     ═══════════════════════════════════════════════════════════════════ */
+  function staticReveals() {
+    /* generic .reveal elements */
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      gsap.fromTo(el,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: 0.9, ease: 'expo.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+        }
+      );
+    });
+
+    /* calendar container */
+    var cal = document.querySelector('.calendar-container');
+    if (cal) {
+      gsap.fromTo(cal,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out',
+          scrollTrigger: { trigger: cal, start: 'top 88%', once: true } }
+      );
+    }
+
+    /* project cards — set visible; they're injected dynamically so
+       dynamicWatchers handles the scroll-in animation */
+    gsap.utils.toArray('.project-card').forEach(function (card) {
+      gsap.set(card, { opacity: 1 });
+    });
+  }
+
+
+  /* ═══════════════════════════════════════════════════════════════════
+     4 · DYNAMIC WATCHERS  (MutationObserver for JS-injected content)
+     ═══════════════════════════════════════════════════════════════════ */
+  function dynamicWatchers() {
+    var grid = document.getElementById('projects-grid');
+    if (!grid) return;
+
+    function animateCards(cards) {
+      cards.forEach(function (card, i) {
+        gsap.fromTo(card,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.7,
+            ease: 'expo.out',
+            delay: i * 0.07,
+            scrollTrigger: { trigger: card, start: 'top 90%', once: true }
+          }
+        );
+      });
+    }
+
+    /* animate any cards already present */
+    var existing = grid.querySelectorAll('.project-card');
+    if (existing.length) animateCards(Array.from(existing));
+
+    /* watch for cards injected after load */
+    var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (m) {
+        var newCards = Array.from(m.addedNodes).filter(function (n) {
+          return n.nodeType === 1 && (n.classList.contains('project-card') || n.querySelector('.project-card'));
+        });
+        var cards = [];
+        newCards.forEach(function (n) {
+          if (n.classList.contains('project-card')) cards.push(n);
+          else cards.push(...n.querySelectorAll('.project-card'));
+        });
+        if (cards.length) {
+          ScrollTrigger.refresh();
+          animateCards(cards);
+        }
+      });
+    });
+
+    observer.observe(grid, { childList: true, subtree: true });
+  }
+
+
+  /* ═══════════════════════════════════════════════════════════════════
+     5 · CARD HOVERS
+     ═══════════════════════════════════════════════════════════════════ */
+  function cardHovers() {
+    /* handled via CSS — nothing extra needed */
+  }
+
+})();
