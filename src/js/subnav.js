@@ -55,7 +55,7 @@
       }
     }
 
-    if (!document.getElementById('rn26-pill')) {
+    if (!document.getElementById('rn26-pill') && window.SITE_CONFIG?.SHOW_RN26) {
       if (mainNav) {
         mainNav.insertAdjacentHTML('afterend', PILL_HTML);
       } else {
@@ -91,7 +91,6 @@
       registerLink.classList.add('rn26-active');
       document.body.classList.add('page-register');
 
-      // Kill main navbar spotlight using MutationObserver
       const overlay = document.querySelector('.navbar-spotlight-overlay');
       if (overlay) {
         overlay.style.setProperty('opacity', '0', 'important');
