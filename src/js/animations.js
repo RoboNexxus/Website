@@ -222,6 +222,7 @@
             duration: 0.7,
             ease: 'expo.out',
             delay: i * 0.07,
+            clearProps: 'transform',
             scrollTrigger: { trigger: card, start: 'top 90%', once: true }
           }
         );
@@ -258,7 +259,123 @@
      5 · CARD HOVERS
      ═══════════════════════════════════════════════════════════════════ */
   function cardHovers() {
-    /* handled via CSS — nothing extra needed */
+    var grid = document.getElementById('projects-grid');
+    if (!grid || typeof gsap === 'undefined') return;
+
+    var canHover = !window.matchMedia ||
+      window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var reduceMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!canHover || reduceMotion) return;
+
+    var setters = new WeakMap();
+    var activeCard = null;
+    var rafId = 0;
+    var nextRX = 0;
+    var nextRY = 0;
+
+    function getCardSetters(card) {
+      var existing = setters.get(card);
+      if (existing) return existing;
+
+      var created = {
+        setRX: gsap.quickSetter(card, 'rotationX', 'deg'),
+        setRY: gsap.quickSetter(card, 'rotationY', 'deg')
+      };
+      setters.set(card, created);
+
+      gsap.set(card, {
+        transformPerspective: 1000,
+        transformOrigin: 'center center',
+        force3D: true
+      });
+
+      return created;
+    }
+
+    function resetCard(card) {
+      if (!card) return;
+      gsap.to(card, {
+        rotationX: 0,
+        rotationY: 0,
+        y: 0,
+        duration: 0.55,
+        ease: 'expo.out',
+        overwrite: 'auto',
+        force3D: true
+      });
+    }
+
+    function getTiltCard(target) {
+      if (!target || !target.closest) return null;
+      var card = target.closest('.project-card');
+      if (!card || !grid.contains(card) || card.classList.contains('project-wide')) return null;
+      return card;
+    }
+
+    function flushTilt() {
+      if (!activeCard) {
+        rafId = 0;
+        return;
+      }
+
+      var tilt = getCardSetters(activeCard);
+      tilt.setRX(nextRX);
+      tilt.setRY(nextRY);
+      rafId = 0;
+    }
+
+    grid.addEventListener('pointermove', function (e) {
+      var card = getTiltCard(e.target);
+
+      if (!card) {
+        if (activeCard) {
+          resetCard(activeCard);
+          activeCard = null;
+        }
+        return;
+      }
+
+      if (activeCard !== card) {
+        if (activeCard) resetCard(activeCard);
+        activeCard = card;
+        getCardSetters(card);
+
+        gsap.to(card, {
+          y: -10,
+          duration: 0.35,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+      }
+
+      var rect = card.getBoundingClientRect();
+      var nx = (e.clientX - rect.left) / rect.width - 0.5;
+      var ny = (e.clientY - rect.top) / rect.height - 0.5;
+
+      nextRY = nx * 10;
+      nextRX = ny * -8;
+
+      if (!rafId) rafId = requestAnimationFrame(flushTilt);
+    });
+
+    grid.addEventListener('pointerleave', function () {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      if (activeCard) {
+        resetCard(activeCard);
+        activeCard = null;
+      }
+    });
+
+    window.addEventListener('blur', function () {
+      if (activeCard) {
+        resetCard(activeCard);
+        activeCard = null;
+      }
+    });
   }
 
 })();
