@@ -258,21 +258,91 @@
      5 · DYNAMIC CARD HOVERS (3D Tilt)
      ═══════════════════════════════════════════════════════════════════ */
   function cardHovers() {
-    var cards = document.querySelectorAll('.project-card, .cert-card, .team-card');
-    if (!cards.length) return;
+    var selector = '.project-card, .cert-card, .team-card';
+    var supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+    var boundCards = new WeakSet();
 
-    cards.forEach(function (card) {
-      gsap.fromTo(card,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.7,
-          ease: 'expo.out',
-          delay: 0.07,
-          scrollTrigger: { trigger: card, start: 'top 90%', once: true }
+    function bindCard(card) {
+      if (!card || boundCards.has(card)) return;
+      boundCards.add(card);
+
+      var image = card.querySelector('.project-image img, img');
+      var maxTilt = card.classList.contains('team-card') ? 10 : 8;
+      var liftY = card.classList.contains('team-card') ? -12 : -10;
+
+      gsap.set(card, {
+        transformPerspective: 1000,
+        transformOrigin: 'center center'
+      });
+
+      var rotateXTo = gsap.quickTo(card, 'rotateX', { duration: 0.3, ease: 'power2.out' });
+      var rotateYTo = gsap.quickTo(card, 'rotateY', { duration: 0.3, ease: 'power2.out' });
+      var liftTo = gsap.quickTo(card, 'y', { duration: 0.3, ease: 'power2.out' });
+      var imageXTo = image ? gsap.quickTo(image, 'x', { duration: 0.35, ease: 'power2.out' }) : null;
+      var imageYTo = image ? gsap.quickTo(image, 'y', { duration: 0.35, ease: 'power2.out' }) : null;
+
+      card.addEventListener('mousemove', function (e) {
+        if (!supportsHover.matches) return;
+
+        var rect = card.getBoundingClientRect();
+        var px = (e.clientX - rect.left) / rect.width;
+        var py = (e.clientY - rect.top) / rect.height;
+        var normalizedX = (px - 0.5) * 2;
+        var normalizedY = (py - 0.5) * 2;
+
+        rotateYTo(normalizedX * maxTilt);
+        rotateXTo(-normalizedY * maxTilt);
+        liftTo(liftY);
+
+        if (imageXTo && imageYTo) {
+          imageXTo(normalizedX * 8);
+          imageYTo(normalizedY * 8);
         }
-      );
+      });
+
+      card.addEventListener('mouseleave', function () {
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          y: 0,
+          duration: 0.45,
+          ease: 'power3.out'
+        });
+
+        if (image) {
+          gsap.to(image, {
+            x: 0,
+            y: 0,
+            duration: 0.45,
+            ease: 'power3.out'
+          });
+        }
+      });
+    }
+
+    function bindFromNode(node) {
+      if (!node) return;
+
+      if (node.matches && node.matches(selector)) {
+        bindCard(node);
+      }
+
+      if (node.querySelectorAll) {
+        node.querySelectorAll(selector).forEach(bindCard);
+      }
+    }
+
+    bindFromNode(document);
+
+    var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        mutation.addedNodes.forEach(function (node) {
+          if (node.nodeType === 1) bindFromNode(node);
+        });
+      });
     });
+
+    observer.observe(document.body, { childList: true, subtree: true });
   }
 
 })();
