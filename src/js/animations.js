@@ -255,10 +255,24 @@
 
 
   /* ═══════════════════════════════════════════════════════════════════
-     5 · CARD HOVERS
+     5 · DYNAMIC CARD HOVERS (3D Tilt)
      ═══════════════════════════════════════════════════════════════════ */
   function cardHovers() {
-    /* handled via CSS — nothing extra needed */
+    var cards = document.querySelectorAll('.project-card, .cert-card, .team-card');
+    if (!cards.length) return;
+
+    cards.forEach(function (card) {
+      gsap.fromTo(card,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.7,
+          ease: 'expo.out',
+          delay: 0.07,
+          scrollTrigger: { trigger: card, start: 'top 90%', once: true }
+        }
+      );
+    });
   }
 
 })();
