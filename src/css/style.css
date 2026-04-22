@@ -807,6 +807,9 @@ body.sticky-nav .navbar {
 }
 
 .project-card {
+  --project-rotate-x: 0deg;
+  --project-rotate-y: 0deg;
+  --project-lift: 0px;
   break-inside: avoid;
   margin-bottom: 30px;
   background: rgba(15, 15, 15, 0.9);
@@ -817,6 +820,8 @@ body.sticky-nav .navbar {
   opacity: 0;
   display: inline-block;
   width: 100%;
+  transform: perspective(1000px) rotateX(var(--project-rotate-x)) rotateY(var(--project-rotate-y)) translateY(var(--project-lift));
+  transform-style: preserve-3d;
 }
 
 .project-card.project-wide {
@@ -874,11 +879,11 @@ body.sticky-nav .navbar {
 }
 
 .project-card.project-wide:hover {
-  transform: none;
+  --project-lift: 0px;
 }
 
 .project-card:hover {
-  transform: translateY(-10px);
+  --project-lift: -10px;
   border-color: #47a0b8;
   box-shadow: 0 30px 60px rgba(71, 160, 184, 0.2);
 }
@@ -3678,4 +3683,3 @@ input, textarea {
     display: flex;
   }
 }
-

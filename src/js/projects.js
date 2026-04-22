@@ -45,6 +45,7 @@ async function initProjects() {
   }
 
   renderTutorials();
+  attachProjectCard3DEffect();
 }
 
 document.addEventListener('DOMContentLoaded', initProjects);
@@ -84,6 +85,26 @@ function renderTutorials() {
       </div>
     </div>
   `).join('');
+}
+
+function attachProjectCard3DEffect() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.querySelectorAll('.project-card:not(.project-wide)').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+      card.style.setProperty('--project-rotate-x', `${(-y * 10).toFixed(2)}deg`);
+      card.style.setProperty('--project-rotate-y', `${(x * 10).toFixed(2)}deg`);
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--project-rotate-x', '0deg');
+      card.style.setProperty('--project-rotate-y', '0deg');
+    });
+  });
 }
 
 // ── Modal ─────────────────────────────────────────────────────────
