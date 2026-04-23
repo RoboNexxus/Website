@@ -11,7 +11,7 @@ const EVENT_OPTIONS = new Set([
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_RE = /^[a-zA-Z][a-zA-Z .'-]{1,79}$/;
-const PHONE_RE = /^\+?[\d\s\-()\\.]{7,20}$/;
+const PHONE_RE = /^\+?[\d\s\-().]{7,20}$/;
 const UNSAFE_INPUT_RE = /<[^>]*>|javascript:|data:text\/html|onerror\s*=|onload\s*=|<\/?script/i;
 
 function cleanString(value, maxLength) {
@@ -21,6 +21,12 @@ function cleanString(value, maxLength) {
 
 function hasUnsafeInput(value) {
   return UNSAFE_INPUT_RE.test(String(value || ''));
+}
+
+function isValidPhoneNumber(value) {
+  if (!PHONE_RE.test(value)) return false;
+  const digitsOnly = value.replace(/\D/g, '');
+  return digitsOnly.length >= 7 && digitsOnly.length <= 15;
 }
 
 function isValidHttpUrl(value) {
@@ -130,7 +136,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Invalid email format' });
     }
 
-    if (!PHONE_RE.test(cleanPhone)) {
+    if (!isValidPhoneNumber(cleanPhone)) {
       return res.status(400).json({ message: 'Invalid phone number format' });
     }
 

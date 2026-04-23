@@ -306,7 +306,7 @@
         <div class="apply-row">
           <div class="apply-field">
             <label><i class="fas fa-phone"></i> Phone Number <span class="req">*</span></label>
-            <input type="tel" id="apply-phone" placeholder="+91 98765 43210" />
+            <input type="tel" id="apply-phone" placeholder="+91 98765 43210" aria-required="true" />
           </div>
         </div>
 
@@ -385,7 +385,7 @@
 
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const NAME_RE = /^[a-zA-Z][a-zA-Z .'-]{1,79}$/;
-    const PHONE_RE = /^\+?[\d\s\-()\\.]{7,20}$/;
+    const PHONE_RE = /^\+?[\d\s\-().]{7,20}$/;
     const UNSAFE_INPUT_RE = /<[^>]*>|javascript:|data:text\/html|onerror\s*=|onload\s*=|<\/?script/i;
 
     const EVENTS = [
@@ -437,6 +437,12 @@
 
     function hasUnsafeInput(value) {
       return UNSAFE_INPUT_RE.test(String(value || ''));
+    }
+
+    function isValidPhoneNumber(value) {
+      if (!PHONE_RE.test(value)) return false;
+      const digitsOnly = value.replace(/\D/g, '');
+      return digitsOnly.length >= 7 && digitsOnly.length <= 15;
     }
 
     function isValidHttpUrl(value) {
@@ -505,7 +511,7 @@
         return;
       }
 
-      if (!PHONE_RE.test(phone)) {
+      if (!isValidPhoneNumber(phone)) {
         setError('apply-phone');
         showErrorToast('Invalid Phone Number', 'Please enter a valid phone number.');
         return;
