@@ -46,8 +46,10 @@
     if (!navContainer) return;
 
     const mainNav = navContainer.querySelector('.spotlight-nav');
+    const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS !== false;
+    const showRN26 = !!window.SITE_CONFIG?.SHOW_RN26;
 
-    if (!document.getElementById('rn-inductions-pill')) {
+    if (showInductions && !document.getElementById('rn-inductions-pill')) {
       if (mainNav) {
         mainNav.insertAdjacentHTML('beforebegin', INDUCTIONS_PILL_HTML);
       } else {
@@ -55,7 +57,7 @@
       }
     }
 
-    if (!document.getElementById('rn26-pill') && window.SITE_CONFIG?.SHOW_RN26) {
+    if (showRN26 && !document.getElementById('rn26-pill')) {
       if (mainNav) {
         mainNav.insertAdjacentHTML('afterend', PILL_HTML);
       } else {

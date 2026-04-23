@@ -4,6 +4,30 @@ let pastEvents = [];
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
+function isRn26Event(event) {
+  const title = (event?.title || '').toLowerCase();
+  return event?.id === 1 || title.includes('robonexus');
+}
+
+function isInductionsEvent(event) {
+  const title = (event?.title || '').toLowerCase();
+  const type = (event?.type || '').toLowerCase();
+  return event?.id === 2 || type === 'induction' || title.includes('induction');
+}
+
+function shouldShowUpcomingEvent(event) {
+  const showRN26 = !!window.SITE_CONFIG?.SHOW_RN26;
+  const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS !== false;
+
+  if (!showRN26 && isRn26Event(event)) return false;
+  if (!showInductions && isInductionsEvent(event)) return false;
+  return true;
+}
+
+function getVisibleUpcomingEvents() {
+  return upcomingEvents.filter(shouldShowUpcomingEvent);
+}
+
 function initEvents() {
   fetch(`/src/js/events.json?v=83&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`)
     .then(res => {
@@ -37,7 +61,7 @@ function generateCalendarDays(year, month) {
   const days = [];
 
   const allEvents = [
-    ...upcomingEvents.map(e => ({ ...e, isPast: false })),
+    ...getVisibleUpcomingEvents().map(e => ({ ...e, isPast: false })),
     ...pastEvents.map(e => ({ ...e, isPast: true }))
   ];
 
@@ -97,9 +121,7 @@ function renderUpcomingEvents() {
   const container = document.getElementById('upcoming-events');
   if (!container) return;
 
-  const events = window.SITE_CONFIG?.SHOW_RN26
-    ? upcomingEvents
-    : upcomingEvents.filter(e => e.id !== 1);
+  const events = getVisibleUpcomingEvents();
 
   if (events.length === 0) {
     container.innerHTML = `

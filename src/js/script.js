@@ -45,6 +45,47 @@ initPageTransition();
 ================================ */
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links-ul');
+const MOBILE_NAV_BREAKPOINT = 992;
+const MOBILE_INDUCTIONS_LINK_ID = 'mobile-inductions-nav-link';
+
+function isInductionsEnabled() {
+  return window.SITE_CONFIG?.SHOW_INDUCTIONS !== false;
+}
+
+function isOnInductionsPage() {
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  return path === '/inductions' || path.endsWith('/inductions');
+}
+
+function ensureMobileInductionsLink() {
+  if (!navLinks) return;
+
+  const isMobile = window.innerWidth <= MOBILE_NAV_BREAKPOINT;
+  const existingLink = document.getElementById(MOBILE_INDUCTIONS_LINK_ID);
+  const existingItem = existingLink ? existingLink.closest('li') : null;
+  const shouldShow = isMobile && isInductionsEnabled();
+
+  if (!shouldShow) {
+    if (existingItem) existingItem.remove();
+    return;
+  }
+
+  let item = existingItem;
+  if (!item) {
+    item = document.createElement('li');
+    item.className = 'mobile-inductions-item';
+    item.innerHTML = `<a class="nav-links" href="/inductions" id="${MOBILE_INDUCTIONS_LINK_ID}">Inductions</a>`;
+    navLinks.insertBefore(item, navLinks.firstElementChild);
+  } else if (navLinks.firstElementChild !== item) {
+    navLinks.insertBefore(item, navLinks.firstElementChild);
+  }
+
+  const mobileLink = document.getElementById(MOBILE_INDUCTIONS_LINK_ID);
+  if (mobileLink) {
+    if (isOnInductionsPage()) mobileLink.classList.add('active');
+    else mobileLink.classList.remove('active');
+  }
+}
 
 // Create and append backdrop dynamically
 const backdrop = document.createElement('div');
@@ -56,7 +97,7 @@ document.body.appendChild(backdrop);
 function updateNavLinksPosition() {
   if (!navLinks) return;
   
-  const isMobile = window.innerWidth <= 992;
+  const isMobile = window.innerWidth <= MOBILE_NAV_BREAKPOINT;
   const isInBody = navLinks.parentElement === document.body;
   
   if (isMobile && !isInBody) {
@@ -75,10 +116,19 @@ function updateNavLinksPosition() {
       }
     }
   }
+
+  ensureMobileInductionsLink();
 }
 
 // Update on load
 updateNavLinksPosition();
+
+// Ensure nav reflects final config state after all defer scripts finish
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', ensureMobileInductionsLink);
+} else {
+  ensureMobileInductionsLink();
+}
 
 // Update on resize
 window.addEventListener('resize', updateNavLinksPosition);
@@ -113,12 +163,10 @@ if (hamburger && navLinks) {
   // Close when clicking backdrop
   backdrop.addEventListener('click', closeMobileNav);
 
-  // Close menu when clicking a link
-  document.querySelectorAll('.nav-links').forEach(link => {
-    link.addEventListener('click', () => {
-      // Small delay to let the click through before closing animation
-      setTimeout(closeMobileNav, 100);
-    });
+  // Close menu when clicking any nav link (supports dynamically inserted links)
+  navLinks.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-links')) return;
+    setTimeout(closeMobileNav, 100);
   });
 
   // Close on Escape key
@@ -131,11 +179,34 @@ if (hamburger && navLinks) {
    EVENTS BADGE (MOBILE)
 ================================ */
 (async function() {
+  function isRn26Event(event) {
+    const title = (event?.title || '').toLowerCase();
+    return event?.id === 1 || title.includes('robonexus');
+  }
+
+  function isInductionsEvent(event) {
+    const title = (event?.title || '').toLowerCase();
+    const type = (event?.type || '').toLowerCase();
+    return event?.id === 2 || type === 'induction' || title.includes('induction');
+  }
+
+  function shouldShowUpcomingEvent(event) {
+    const showRN26 = !!window.SITE_CONFIG?.SHOW_RN26;
+    const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS !== false;
+
+    if (!showRN26 && isRn26Event(event)) return false;
+    if (!showInductions && isInductionsEvent(event)) return false;
+    return true;
+  }
+
   try {
     const res = await fetch(`/src/js/events.json?v=82&t=${GLOBAL_CACHE_MASTER}`);
     if (!res.ok) return;
     const data = await res.json();
-    if (data.upcomingEvents && data.upcomingEvents.length > 0) {
+
+    const visibleUpcoming = (data.upcomingEvents || []).filter(shouldShowUpcomingEvent);
+
+    if (visibleUpcoming.length > 0) {
       document.querySelectorAll('.nav-links[href="/events"]').forEach(link => {
         if (!link.querySelector('.nav-new-badge')) {
           const badge = document.createElement('span');
@@ -144,6 +215,8 @@ if (hamburger && navLinks) {
           link.appendChild(badge);
         }
       });
+    } else {
+      document.querySelectorAll('.nav-links[href="/events"] .nav-new-badge').forEach(badge => badge.remove());
     }
   } catch (e) {
     // Silent catch
