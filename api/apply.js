@@ -11,6 +11,7 @@ const EVENT_OPTIONS = new Set([
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_RE = /^[a-zA-Z][a-zA-Z .'-]{1,79}$/;
+const PHONE_RE = /^\+?[\d\s\-().]{7,20}$/;
 const UNSAFE_INPUT_RE = /<[^>]*>|javascript:|data:text\/html|onerror\s*=|onload\s*=|<\/?script/i;
 
 function cleanString(value, maxLength) {
@@ -20,6 +21,12 @@ function cleanString(value, maxLength) {
 
 function hasUnsafeInput(value) {
   return UNSAFE_INPUT_RE.test(String(value || ''));
+}
+
+function isValidPhoneNumber(value) {
+  if (!PHONE_RE.test(value)) return false;
+  const digitsOnly = value.replace(/\D/g, '');
+  return digitsOnly.length >= 7 && digitsOnly.length <= 15;
 }
 
 function isValidHttpUrl(value) {
@@ -41,6 +48,7 @@ function truncateText(value, maxLength) {
 async function sendDiscordNotification(webhookUrl, {
   name,
   email,
+  phone,
   github,
   website,
   links,
@@ -63,6 +71,7 @@ async function sendDiscordNotification(webhookUrl, {
       fields: [
         { name: 'Name', value: truncateText(name, 1024), inline: true },
         { name: 'Email', value: truncateText(email, 1024), inline: true },
+        { name: 'Phone', value: truncateText(phone, 1024), inline: true },
         { name: 'GitHub', value: truncateText(github || 'Not provided', 1024), inline: false },
         { name: 'Website', value: truncateText(website || 'Not provided', 1024), inline: false },
         { name: 'Skills', value: truncateText(skillsText, 1024), inline: false },
@@ -98,10 +107,11 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ message: 'Method Not Allowed' });
 
   try {
-    const { name, email, github, website, links, skills, eventsInterested, experience } = req.body;
+    const { name, email, phone, github, website, links, skills, eventsInterested, experience } = req.body;
 
     const cleanName = cleanString(name, 80);
     const cleanEmail = cleanString(email, 254).toLowerCase();
+    const cleanPhone = cleanString(phone, 25);
     const cleanGithub = cleanString(github, 300);
     const cleanWebsite = cleanString(website, 300);
     const cleanLinks = cleanString(links, 500);
@@ -114,8 +124,8 @@ export default async function handler(req, res) {
       ? eventsInterested.map((value) => cleanString(String(value), 60)).filter(Boolean)
       : [];
 
-    if (!cleanName || !cleanEmail) {
-      return res.status(400).json({ message: 'Name and email are required' });
+    if (!cleanName || !cleanEmail || !cleanPhone) {
+      return res.status(400).json({ message: 'Name, email, and phone are required' });
     }
 
     if (!NAME_RE.test(cleanName)) {
@@ -126,12 +136,16 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Invalid email format' });
     }
 
+    if (!isValidPhoneNumber(cleanPhone)) {
+      return res.status(400).json({ message: 'Invalid phone number format' });
+    }
+
     if (!isValidHttpUrl(cleanGithub) || !isValidHttpUrl(cleanWebsite)) {
       return res.status(400).json({ message: 'GitHub and website must be valid http/https URLs' });
     }
 
     if (
-      hasUnsafeInput(cleanName) || hasUnsafeInput(cleanEmail) || hasUnsafeInput(cleanGithub) ||
+      hasUnsafeInput(cleanName) || hasUnsafeInput(cleanEmail) || hasUnsafeInput(cleanPhone) || hasUnsafeInput(cleanGithub) ||
       hasUnsafeInput(cleanWebsite) || hasUnsafeInput(cleanLinks) || hasUnsafeInput(cleanExperience)
     ) {
       return res.status(400).json({ message: 'Invalid or unsafe input detected' });
@@ -185,6 +199,7 @@ export default async function handler(req, res) {
       properties: {
         Name: { title: [{ text: { content: cleanName } }] },
         Email: { email: cleanEmail },
+        Phone: { phone_number: cleanPhone },
         ...(cleanGithub ? { GitHub: { url: cleanGithub } } : {}),
         Skills: {
           multi_select: safeSkills
@@ -223,6 +238,7 @@ export default async function handler(req, res) {
       discord = await sendDiscordNotification(DISCORD_WEBHOOK_URL, {
         name: cleanName,
         email: cleanEmail,
+        phone: cleanPhone,
         github: cleanGithub,
         website: cleanWebsite,
         links: cleanLinks,
