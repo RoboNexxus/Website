@@ -84,6 +84,10 @@ function renderTutorials() {
       </div>
     </div>
   `).join('');
+
+  grid.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', () => openModal(card.closest('.project-card').dataset.id));
+  });
 }
 
 // ── Modal ─────────────────────────────────────────────────────────

@@ -880,7 +880,6 @@ body.sticky-nav .navbar {
 }
 
 .project-card:hover {
-  transform: translateY(-10px);
   border-color: #47a0b8;
   box-shadow: 0 30px 60px rgba(71, 160, 184, 0.2);
 }

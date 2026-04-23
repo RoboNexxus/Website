@@ -222,7 +222,7 @@
             duration: 0.7,
             ease: 'expo.out',
             delay: i * 0.07,
-            clearProps: 'transform',
+            clearProps: 'y',
             scrollTrigger: { trigger: card, start: 'top 90%', once: true }
           }
         );
