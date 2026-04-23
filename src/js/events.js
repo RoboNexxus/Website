@@ -111,14 +111,17 @@ function renderUpcomingEvents() {
   }
 
   container.innerHTML = events.map(event => {
-    const date = new Date(event.date);
-    const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const hasValidDate = Boolean(event.date) && !Number.isNaN(new Date(event.date).getTime());
+    const formattedDate = hasValidDate
+      ? new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      : 'Date TBA';
+    const registerLink = event.registerLink || '/register';
 
     return `
       <div class="event-list-card">
         <div class="event-list-top">
           <span class="event-list-badge">${event.type}</span>
-          ${event.registrationOpen ? `<a href="/register" class="event-list-register-btn">Register</a>` : ''}
+          ${event.registrationOpen ? `<a href="${registerLink}" class="event-list-register-btn">Register</a>` : ''}
         </div>
         <p class="event-list-title">${event.title}</p>
         <p class="event-list-desc">${event.description}</p>

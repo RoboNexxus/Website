@@ -40,6 +40,21 @@
       "registerLink": "/register",
       "category": "9-12, 6-8, 1-5",
       "maxParticipants": 100
+    },
+    {
+      "id": 2,
+      "title": "Inductions",
+      "date": "2026-05-01",
+      "time": "Applications Open",
+      "location": "Online",
+      "description": "Applications are now open to join Robo Nexus. Tell us about your interests, skills, and robotics journey.",
+      "type": "induction",
+      "registrationOpen": true,
+      "spots": 0,
+      "spotsLeft": 0,
+      "registerLink": "/inductions",
+      "category": "All Grades",
+      "maxParticipants": 0
     }
   ],
   "pastEvents": [
