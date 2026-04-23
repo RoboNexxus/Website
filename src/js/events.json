@@ -4,6 +4,7 @@
       "id": "Unique number (1, 2, 3...)",
       "title": "Event name",
       "date": "YYYY-MM-DD format",
+        "dateRange": "Optional human-readable range label",
       "time": "Start - End time",
       "location": "Venue name",
       "description": "Event description",
@@ -44,7 +45,8 @@
     {
       "id": 2,
       "title": "Inductions",
-      "date": "2026-05-01",
+      "date": "2026-04-27",
+      "dateRange": "27 Apr - 3 May",
       "time": "Applications Open",
       "location": "Online",
       "description": "Applications are now open to join Robo Nexus. Tell us about your interests, skills, and robotics journey.",

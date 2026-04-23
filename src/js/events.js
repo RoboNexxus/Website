@@ -28,8 +28,17 @@ function getVisibleUpcomingEvents() {
   return upcomingEvents.filter(shouldShowUpcomingEvent);
 }
 
+function getEventDisplayDate(event) {
+  if (event?.dateRange) return event.dateRange;
+
+  const hasValidDate = Boolean(event?.date) && !Number.isNaN(new Date(event.date).getTime());
+  return hasValidDate
+    ? new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : 'Date TBA';
+}
+
 function initEvents() {
-  fetch(`/src/js/events.json?v=83&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`)
+  fetch(`/src/js/events.json?v=84&t=${window.GLOBAL_CACHE_MASTER || Date.now()}`)
     .then(res => {
       if (!res.ok) throw new Error('Failed to fetch events');
       return res.json();
@@ -133,10 +142,7 @@ function renderUpcomingEvents() {
   }
 
   container.innerHTML = events.map(event => {
-    const hasValidDate = Boolean(event.date) && !Number.isNaN(new Date(event.date).getTime());
-    const formattedDate = hasValidDate
-      ? new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-      : 'Date TBA';
+    const formattedDate = getEventDisplayDate(event);
     const registerLink = event.registerLink || '/register';
 
     return `
@@ -169,9 +175,7 @@ function renderPastEvents() {
   }
 
   container.innerHTML = pastEvents.map(event => {
-    const date = event.date
-      ? new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-      : '';
+    const date = getEventDisplayDate(event);
 
     return `
       <div class="past-event-grid-card">
