@@ -259,8 +259,7 @@
      5 · CARD HOVERS
      ═══════════════════════════════════════════════════════════════════ */
   function cardHovers() {
-    var grid = document.getElementById('projects-grid');
-    if (!grid || typeof gsap === 'undefined') return;
+    if (typeof gsap === 'undefined') return;
 
     var canHover = !window.matchMedia ||
       window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -268,113 +267,140 @@
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!canHover || reduceMotion) return;
 
-    var setters = new WeakMap();
-    var activeCard = null;
-    var rafId = 0;
-    var nextRX = 0;
-    var nextRY = 0;
+    var hoverTargets = [
+      {
+        container: document.getElementById('projects-grid'),
+        cardSelector: '.project-card',
+        skipSelector: '.project-wide'
+      },
+      {
+        container: document.getElementById('team-container'),
+        cardSelector: '.team-card'
+      },
+      {
+        container: document.getElementById('alumni-container'),
+        cardSelector: '.alumni-card'
+      }
+    ].filter(function (target) {
+      return !!target.container;
+    });
 
-    function getCardSetters(card) {
-      var existing = setters.get(card);
-      if (existing) return existing;
+    if (!hoverTargets.length) return;
 
-      var created = {
-        setRX: gsap.quickSetter(card, 'rotationX', 'deg'),
-        setRY: gsap.quickSetter(card, 'rotationY', 'deg')
-      };
-      setters.set(card, created);
+    function initTilt(container, cardSelector, skipSelector) {
+      var setters = new WeakMap();
+      var activeCard = null;
+      var rafId = 0;
+      var nextRX = 0;
+      var nextRY = 0;
 
-      gsap.set(card, {
-        transformPerspective: 1000,
-        transformOrigin: 'center center',
-        force3D: true
-      });
+      function getCardSetters(card) {
+        var existing = setters.get(card);
+        if (existing) return existing;
 
-      return created;
-    }
+        var created = {
+          setRX: gsap.quickSetter(card, 'rotationX', 'deg'),
+          setRY: gsap.quickSetter(card, 'rotationY', 'deg')
+        };
+        setters.set(card, created);
 
-    function resetCard(card) {
-      if (!card) return;
-      gsap.to(card, {
-        rotationX: 0,
-        rotationY: 0,
-        y: 0,
-        duration: 0.55,
-        ease: 'expo.out',
-        overwrite: 'auto',
-        force3D: true
-      });
-    }
+        gsap.set(card, {
+          transformPerspective: 1000,
+          transformOrigin: 'center center',
+          force3D: true
+        });
 
-    function getTiltCard(target) {
-      if (!target || !target.closest) return null;
-      var card = target.closest('.project-card');
-      if (!card || !grid.contains(card) || card.classList.contains('project-wide')) return null;
-      return card;
-    }
-
-    function flushTilt() {
-      if (!activeCard) {
-        rafId = 0;
-        return;
+        return created;
       }
 
-      var tilt = getCardSetters(activeCard);
-      tilt.setRX(nextRX);
-      tilt.setRY(nextRY);
-      rafId = 0;
-    }
+      function resetCard(card) {
+        if (!card) return;
+        gsap.to(card, {
+          rotationX: 0,
+          rotationY: 0,
+          y: 0,
+          duration: 0.55,
+          ease: 'expo.out',
+          overwrite: 'auto',
+          force3D: true
+        });
+      }
 
-    grid.addEventListener('pointermove', function (e) {
-      var card = getTiltCard(e.target);
+      function getTiltCard(target) {
+        if (!target || !target.closest) return null;
+        var card = target.closest(cardSelector);
+        if (!card || !container.contains(card)) return null;
+        if (skipSelector && card.matches(skipSelector)) return null;
+        return card;
+      }
 
-      if (!card) {
+      function flushTilt() {
+        if (!activeCard) {
+          rafId = 0;
+          return;
+        }
+
+        var tilt = getCardSetters(activeCard);
+        tilt.setRX(nextRX);
+        tilt.setRY(nextRY);
+        rafId = 0;
+      }
+
+      container.addEventListener('pointermove', function (e) {
+        var card = getTiltCard(e.target);
+
+        if (!card) {
+          if (activeCard) {
+            resetCard(activeCard);
+            activeCard = null;
+          }
+          return;
+        }
+
+        if (activeCard !== card) {
+          if (activeCard) resetCard(activeCard);
+          activeCard = card;
+          getCardSetters(card);
+
+          gsap.to(card, {
+            y: -10,
+            duration: 0.35,
+            ease: 'power2.out',
+            overwrite: 'auto'
+          });
+        }
+
+        var rect = card.getBoundingClientRect();
+        var nx = (e.clientX - rect.left) / rect.width - 0.5;
+        var ny = (e.clientY - rect.top) / rect.height - 0.5;
+
+        nextRY = nx * 10;
+        nextRX = ny * -8;
+
+        if (!rafId) rafId = requestAnimationFrame(flushTilt);
+      });
+
+      container.addEventListener('pointerleave', function () {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
         if (activeCard) {
           resetCard(activeCard);
           activeCard = null;
         }
-        return;
-      }
+      });
 
-      if (activeCard !== card) {
-        if (activeCard) resetCard(activeCard);
-        activeCard = card;
-        getCardSetters(card);
+      window.addEventListener('blur', function () {
+        if (activeCard) {
+          resetCard(activeCard);
+          activeCard = null;
+        }
+      });
+    }
 
-        gsap.to(card, {
-          y: -10,
-          duration: 0.35,
-          ease: 'power2.out',
-          overwrite: 'auto'
-        });
-      }
-
-      var rect = card.getBoundingClientRect();
-      var nx = (e.clientX - rect.left) / rect.width - 0.5;
-      var ny = (e.clientY - rect.top) / rect.height - 0.5;
-
-      nextRY = nx * 10;
-      nextRX = ny * -8;
-
-      if (!rafId) rafId = requestAnimationFrame(flushTilt);
-    });
-
-    grid.addEventListener('pointerleave', function () {
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-        rafId = 0;
-      }
-      if (activeCard) {
-        resetCard(activeCard);
-        activeCard = null;
-      }
-    });
-
-    window.addEventListener('blur', function () {
-      if (activeCard) {
-        resetCard(activeCard);
-        activeCard = null;
-      }
+    hoverTargets.forEach(function (target) {
+      initTilt(target.container, target.cardSelector, target.skipSelector);
     });
   }
 

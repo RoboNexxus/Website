@@ -1565,6 +1565,8 @@ body.sticky-nav .navbar {
   position: relative;
   overflow: hidden;
   opacity: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .team-card::before {
@@ -2216,6 +2218,8 @@ textarea::placeholder {
   position: relative;
   overflow: hidden;
   transition: all 0.4s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .alumni-card::before {
