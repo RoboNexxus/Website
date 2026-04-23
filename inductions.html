@@ -31,8 +31,7 @@
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html,
-    body { width: 100%; min-height: 100%; overflow-x: hidden; }
+    html, body { width: 100%; min-height: 100%; overflow-x: hidden; }
     body { background: #000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
     .page-transition { position: fixed; inset: 0; background: #000; z-index: 9999; pointer-events: none; opacity: 0; display: none; }
     .page-content { position: relative; z-index: 1; min-height: 100vh; }
@@ -289,9 +288,11 @@
 
     <div class="apply-outer">
 
+      <!-- ── CARD 1: Basic Information ── -->
       <div class="apply-card reveal">
         <p class="apply-section-label"><i class="fas fa-user"></i> Basic Information</p>
 
+        <!-- Name + Email -->
         <div class="apply-row">
           <div class="apply-field">
             <label><i class="fas fa-user"></i> Full Name <span class="req">*</span></label>
@@ -303,6 +304,13 @@
           </div>
         </div>
 
+        <!-- Phone (full width) -->
+        <div class="apply-field">
+          <label><i class="fas fa-phone"></i> Phone Number <span class="req">*</span></label>
+          <input type="tel" id="apply-phone" placeholder="+91 XXXXX XXXXX" />
+        </div>
+
+        <!-- GitHub + Website -->
         <div class="apply-row">
           <div class="apply-field">
             <label><i class="fab fa-github"></i> GitHub <span class="opt">(optional)</span></label>
@@ -320,6 +328,7 @@
         </div>
       </div>
 
+      <!-- ── CARD 2: Skills & Experience ── -->
       <div class="apply-card reveal">
         <p class="apply-section-label"><i class="fas fa-microchip"></i> Robotics & Tech Skills</p>
 
@@ -340,6 +349,7 @@
         </div>
       </div>
 
+      <!-- ── CARD 3: Submit ── -->
       <div class="apply-card reveal">
         <p class="apply-section-label"><i class="fas fa-paper-plane"></i> Submit Application</p>
         <p style="font-size:.85rem;color:rgba(255,255,255,.45);margin-bottom:18px;line-height:1.6;">
@@ -371,31 +381,35 @@
   <script src="/src/js/animations.js?v=82" defer></script>
 
   <script>
+    // ── Synced with Notion DB multi_select options ──
     const SKILLS = [
-      'Robotics', 'Microcontrollers', 'Web Dev', 'Video Editing', '3D Modeling / CAD', '3D Printing',
-      'C / C++', 'Python', 'Arduino', 'Electronics', 'Drone Piloting',
+      'Robotics', 'Arduino', 'Python', 'Electronics', 'CAD/3D Modelling',
+      'Drone Piloting', 'AI/ML', 'Web Dev', 'Discord Bots',
+      'Video Editing', 'Builder', 'Leadership', '2D',
     ];
-
-    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const NAME_RE = /^[a-zA-Z][a-zA-Z .'-]{1,79}$/;
-    const UNSAFE_INPUT_RE = /<[^>]*>|javascript:|data:text\/html|onerror\s*=|onload\s*=|<\/?script/i;
 
     const EVENTS = [
-      { label: 'Robo War', value: 'Robo War' },
-      { label: 'Robo Soccer', value: 'Robo Soccer' },
-      { label: 'Drone', value: 'Drone' },
+      { label: 'Robo War',      value: 'Robo War'      },
+      { label: 'Robo Soccer',   value: 'Robo Soccer'   },
+      { label: 'Drone',         value: 'Drone'         },
       { label: 'Line Follower', value: 'Line Follower' },
-      { label: 'RC Racing', value: 'RC Racing' },
-      { label: 'Maze Solver', value: 'Maze Solver' },
-      { label: 'Innovation', value: 'Innovation' },
+      { label: 'Race',          value: 'Race'          },
+      { label: 'Innovation',    value: 'Innovation'    },
+      { label: 'Web / Tech',    value: 'Web/Tech'      },
     ];
 
+    const EMAIL_RE       = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const NAME_RE        = /^[a-zA-Z][a-zA-Z .'-]{1,79}$/;
+    const PHONE_RE       = /^\+?[\d\s\-()\\.]{7,20}$/;
+    const UNSAFE_INPUT_RE = /<[^>]*>|javascript:|data:text\/html|onerror\s*=|onload\s*=|<\/?script/i;
+
+    // ── Build chip grids ──
     function buildChips(items, containerId, namePrefix) {
       const container = document.getElementById(containerId);
       container.innerHTML = items.map((item, i) => {
-        const val = typeof item === 'string' ? item : item.value;
+        const val   = typeof item === 'string' ? item : item.value;
         const label = typeof item === 'string' ? item : item.label;
-        const id = `${namePrefix}-${i}`;
+        const id    = `${namePrefix}-${i}`;
         return `
           <div class="chip-item">
             <input type="checkbox" id="${id}" value="${val}" name="${namePrefix}">
@@ -414,8 +428,9 @@
       return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
     }
 
+    // ── Validation helpers ──
     function clearErrors() {
-      ['apply-name', 'apply-email', 'apply-github', 'apply-website', 'apply-links', 'apply-experience']
+      ['apply-name', 'apply-email', 'apply-phone', 'apply-github', 'apply-website', 'apply-links', 'apply-experience']
         .forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.remove('error');
@@ -453,72 +468,71 @@
       }
     }
 
+    // ── Submit ──
     async function submitApplication() {
       clearErrors();
 
-      const name = document.getElementById('apply-name').value.trim();
-      const email = document.getElementById('apply-email').value.trim();
-      const github = document.getElementById('apply-github').value.trim();
-      const website = document.getElementById('apply-website').value.trim();
-      const links = document.getElementById('apply-links').value.trim();
-      const experience = document.getElementById('apply-experience').value.trim();
-      const skills = getChecked('skill');
+      const name            = document.getElementById('apply-name').value.trim();
+      const email           = document.getElementById('apply-email').value.trim();
+      const phone           = document.getElementById('apply-phone').value.trim();
+      const github          = document.getElementById('apply-github').value.trim();
+      const website         = document.getElementById('apply-website').value.trim();
+      const links           = document.getElementById('apply-links').value.trim();
+      const experience      = document.getElementById('apply-experience').value.trim();
+      const skills          = getChecked('skill');
       const eventsInterested = getChecked('event');
 
       let hasError = false;
 
-      if (!name) {
-        setError('apply-name');
-        hasError = true;
-      }
-      if (!email) {
-        setError('apply-email');
-        hasError = true;
-      }
+      // Required
+      if (!name)  { setError('apply-name');  hasError = true; }
+      if (!email) { setError('apply-email'); hasError = true; }
+      if (!phone) { setError('apply-phone'); hasError = true; }
       if (hasError) {
         showErrorToast('Missing Fields', 'Please fill in all required fields.');
         return;
       }
 
+      // Format checks
       if (!NAME_RE.test(name)) {
         setError('apply-name');
-        showErrorToast('Invalid Name', 'Use 2-80 letters. You can include spaces, apostrophes, dots, and hyphens.');
+        showErrorToast('Invalid Name', 'Use 2–80 letters. Spaces, apostrophes, dots and hyphens are allowed.');
         return;
       }
-
       if (!EMAIL_RE.test(email)) {
         setError('apply-email');
         showErrorToast('Invalid Email', 'Please enter a valid email address.');
         return;
       }
-
+      if (!PHONE_RE.test(phone)) {
+        setError('apply-phone');
+        showErrorToast('Invalid Phone', 'Enter a valid phone number (7–20 digits, country code optional).');
+        return;
+      }
       if (github && !isValidHttpUrl(github)) {
         setError('apply-github');
         showErrorToast('Invalid GitHub URL', 'Use a valid URL starting with http:// or https://.');
         return;
       }
-
       if (website && !isValidHttpUrl(website)) {
         setError('apply-website');
         showErrorToast('Invalid Website URL', 'Use a valid URL starting with http:// or https://.');
         return;
       }
-
       if (links.length > 500) {
         setError('apply-links');
         showErrorToast('Links Too Long', 'Keep Other Links under 500 characters.');
         return;
       }
-
       if (experience.length > 1500) {
         setError('apply-experience');
         showErrorToast('Experience Too Long', 'Keep Robotics Experience under 1500 characters.');
         return;
       }
-
       if (
-        hasUnsafeInput(name) || hasUnsafeInput(email) || hasUnsafeInput(github) ||
-        hasUnsafeInput(website) || hasUnsafeInput(links) || hasUnsafeInput(experience)
+        hasUnsafeInput(name)    || hasUnsafeInput(email)   || hasUnsafeInput(phone) ||
+        hasUnsafeInput(github)  || hasUnsafeInput(website) ||
+        hasUnsafeInput(links)   || hasUnsafeInput(experience)
       ) {
         showErrorToast('Invalid Input', 'Please remove suspicious characters or scripts from your input.');
         return;
@@ -530,9 +544,12 @@
 
       try {
         const res = await fetch('/api/apply', {
-          method: 'POST',
+          method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, github, website, links, skills, eventsInterested, experience }),
+          body:    JSON.stringify({
+            name, email, phone, github, website,
+            links, skills, eventsInterested, experience,
+          }),
         });
 
         const data = await res.json();
@@ -543,17 +560,17 @@
           showErrorToast('Already Applied', 'An application with this email already exists.');
           return;
         }
-
         if (res.status === 400) {
           btn.disabled = false;
           btn.innerHTML = '<i class="fas fa-rocket"></i> Submit Application';
           showErrorToast('Invalid Input', data.message || 'Please check your details and try again.');
           return;
         }
-
         if (!res.ok) throw new Error(data.message || 'Server error');
 
-        ['apply-name', 'apply-email', 'apply-github', 'apply-website', 'apply-links', 'apply-experience']
+        // Reset form
+        ['apply-name', 'apply-email', 'apply-phone', 'apply-github',
+         'apply-website', 'apply-links', 'apply-experience']
           .forEach(id => {
             const el = document.getElementById(id);
             if (el) el.value = '';
