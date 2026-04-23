@@ -875,10 +875,6 @@ body.sticky-nav .navbar {
   }
 }
 
-.project-card.project-wide:hover {
-  transform: none;
-}
-
 .project-card:hover {
   border-color: #47a0b8;
   box-shadow: 0 30px 60px rgba(71, 160, 184, 0.2);
@@ -894,11 +890,19 @@ body.sticky-nav .navbar {
   width: 100%;
   height: auto;
   display: block;
+  transform: translateZ(24px);
+  transform-style: preserve-3d;
   transition: transform 0.5s ease;
 }
 
 .project-card:hover .project-image img {
-  transform: scale(1.1);
+  transform: translateZ(24px) scale(1.1);
+}
+
+.project-info,
+.project-overlay {
+  transform: translateZ(16px);
+  transform-style: preserve-3d;
 }
 
 .project-overlay {
@@ -1561,7 +1565,7 @@ body.sticky-nav .navbar {
   border-radius: 20px;
   padding: 30px;
   text-align: center;
-  transition: all 0.4s ease;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
   position: relative;
   overflow: hidden;
   opacity: 0;
@@ -1585,7 +1589,6 @@ body.sticky-nav .navbar {
 }
 
 .team-card:hover {
-  transform: translateY(-15px) scale(1.02);
   border-color: #47a0b8;
   box-shadow: 0 30px 60px rgba(71, 160, 184, 0.3);
 }
@@ -1597,12 +1600,22 @@ body.sticky-nav .navbar {
   border-radius: 50%;
   border: 4px solid rgba(71, 160, 184, 0.5);
   margin-bottom: 20px;
+  transform: translateZ(28px);
+  transform-style: preserve-3d;
   transition: all 0.3s ease;
 }
 
 .team-card:hover img {
+  transform: translateZ(28px);
   border-color: #47a0b8;
   box-shadow: 0 0 30px rgba(71, 160, 184, 0.5);
+}
+
+.team-card h2,
+.team-card p,
+.team-card .social-links {
+  transform: translateZ(18px);
+  transform-style: preserve-3d;
 }
 
 .team-card h2 {
@@ -2217,7 +2230,7 @@ textarea::placeholder {
   align-items: center;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s ease;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
   transform-style: preserve-3d;
   will-change: transform;
 }
@@ -2244,7 +2257,6 @@ textarea::placeholder {
 }
 
 .alumni-card:hover {
-  transform: translateY(-10px);
   border-color: #ffd700;
   box-shadow: 0 20px 50px rgba(255, 215, 0, 0.2);
 }
@@ -2275,10 +2287,13 @@ textarea::placeholder {
   border-radius: 50%;
   border: 3px solid rgba(255, 215, 0, 0.5);
   flex-shrink: 0;
+  transform: translateZ(26px);
+  transform-style: preserve-3d;
   transition: all 0.3s ease;
 }
 
 .alumni-card:hover img {
+  transform: translateZ(26px);
   border-color: #ffd700;
   box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
 }
@@ -2287,6 +2302,13 @@ textarea::placeholder {
   flex: 1;
   position: relative;
   z-index: 1;
+  transform: translateZ(16px);
+  transform-style: preserve-3d;
+}
+
+.alumni-badge {
+  transform: translateZ(22px);
+  transform-style: preserve-3d;
 }
 
 .alumni-info h2 {

@@ -270,15 +270,27 @@
     var hoverTargets = [
       {
         container: document.getElementById('projects-grid'),
-        cardSelector: '.project-card'
+        cardSelector: '.project-card',
+        maxTiltY: 14,
+        maxTiltX: 10,
+        liftY: -12,
+        perspective: 1200
       },
       {
         container: document.getElementById('team-container'),
-        cardSelector: '.team-card'
+        cardSelector: '.team-card',
+        maxTiltY: 16,
+        maxTiltX: 12,
+        liftY: -13,
+        perspective: 1300
       },
       {
         container: document.getElementById('alumni-container'),
-        cardSelector: '.alumni-card'
+        cardSelector: '.alumni-card',
+        maxTiltY: 15,
+        maxTiltX: 11,
+        liftY: -11,
+        perspective: 1250
       }
     ].filter(function (target) {
       return !!target.container;
@@ -286,7 +298,15 @@
 
     if (!hoverTargets.length) return;
 
-    function initTilt(container, cardSelector, skipSelector) {
+    function initTilt(target) {
+      var container = target.container;
+      var cardSelector = target.cardSelector;
+      var skipSelector = target.skipSelector;
+      var maxTiltY = target.maxTiltY || 10;
+      var maxTiltX = target.maxTiltX || 8;
+      var liftY = target.liftY || -10;
+      var perspective = target.perspective || 1000;
+
       var setters = new WeakMap();
       var activeCard = null;
       var rafId = 0;
@@ -298,13 +318,14 @@
         if (existing) return existing;
 
         var created = {
-          setRX: gsap.quickSetter(card, 'rotationX', 'deg'),
-          setRY: gsap.quickSetter(card, 'rotationY', 'deg')
+          setRX: gsap.quickTo(card, 'rotationX', { duration: 0.2, ease: 'power2.out' }),
+          setRY: gsap.quickTo(card, 'rotationY', { duration: 0.2, ease: 'power2.out' }),
+          setY: gsap.quickTo(card, 'y', { duration: 0.28, ease: 'power2.out' })
         };
         setters.set(card, created);
 
         gsap.set(card, {
-          transformPerspective: 1000,
+          transformPerspective: perspective,
           transformOrigin: 'center center',
           force3D: true
         });
@@ -314,15 +335,10 @@
 
       function resetCard(card) {
         if (!card) return;
-        gsap.to(card, {
-          rotationX: 0,
-          rotationY: 0,
-          y: 0,
-          duration: 0.55,
-          ease: 'expo.out',
-          overwrite: 'auto',
-          force3D: true
-        });
+        var tilt = getCardSetters(card);
+        tilt.setRX(0);
+        tilt.setRY(0);
+        tilt.setY(0);
       }
 
       function getTiltCard(target) {
@@ -359,22 +375,23 @@
         if (activeCard !== card) {
           if (activeCard) resetCard(activeCard);
           activeCard = card;
-          getCardSetters(card);
-
-          gsap.to(card, {
-            y: -10,
-            duration: 0.35,
-            ease: 'power2.out',
-            overwrite: 'auto'
-          });
+          var activeTilt = getCardSetters(card);
+          activeTilt.setY(liftY);
         }
 
         var rect = card.getBoundingClientRect();
         var nx = (e.clientX - rect.left) / rect.width - 0.5;
         var ny = (e.clientY - rect.top) / rect.height - 0.5;
 
-        nextRY = nx * 10;
-        nextRX = ny * -8;
+        var cardTiltY = maxTiltY;
+        var cardTiltX = maxTiltX;
+        if (card.classList.contains('project-wide')) {
+          cardTiltY *= 1.25;
+          cardTiltX *= 1.2;
+        }
+
+        nextRY = nx * cardTiltY;
+        nextRX = ny * -cardTiltX;
 
         if (!rafId) rafId = requestAnimationFrame(flushTilt);
       });
@@ -398,9 +415,7 @@
       });
     }
 
-    hoverTargets.forEach(function (target) {
-      initTilt(target.container, target.cardSelector, target.skipSelector);
-    });
+    hoverTargets.forEach(initTilt);
   }
 
 })();
