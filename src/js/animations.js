@@ -270,8 +270,7 @@
     var hoverTargets = [
       {
         container: document.getElementById('projects-grid'),
-        cardSelector: '.project-card',
-        skipSelector: '.project-wide'
+        cardSelector: '.project-card'
       },
       {
         container: document.getElementById('team-container'),
