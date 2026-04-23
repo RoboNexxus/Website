@@ -305,6 +305,13 @@
 
         <div class="apply-row">
           <div class="apply-field">
+            <label><i class="fas fa-phone"></i> Phone Number <span class="req">*</span></label>
+            <input type="tel" id="apply-phone" placeholder="+91 98765 43210" />
+          </div>
+        </div>
+
+        <div class="apply-row">
+          <div class="apply-field">
             <label><i class="fab fa-github"></i> GitHub <span class="opt">(optional)</span></label>
             <input type="url" id="apply-github" placeholder="https://github.com/username" />
           </div>
@@ -378,6 +385,7 @@
 
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const NAME_RE = /^[a-zA-Z][a-zA-Z .'-]{1,79}$/;
+    const PHONE_RE = /^\+?[\d\s\-()\\.]{7,20}$/;
     const UNSAFE_INPUT_RE = /<[^>]*>|javascript:|data:text\/html|onerror\s*=|onload\s*=|<\/?script/i;
 
     const EVENTS = [
@@ -415,7 +423,7 @@
     }
 
     function clearErrors() {
-      ['apply-name', 'apply-email', 'apply-github', 'apply-website', 'apply-links', 'apply-experience']
+      ['apply-name', 'apply-email', 'apply-phone', 'apply-github', 'apply-website', 'apply-links', 'apply-experience']
         .forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.remove('error');
@@ -458,6 +466,7 @@
 
       const name = document.getElementById('apply-name').value.trim();
       const email = document.getElementById('apply-email').value.trim();
+      const phone = document.getElementById('apply-phone').value.trim();
       const github = document.getElementById('apply-github').value.trim();
       const website = document.getElementById('apply-website').value.trim();
       const links = document.getElementById('apply-links').value.trim();
@@ -475,6 +484,10 @@
         setError('apply-email');
         hasError = true;
       }
+      if (!phone) {
+        setError('apply-phone');
+        hasError = true;
+      }
       if (hasError) {
         showErrorToast('Missing Fields', 'Please fill in all required fields.');
         return;
@@ -489,6 +502,12 @@
       if (!EMAIL_RE.test(email)) {
         setError('apply-email');
         showErrorToast('Invalid Email', 'Please enter a valid email address.');
+        return;
+      }
+
+      if (!PHONE_RE.test(phone)) {
+        setError('apply-phone');
+        showErrorToast('Invalid Phone Number', 'Please enter a valid phone number.');
         return;
       }
 
@@ -517,7 +536,7 @@
       }
 
       if (
-        hasUnsafeInput(name) || hasUnsafeInput(email) || hasUnsafeInput(github) ||
+        hasUnsafeInput(name) || hasUnsafeInput(email) || hasUnsafeInput(phone) || hasUnsafeInput(github) ||
         hasUnsafeInput(website) || hasUnsafeInput(links) || hasUnsafeInput(experience)
       ) {
         showErrorToast('Invalid Input', 'Please remove suspicious characters or scripts from your input.');
@@ -532,7 +551,7 @@
         const res = await fetch('/api/apply', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, github, website, links, skills, eventsInterested, experience }),
+          body: JSON.stringify({ name, email, phone, github, website, links, skills, eventsInterested, experience }),
         });
 
         const data = await res.json();
@@ -553,7 +572,7 @@
 
         if (!res.ok) throw new Error(data.message || 'Server error');
 
-        ['apply-name', 'apply-email', 'apply-github', 'apply-website', 'apply-links', 'apply-experience']
+        ['apply-name', 'apply-email', 'apply-phone', 'apply-github', 'apply-website', 'apply-links', 'apply-experience']
           .forEach(id => {
             const el = document.getElementById(id);
             if (el) el.value = '';
