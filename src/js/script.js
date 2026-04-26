@@ -49,7 +49,7 @@ const MOBILE_NAV_BREAKPOINT = 992;
 const MOBILE_INDUCTIONS_LINK_ID = 'mobile-inductions-nav-link';
 
 function isInductionsEnabled() {
-  return window.SITE_CONFIG?.SHOW_INDUCTIONS !== false;
+  return window.SITE_CONFIG?.SHOW_INDUCTIONS === true;
 }
 
 function isOnInductionsPage() {
@@ -192,7 +192,7 @@ if (hamburger && navLinks) {
 
   function shouldShowUpcomingEvent(event) {
     const showRN26 = !!window.SITE_CONFIG?.SHOW_RN26;
-    const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS !== false;
+    const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS === true;
 
     if (!showRN26 && isRn26Event(event)) return false;
     if (!showInductions && isInductionsEvent(event)) return false;

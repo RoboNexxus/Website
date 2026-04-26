@@ -46,7 +46,7 @@
     if (!navContainer) return;
 
     const mainNav = navContainer.querySelector('.spotlight-nav');
-    const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS !== false;
+    const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS === true;
     const showRN26 = !!window.SITE_CONFIG?.SHOW_RN26;
 
     if (showInductions && !document.getElementById('rn-inductions-pill')) {

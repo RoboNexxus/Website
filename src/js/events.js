@@ -17,7 +17,7 @@ function isInductionsEvent(event) {
 
 function shouldShowUpcomingEvent(event) {
   const showRN26 = !!window.SITE_CONFIG?.SHOW_RN26;
-  const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS !== false;
+  const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS === true;
 
   if (!showRN26 && isRn26Event(event)) return false;
   if (!showInductions && isInductionsEvent(event)) return false;
