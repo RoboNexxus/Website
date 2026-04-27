@@ -1,5 +1,12 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/register",
+      "destination": "/404",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/src/assets/images/(.*)",
