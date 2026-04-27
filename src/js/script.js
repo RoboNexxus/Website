@@ -1,7 +1,7 @@
-// MASTER CACHE CONTROL - v58
+// MASTER CACHE CONTROL - v59
 // This is the global master control to reset all cache. 
 // Changing this ID will force ALL users to re-download all JSON and Dynamic data.
-const GLOBAL_CACHE_MASTER = 58;
+const GLOBAL_CACHE_MASTER = 59;
 window.GLOBAL_CACHE_MASTER = GLOBAL_CACHE_MASTER;
 
 // Wait for GSAP to be available
