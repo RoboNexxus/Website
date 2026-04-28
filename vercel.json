@@ -5,6 +5,11 @@
       "source": "/register",
       "destination": "/404",
       "permanent": false
+    },
+    {
+      "source": "/inductions",
+      "destination": "/404",
+      "permanent": false
     }
   ],
   "headers": [
