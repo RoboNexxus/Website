@@ -1,7 +1,7 @@
 {
   "_FORMAT_GUIDE": {
     "name": "Member's full name",
-    "role": "President / Vice President / Core Member / Member",
+    "role": "President / Head / Vice President / Core Member / Member",
     "image": "Image path in WebP format - use: 'assets/images/filename.webp' OR '/src/assets/images/filename.webp'",
     "leavingSoon": "true (only for members leaving soon) or remove this field",
     "links": {
@@ -29,13 +29,13 @@
     },
     {
       "name": "Daksh Yadav",
-      "role": "Core Member",
+      "role": "Head",
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {}
     },
     {
       "name": "Nipun Dhawan",
-      "role": "Core Member",
+      "role": "Head",
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {
         "linkedin": "https://www.linkedin.com/in/nipun-dhawan-03072009nd/"
@@ -43,7 +43,7 @@
     },
     {
       "name": "Vyom Dwivedi",
-      "role": "Core Member",
+      "role": "Head",
       "image": "assets/images/VD.webp",
       "links": {
         "github": "https://github.com/vyomdwivedi",

@@ -370,6 +370,7 @@ function loadTeamMembers() {
         // Define role hierarchy for sorting
         const roleOrder = {
           "President": 1,
+          "Head": 1,
           "Vice President": 2,
           "Core Member": 3,
           "Member": 4
