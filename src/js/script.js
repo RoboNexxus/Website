@@ -1,3 +1,362 @@
+// MASTER CACHE CONTROL - v59
+// This is the global master control to reset all cache. 
+// Changing this ID will force ALL users to re-download all JSON and Dynamic data.
+const GLOBAL_CACHE_MASTER = 59;
+window.GLOBAL_CACHE_MASTER = GLOBAL_CACHE_MASTER;
+
+// Wait for GSAP to be available
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+/* ===============================
+   PAGE TRANSITION
+================================ */
+function initPageTransition() {
+  const pageTransition = document.querySelector(".page-transition");
+
+  if (pageTransition) {
+    // Immediately hide transition overlay
+    if (typeof gsap !== 'undefined') {
+      gsap.set(pageTransition, { opacity: 0 });
+    }
+
+    // Disable page transition animations to prevent browser glitches
+    document.querySelectorAll("a[href]").forEach(link => {
+      const href = link.getAttribute("href");
+
+      if (
+        href.startsWith("http") ||
+        href.startsWith("#") ||
+        href.startsWith("mailto")
+      ) return;
+
+      // Remove the transition animation - just navigate directly
+      // This prevents the browser glitch/hang issue
+    });
+  }
+}
+
+// Initialize page transition
+initPageTransition();
+
+/* ===============================
+   HAMBURGER MENU (GLASS SIDE TRAY)
+================================ */
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links-ul');
+const MOBILE_NAV_BREAKPOINT = 992;
+const MOBILE_INDUCTIONS_LINK_ID = 'mobile-inductions-nav-link';
+
+function isInductionsEnabled() {
+  return window.SITE_CONFIG?.SHOW_INDUCTIONS === true;
+}
+
+function isOnInductionsPage() {
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  return path === '/inductions' || path.endsWith('/inductions');
+}
+
+function ensureMobileInductionsLink() {
+  if (!navLinks) return;
+
+  const isMobile = window.innerWidth <= MOBILE_NAV_BREAKPOINT;
+  const existingLink = document.getElementById(MOBILE_INDUCTIONS_LINK_ID);
+  const existingItem = existingLink ? existingLink.closest('li') : null;
+  const shouldShow = isMobile && isInductionsEnabled();
+
+  if (!shouldShow) {
+    if (existingItem) existingItem.remove();
+    return;
+  }
+
+  let item = existingItem;
+  if (!item) {
+    item = document.createElement('li');
+    item.className = 'mobile-inductions-item';
+    item.innerHTML = `<a class="nav-links" href="/inductions" id="${MOBILE_INDUCTIONS_LINK_ID}">Inductions</a>`;
+    navLinks.insertBefore(item, navLinks.firstElementChild);
+  } else if (navLinks.firstElementChild !== item) {
+    navLinks.insertBefore(item, navLinks.firstElementChild);
+  }
+
+  const mobileLink = document.getElementById(MOBILE_INDUCTIONS_LINK_ID);
+  if (mobileLink) {
+    if (isOnInductionsPage()) mobileLink.classList.add('active');
+    else mobileLink.classList.remove('active');
+  }
+}
+
+// Create and append backdrop dynamically
+const backdrop = document.createElement('div');
+backdrop.className = 'mobile-nav-backdrop';
+document.body.appendChild(backdrop);
+
+// Move nav tray to body ONLY on mobile so it escapes .page-content stacking context
+// On desktop, it stays in navbar for proper layout
+function updateNavLinksPosition() {
+  if (!navLinks) return;
+  
+  const isMobile = window.innerWidth <= MOBILE_NAV_BREAKPOINT;
+  const isInBody = navLinks.parentElement === document.body;
+  
+  if (isMobile && !isInBody) {
+    // Move to body for mobile
+    document.body.appendChild(navLinks);
+  } else if (!isMobile && isInBody) {
+    // Move back to navbar for desktop
+    const navbar = document.querySelector('.navbar-content');
+    if (navbar) {
+      // Insert before spotlight overlay
+      const spotlight = navbar.querySelector('.navbar-spotlight-overlay');
+      if (spotlight) {
+        navbar.insertBefore(navLinks, spotlight);
+      } else {
+        navbar.appendChild(navLinks);
+      }
+    }
+  }
+
+  ensureMobileInductionsLink();
+}
+
+// Update on load
+updateNavLinksPosition();
+
+// Ensure nav reflects final config state after all defer scripts finish
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', ensureMobileInductionsLink);
+} else {
+  ensureMobileInductionsLink();
+}
+
+// Update on resize
+window.addEventListener('resize', updateNavLinksPosition);
+
+function openMobileNav() {
+  if (!hamburger || !navLinks) return;
+  hamburger.classList.add('active');
+  navLinks.classList.add('active');
+  backdrop.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileNav() {
+  if (!hamburger || !navLinks) return;
+  hamburger.classList.remove('active');
+  navLinks.classList.remove('active');
+  backdrop.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+if (hamburger && navLinks) {
+  hamburger.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (hamburger.classList.contains('active')) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  });
+
+  // Close when clicking backdrop
+  backdrop.addEventListener('click', closeMobileNav);
+
+  // Close menu when clicking any nav link (supports dynamically inserted links)
+  navLinks.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-links')) return;
+    setTimeout(closeMobileNav, 100);
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMobileNav();
+  });
+}
+
+/* ===============================
+   EVENTS BADGE (MOBILE)
+================================ */
+(async function() {
+  function isRn26Event(event) {
+    const title = (event?.title || '').toLowerCase();
+    return event?.id === 1 || title.includes('robonexus');
+  }
+
+  function isInductionsEvent(event) {
+    const title = (event?.title || '').toLowerCase();
+    const type = (event?.type || '').toLowerCase();
+    return event?.id === 2 || type === 'induction' || title.includes('induction');
+  }
+
+  function shouldShowUpcomingEvent(event) {
+    const showRN26 = !!window.SITE_CONFIG?.SHOW_RN26;
+    const showInductions = window.SITE_CONFIG?.SHOW_INDUCTIONS === true;
+
+    if (!showRN26 && isRn26Event(event)) return false;
+    if (!showInductions && isInductionsEvent(event)) return false;
+    return true;
+  }
+
+  try {
+    const res = await fetch(`/src/js/events.json?v=82&t=${GLOBAL_CACHE_MASTER}`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const visibleUpcoming = (data.upcomingEvents || []).filter(shouldShowUpcomingEvent);
+
+    if (visibleUpcoming.length > 0) {
+      document.querySelectorAll('.nav-links[href="/events"]').forEach(link => {
+        if (!link.querySelector('.nav-new-badge')) {
+          const badge = document.createElement('span');
+          badge.className = 'nav-new-badge';
+          badge.textContent = 'New';
+          link.appendChild(badge);
+        }
+      });
+    } else {
+      document.querySelectorAll('.nav-links[href="/events"] .nav-new-badge').forEach(badge => badge.remove());
+    }
+  } catch (e) {
+    // Silent catch
+  }
+})();
+
+
+
+
+/* ===============================
+   NAVBAR ANIMATION
+================================ */
+gsap.set(".navbar, .nav-links, .nav-logo img", { opacity: 1 });
+
+
+// Navbar links stagger animation
+gsap.from(".nav-links", {
+  y: -20,
+  opacity: 0,
+  duration: 0.5,
+  stagger: 0.05,
+  delay: 0.3,
+  ease: "power3.out"
+});
+
+// Logo animation
+gsap.from(".nav-logo img", {
+  scale: 0.5,
+  opacity: 0,
+  duration: 0.6,
+  delay: 0.2,
+  ease: "power3.out"
+});
+
+/* ===============================
+   HOME PAGE HERO
+================================ */
+if (document.querySelector(".hero-section")) {
+  function playHeroAnimations() {
+    // Make sure elements are visible first
+    gsap.set(".home-text-main, .home-text-sub, .socials a, .home-logo-img", { opacity: 1 });
+    
+    // Main text animation
+    gsap.from(".home-text-main", {
+      y: 100,
+      opacity: 0,
+      duration: 1,
+      delay: 0.3,
+      ease: "power4.out"
+    });
+
+    // Sub text animation
+    gsap.from(".home-text-sub", {
+      y: 80,
+      opacity: 0,
+      duration: 1,
+      delay: 0.5,
+      ease: "power4.out"
+    });
+
+    // Social icons stagger
+    gsap.from(".socials a", {
+      y: 30,
+      opacity: 0,
+      duration: 0.5,
+      delay: 0.7,
+      stagger: 0.1,
+      ease: "power3.out"
+    });
+
+    // Logo animation
+    gsap.from(".home-logo-img", {
+      scale: 0.8,
+      opacity: 0,
+      duration: 1,
+      delay: 0.5,
+      ease: "power3.out"
+    });
+  }
+
+  // Delay hero animations until landing intro finishes
+  if (document.getElementById('landing-intro')) {
+    window.addEventListener('introComplete', playHeroAnimations, { once: true });
+  } else {
+    playHeroAnimations();
+  }
+}
+
+/* ===============================
+   PAGE HERO ANIMATIONS
+================================ */
+if (document.querySelector(".page-hero")) {
+  gsap.set(".glitch-text, .hero-subtitle", { opacity: 1 });
+  
+  gsap.from(".glitch-text", {
+    scale: 0.8,
+    opacity: 0,
+    duration: 0.8,
+    delay: 0.2,
+    ease: "power3.out"
+  });
+
+  gsap.from(".hero-subtitle", {
+    y: 20,
+    opacity: 0,
+    duration: 0.6,
+    delay: 0.4,
+    ease: "power3.out"
+  });
+}
+
+/* ===============================
+   SCROLL REVEAL
+================================ */
+const revealElements = document.querySelectorAll('.reveal');
+
+revealElements.forEach(el => {
+  gsap.set(el, { opacity: 0, y: 40 });
+  
+  gsap.to(el, {
+    scrollTrigger: {
+      trigger: el,
+      start: "top 85%",
+      toggleActions: "play none none none"
+    },
+    opacity: 1,
+    y: 0,
+    duration: 0.8,
+    ease: "power3.out"
+  });
+});
+
+/* ===============================
+   ABOUT SECTION
+================================ */
+// Removed duplicate animation - using .reveal class instead
+
+/* ===============================
+   TEAM CARDS
+================================ */
 function loadTeamMembers() {
   const teamContainer = document.getElementById("team-container");
 
@@ -24,17 +383,18 @@ function loadTeamMembers() {
           return a.name.localeCompare(b.name);
         });
 
-        teamContainer.innerHTML = members.map((member) => {
+        teamContainer.innerHTML = members.map((member, index) => {
+          // Normalize image path - handle both "assets/images/..." and "src/assets/images/..." formats
           let imagePath = member.image;
           if (!imagePath.startsWith('/') && !imagePath.startsWith('src/')) {
             imagePath = `/src/${imagePath}`;
           } else if (imagePath.startsWith('src/')) {
             imagePath = `/${imagePath}`;
           }
-
+          
           return `
             <div class="team-card ${member.leavingSoon ? 'leaving-soon' : ''}">
-              ${member.leavingSoon ? '<span class="leaving-badge">Leaving Soon</span>' : ''}
+              ${member.leavingSoon ? '<span class="leaving-badge"><i class="fas fa-crown"></i> Leaving Club Soon</span>' : ''}
               <img src="${imagePath}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.webp'">
               <h2>${member.name}</h2>
               <p>${member.role}</p>
@@ -42,20 +402,279 @@ function loadTeamMembers() {
                 ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
                 ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
                 ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
+                ${member.links.discord ? `<a href="${member.links.discord}" target="_blank"><i class="fab fa-discord"></i></a>` : ""}
               </div>
             </div>
           `;
         }).join("");
+        // Animate each card individually as it scrolls into view
+        const cards = teamContainer.querySelectorAll('.team-card');
+        cards.forEach((card, i) => {
+          gsap.set(card, { opacity: 0, y: 60, scale: 0.95 });
+          gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            delay: i * 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none none"
+            }
+          });
+        });
       })
       .catch(err => {
         console.error('Team loading error:', err);
-        teamContainer.innerHTML = '<p>Error loading team data. Please try again later.</p>';
+        teamContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Failed to load team data. Please try again later.</p>';
       });
   }
 }
 
+// Call immediately and also on DOMContentLoaded as backup
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadTeamMembers);
 } else {
-  loadTeamMembers();
+  // DOM already loaded, call with a small delay to ensure container exists
+  setTimeout(loadTeamMembers, 100);
 }
+
+/* ===============================
+   STATS COUNTER
+================================ */
+const statCards = document.querySelectorAll('.stat-card');
+
+if (statCards.length > 0) {
+  gsap.set(".stat-card", { opacity: 1 });
+  
+  gsap.from(".stat-card", {
+    scrollTrigger: {
+      trigger: ".stats-section",
+      start: "top 85%"
+    },
+    y: 40,
+    opacity: 0,
+    duration: 0.6,
+    stagger: 0.1,
+    ease: "power3.out"
+  });
+}
+
+/* ===============================
+   MAGNETIC BUTTONS
+================================ */
+document.querySelectorAll('.register-btn, .view-project-btn, .contact-send-button').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    
+    gsap.to(btn, {
+      x: x * 0.3,
+      y: y * 0.3,
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  });
+
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, {
+      x: 0,
+      y: 0,
+      duration: 0.5,
+      ease: "elastic.out(1, 0.5)"
+    });
+  });
+});
+
+/* ===============================
+   PARALLAX EFFECT
+================================ */
+document.addEventListener('mousemove', (e) => {
+  const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+  const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+
+  gsap.to('.home-logo-img', {
+    x: moveX * 2,
+    y: moveY * 2,
+    duration: 0.5,
+    ease: "power2.out"
+  });
+});
+
+/* ===============================
+   SMOOTH SCROLL
+================================ */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href');
+    const target = document.querySelector(targetId);
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+/* ===============================
+   CURSOR GLOW EFFECT
+================================ */
+const cursorGlow = document.createElement('div');
+cursorGlow.className = 'cursor-glow';
+cursorGlow.style.cssText = `
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(71, 160, 184, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+`;
+document.body.appendChild(cursorGlow);
+
+document.addEventListener('mousemove', (e) => {
+  cursorGlow.style.left = e.clientX + 'px';
+  cursorGlow.style.top = e.clientY + 'px';
+});
+
+/* ===============================
+   ALUMNI SECTION
+================================ */
+function loadAlumni() {
+  const alumniContainer = document.getElementById("alumni-container");
+
+  if (alumniContainer) {
+    fetch(`/src/js/alumni.json?v=82&t=${GLOBAL_CACHE_MASTER}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load alumni data');
+        return res.json();
+      })
+      .then(data => {
+        const alumni = data.alumni;
+        if (alumni.length === 0) {
+          alumniContainer.innerHTML = '<p class="no-alumni">No alumni yet - our journey continues!</p>';
+          return;
+        }
+        
+        alumniContainer.innerHTML = alumni.map((member, index) => {
+          // Normalize image path - handle both "assets/images/..." and "src/assets/images/..." formats
+          let imagePath = member.image;
+          if (!imagePath.startsWith('/') && !imagePath.startsWith('src/')) {
+            imagePath = `/src/${imagePath}`;
+          } else if (imagePath.startsWith('src/')) {
+            imagePath = `/${imagePath}`;
+          }
+          
+          return `
+            <div class="alumni-card ${member.upcoming ? 'upcoming-alumni' : ''}">
+              <div class="alumni-badge">
+                <i class="fas fa-medal"></i>
+              </div>
+              ${member.upcoming ? '<span class="upcoming-badge"><i class="fas fa-hourglass-half"></i> Coming Soon</span>' : ''}
+              <img src="${imagePath}" alt="${member.name}" width="300" height="300" loading="lazy" onerror="this.src='/src/assets/images/Robo_Nexus_Logo.webp'">
+              <div class="alumni-info">
+                <h2>${member.name}</h2>
+                <p class="alumni-role">${member.role}</p>
+                <p class="alumni-batch"><i class="fas fa-graduation-cap"></i> Batch ${member.batch}</p>
+                ${member.contribution ? `<p class="alumni-contribution">"${member.contribution}"</p>` : ''}
+                <div class="social-links">
+                  ${member.links.github ? `<a href="${member.links.github}" target="_blank"><i class="fab fa-github"></i></a>` : ""}
+                  ${member.links.linkedin ? `<a href="${member.links.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ""}
+                  ${member.links.website ? `<a href="${member.links.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ""}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+        // Animate each card individually as it scrolls into view
+        const cards = alumniContainer.querySelectorAll('.alumni-card');
+        cards.forEach((card, i) => {
+          gsap.set(card, { opacity: 0, y: 60, scale: 0.95 });
+          gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            delay: i * 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none none"
+            }
+          });
+        });
+      })
+      .catch(err => {
+        console.error('Alumni loading error:', err);
+        alumniContainer.innerHTML = '<p style="text-align:center; color: #47a0b8;">Failed to load alumni data. Please try again later.</p>';
+      });
+  }
+}
+
+// Call immediately and also on DOMContentLoaded as backup
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadAlumni);
+} else {
+  // DOM already loaded, call with a small delay to ensure container exists
+  setTimeout(loadAlumni, 100);
+}
+
+/* ===============================
+   SCROLL BUTTONS
+================================ */
+// Create scroll buttons
+const scrollToBottomBtn = document.createElement('button');
+scrollToBottomBtn.className = 'scroll-btn scroll-to-bottom';
+scrollToBottomBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+scrollToBottomBtn.setAttribute('aria-label', 'Scroll to bottom');
+
+const scrollToTopBtn = document.createElement('button');
+scrollToTopBtn.className = 'scroll-btn scroll-to-top';
+scrollToTopBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+scrollToTopBtn.setAttribute('aria-label', 'Scroll to top');
+
+document.body.appendChild(scrollToBottomBtn);
+document.body.appendChild(scrollToTopBtn);
+
+// Scroll button functionality
+scrollToBottomBtn.addEventListener('click', () => {
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: 'smooth'
+  });
+});
+
+scrollToTopBtn.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
+
+// Show/hide buttons based on scroll position
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const scrollHeight = document.body.scrollHeight - window.innerHeight;
+  
+  // Show scroll to bottom when near top
+  if (scrollTop < scrollHeight - 100) {
+    scrollToBottomBtn.classList.add('visible');
+  } else {
+    scrollToBottomBtn.classList.remove('visible');
+  }
+  
+  // Show scroll to top when scrolled down
+  if (scrollTop > 100) {
+    scrollToTopBtn.classList.add('visible');
+  } else {
+    scrollToTopBtn.classList.remove('visible');
+  }
+});

@@ -4,7 +4,6 @@
     "role": "President / Head / Vice President / Core Member / Member",
     "image": "Image path in WebP format - use: 'assets/images/filename.webp' OR '/src/assets/images/filename.webp'",
     "leavingSoon": "true (only for members leaving soon) or remove this field",
-    "class": "10 / 11 / 12",
     "links": {
       "github": "GitHub profile URL (optional)",
       "linkedin": "LinkedIn profile URL (optional)",
@@ -15,7 +14,6 @@
     {
       "name": "Atharv Mandlavdiya",
       "role": "Core Member",
-      "class": 10,
       "image": "assets/images/AM.webp",
       "links": {
         "github": "https://github.com/AtharvM02222",
@@ -26,21 +24,18 @@
     {
       "name": "Avani Yadav",
       "role": "Core Member",
-      "class": 11,
       "image": "assets/images/Av.webp",
       "links": {}
     },
     {
       "name": "Daksh Yadav",
       "role": "Head",
-      "class": 12,
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {}
     },
     {
       "name": "Nipun Dhawan",
       "role": "Head",
-      "class": 12,
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {
         "linkedin": "https://www.linkedin.com/in/nipun-dhawan-03072009nd/"
@@ -49,7 +44,6 @@
     {
       "name": "Vyom Dwivedi",
       "role": "Head",
-      "class": 12,
       "image": "assets/images/VD.webp",
       "links": {
         "github": "https://github.com/vyomdwivedi",
@@ -60,7 +54,6 @@
     {
       "name": "Shubhan Bhasin",
       "role": "Member",
-      "class": 12,
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {
         "linkedin": "https://www.linkedin.com/in/shubhan-bhasin-740a81391/"
@@ -69,14 +62,12 @@
     {
       "name": "Naitik Sharma",
       "role": "Member",
-      "class": 12,
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {}
     },
     {
       "name": "Devanshu Roy",
       "role": "Member",
-      "class": 10,
       "image": "assets/images/DY.webp",
       "links": {
         "github": "https://github.com/DevanshuRoy",
@@ -86,14 +77,12 @@
     {
       "name": "Kavish Baghla",
       "role": "Member",
-      "class": 10,
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {}
     },
     {
       "name": "Reyansh Gugnani",
       "role": "Member",
-      "class": 10,
       "image": "assets/images/RG.webp",
       "links": {
         "linkedin": "https://www.linkedin.com/in/reyanshgugnani/",
@@ -103,14 +92,12 @@
     {
       "name": "Aryan Chhabra",
       "role": "Member",
-      "class": 10,
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {}
     },
     {
       "name": "Divyanshu Aggarwal",
       "role": "Member",
-      "class": 10,
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {
         "github": "https://github.com/divyanshu483"
@@ -119,7 +106,6 @@
     {
       "name": "Vibhor Pandey",
       "role": "Member",
-      "class": 10,
       "image": "assets/images/Robo_Nexus_Logo.webp",
       "links": {}
     }
